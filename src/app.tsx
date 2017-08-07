@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Provider } from 'react-redux';
 import * as ReactDOM from 'react-dom';
+
+import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 import {Router, Route, hashHistory, IndexRoute} from 'react-router';
 import {createLogger} from 'redux-logger';
@@ -9,6 +10,7 @@ import reducers from './reducers/index';
 
 //components
 import Main from './containers/Main';
+
 
 // middleware
 // import promiseMiddleware from './middleware/promiseMiddleware';

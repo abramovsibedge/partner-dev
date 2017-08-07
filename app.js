@@ -10,17 +10,7 @@ var config = require('./config');
 var session = require('express-session');
 var log = require('./libs/log')(module);
 var HttpError = require('./error').HttpError;
-var i18n = require("i18n");
 var fs = require('fs');
-
-//lang
-i18n.configure({
-    locales:['ru', 'en'],
-    cookie: 'lang',
-    directory: __dirname + '/locales',
-    defaultLocale: 'ru'
-});
-
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -31,11 +21,17 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(i18n.init);
 
-app.use(require('./middleware/sendHttpError'));
-//statick ndoejs
+//statick nodejs
 app.use(express.static(path.join(__dirname, 'public')));
+
+// setting template
+require('node-jsx').install();
+app.set('views', path.join(__dirname, 'template'));
+app.set('view engine', 'ejs');
+
+// errors
+app.use(require('./middleware/sendHttpError'));
 
 if (isDevMode) {
     // delete the bundle file to avoid conflicting with dist build(gulp build)

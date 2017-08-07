@@ -6,6 +6,7 @@ let path = require("path");
 
 const extraSass = new ExtractTextPlugin('styles.css', {allChunks: true});
 const extraBootstrap = new ExtractTextPlugin('bootstrap.css', {allChunks: true});
+const srcPath = path.join(__dirname, 'src');
 
 module.exports = {
     devtool: 'eval',
@@ -14,6 +15,10 @@ module.exports = {
         path: path.join(__dirname, 'public'),
         filename: 'bundle.js',
         publicPath: '/build/'
+    },
+    resolve: {
+        extensions: ['', '.ts', '.tsx', '.js', '.jsx'],
+        root: [srcPath],
     },
 
     plugins:[
@@ -26,12 +31,9 @@ module.exports = {
     module: {
         loaders: [
             {
-                test: /\.js$/,
+                test: /\.ts(x?)$/,
                 exclude: [/node_modules/, /public/],
-                loader: "babel",
-                query: {
-                    presets: ['es2015', 'react', 'stage-2']
-                }
+                loader: "babel!eslint!ts"
             },
             {
                 test: /\.css$/,
@@ -44,10 +46,6 @@ module.exports = {
             {
                 test: /\.(png|woff|woff2|eot|ttf|svg)([\?]?.*)$/,
                 loader: 'file'
-            },
-            {
-                test: /\.ts(x?)$/,
-                loader: "babel-loader!eslint-loader!ts-loader"
             }
         ]
     },
