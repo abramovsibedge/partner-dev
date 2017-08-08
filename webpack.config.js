@@ -6,6 +6,7 @@ let path = require("path");
 
 const extraSass = new ExtractTextPlugin('styles.css', {allChunks: true});
 const extraBootstrap = new ExtractTextPlugin('bootstrap.css', {allChunks: true});
+const srcPath = path.join(__dirname, 'app');
 
 module.exports = {
     entry: ["babel-polyfill", "./src/app.tsx"],
@@ -13,6 +14,10 @@ module.exports = {
         path: path.resolve(__dirname + "/public/build/"),
         filename: "bundle.js",
         publicPath: "/build/",
+    },
+    resolve: {
+        extensions: ['', '.ts', '.tsx', '.js', '.jsx'],
+        root: [srcPath],
     },
 
     devtool: 'eval',
@@ -46,7 +51,8 @@ module.exports = {
         loaders: [
             {
                 test: /\.ts(x?)$/,
-                loader: "babel-loader!eslint-loader!ts-loader"
+                exclude: [/node_modules/, /public/],
+                loader: "babel!eslint!ts"
             },
             {
                 test: /\.css$/,
@@ -59,8 +65,8 @@ module.exports = {
 
         ]
     },
+    sassResources: [],
     eslint: {
         configFile: 'eslint.json'
-    },
-    sassResources: ['./src/sass/settings/global.scss', './src/sass/settings/normalize.scss']
+    }
 };

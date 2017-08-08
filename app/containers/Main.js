@@ -4,17 +4,19 @@ import {connect} from 'react-redux'
 
 class Main extends React.Component
 {
-    constructor(props:any) {
+    constructor(props) {
         super(props);
         this.state = {
+            showTest: false
         }
     }
 
     render()
     {
+
         return (
             <div>
-                asss
+                got it!
             </div>
         )
     }
@@ -22,8 +24,6 @@ class Main extends React.Component
 
 export default connect(
     state => ({
-
     }),({
-
     })
 )(Main)

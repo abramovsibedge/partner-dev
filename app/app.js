@@ -6,26 +6,25 @@ import { applyMiddleware, createStore } from 'redux';
 import {Router, Route, hashHistory, IndexRoute} from 'react-router';
 import {createLogger} from 'redux-logger';
 
-import reducers from './reducers/index';
+import counterApp  from './reducers/index';
 
 //components
 import Main from './containers/Main';
 
-
-// middleware
-// import promiseMiddleware from './middleware/promiseMiddleware';
+// Grab the state from a global variable injected into the server-generated HTML
+const preloadedState = window.__PRELOADED_STATE__;
+// Allow the passed state to be garbage-collected
+delete window.__PRELOADED_STATE__;
 
 // logger
 const logger = createLogger();
 
 //store
-var store = createStore(reducers, applyMiddleware(logger));
+var store = createStore(counterApp , applyMiddleware(logger));
 
 ReactDOM.render(
     <Provider store={store}>
-        <Router history={hashHistory}>
-            <Route path='/' component={Main} />
-        </Router>
+        <Main />
     </Provider>,
     document.getElementById('root')
 );

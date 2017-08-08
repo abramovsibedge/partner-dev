@@ -6,11 +6,11 @@ let path = require("path");
 
 const extraSass = new ExtractTextPlugin('styles.css', {allChunks: true});
 const extraBootstrap = new ExtractTextPlugin('bootstrap.css', {allChunks: true});
-const srcPath = path.join(__dirname, 'src');
+const srcPath = path.join(__dirname, 'app');
 
 module.exports = {
     devtool: 'eval',
-    entry: ["babel-polyfill", 'webpack-hot-middleware/client', "./src/app.tsx"],
+    entry: ["babel-polyfill", 'webpack-hot-middleware/client', "./app/app.tsx"],
     output: {
         path: path.join(__dirname, 'public'),
         filename: 'bundle.js',
@@ -49,8 +49,7 @@ module.exports = {
             }
         ]
     },
-
-    sassResources: ['./src/sass/settings/global.scss', './src/sass/settings/normalize.scss'],
+    sassResources: [],
     eslint: {
         configFile: 'eslint.json'
     }

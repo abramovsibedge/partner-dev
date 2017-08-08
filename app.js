@@ -1,64 +1,41 @@
 var isDevMode = false;
-if (process.env.NODE_ENV === 'dev') {
-    isDevMode = true;
-}
+if (process.env.NODE_ENV === 'dev') {isDevMode = false;}
 
-var express = require('express');
-var http = require('http');
-var path = require('path');
-var config = require('./config');
-var session = require('express-session');
-var log = require('./libs/log')(module);
-var HttpError = require('./error').HttpError;
-var fs = require('fs');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+import express from 'express';
+import http from 'http';
+import path from 'path';
+import config from './config';
+import logger from 'morgan';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+import {handleRender} from './libs/handleRender';
 
-var app = express();
+
+const log = require('./libs/log')(module);
+const HttpError = require('./error').HttpError;
+
+// for templates
+require('node-jsx').install();
+
+const app = express();
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(handleRender);
+
 
 //statick nodejs
 app.use(express.static(path.join(__dirname, 'public')));
 
 // setting template
-require('node-jsx').install();
 app.set('views', path.join(__dirname, 'template'));
 app.set('view engine', 'ejs');
 
 // errors
 app.use(require('./middleware/sendHttpError'));
 
-if (isDevMode) {
-    // delete the bundle file to avoid conflicting with dist build(gulp build)
-    // by default bundle.js is generated in memory
-    var bundleFileName = './public/build/bundle.js';
-    var bundleMapFile = './public/build/bundle.js.map';
-    var exists = fs.existsSync(bundleFileName);
-    if (exists) {
-        fs.unlinkSync('./public/build/bundle.js');
-    }
-    exists = fs.existsSync(bundleMapFile);
-
-    if (exists) {
-        fs.unlinkSync('./public/build/bundle.js.map');
-    }
-
-    var webpack = require('webpack');
-    var webpackDevMiddleware = require('webpack-dev-middleware');
-    var webpackHotMiddleware = require('webpack-hot-middleware');
-    var webpackConfig = require('./webpack.dev.config');
-    var compiler = webpack(webpackConfig);
-
-    app.use(webpackDevMiddleware(compiler, { noInfo: false, publicPath: webpackConfig.output.publicPath }));
-    app.use(webpackHotMiddleware(compiler));
-}
-
-require('./routes')(app);
 
 app.use(function(req, res, next) {
     next(new HttpError(404, "Not found"));
