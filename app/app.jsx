@@ -9,11 +9,9 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 
 import routes from './routes';
-import reducers from './reducers/index';
+import reducers from './reducers';
 
-const store = createStore(
-    reducers, window.__INITIAL_STATE__, applyMiddleware(thunk)
-);
+const store = createStore(reducers, window.__INITIAL_STATE__, applyMiddleware(thunk));
 
 const AppRouter = () => {
     return (

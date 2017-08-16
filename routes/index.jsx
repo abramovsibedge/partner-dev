@@ -21,11 +21,10 @@ const router = express.Router();
 const store = createStore(reducers, applyMiddleware(thunk));
 
 router.get('*', (req, res) => {
+
     const branch = matchRoutes(routes, req.url);
-    console.log('branch', branch);
 
     const promises = branch.map(({route}) => {
-        console.log('route.component', route.component);
         let fetchData = route.component.fetchData;
         return fetchData instanceof Function ? fetchData(store) : Promise.resolve(null)
     });

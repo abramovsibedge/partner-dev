@@ -25,7 +25,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-
 //statick nodejs
 app.use(express.static(path.join(__dirname, 'public')));
 
