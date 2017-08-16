@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux'
 
 
-class Main extends React.Component
+class Home extends Component
 {
     constructor(props) {
         super(props);
@@ -16,7 +16,7 @@ class Main extends React.Component
 
         return (
             <div>
-                got it!
+                home
             </div>
         )
     }
@@ -26,4 +26,4 @@ export default connect(
     state => ({
     }),({
     })
-)(Main)
+)(Home)

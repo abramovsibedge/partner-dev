@@ -8,7 +8,8 @@ import config from './config';
 import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
-import {handleRender} from './libs/handleRender';
+
+import router from './routes/index';
 
 
 const log = require('./libs/log')(module);
@@ -23,19 +24,20 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(handleRender);
 
 
 //statick nodejs
 app.use(express.static(path.join(__dirname, 'public')));
 
 // setting template
+app.engine('ejs', require('ejs-locals'));
 app.set('views', path.join(__dirname, 'template'));
 app.set('view engine', 'ejs');
 
 // errors
 app.use(require('./middleware/sendHttpError'));
 
+app.use('/', router);
 
 app.use(function(req, res, next) {
     next(new HttpError(404, "Not found"));
