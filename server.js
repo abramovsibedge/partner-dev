@@ -1,75 +1,60 @@
-var isDevMode = false;
-if (process.env.NODE_ENV === 'dev') {isDevMode = false;}
+/**
+ * NOTE: This file must be run with babel-node as Node is not yet compatible
+ * with all of ES6 and we also use JSX.
+ */
+const url = require('url');
+const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+const express = require('express');
+const webpack = require('webpack');
 
-import express from 'express';
-import http from 'http';
-import path from 'path';
-import config from './config';
-import logger from 'morgan';
-import cookieParser from 'cookie-parser';
-import bodyParser from 'body-parser';
+const config = require('./webpack.config.dev.js');
+const Html = require('./client/template.js');
 
-import router from './routes/index';
-
-
-
-
-const log = require('./libs/log')(module);
-const HttpError = require('./error').HttpError;
-
-// for templates
-require('node-jsx').install();
+/**
+ * Render the entire web page to a string. We use render to static markup here
+ * to avoid react hooking on to the document HTML that will not be managed by
+ * React. The body prop is a string that contains the actual document body,
+ * which react will hook on to.
+ *
+ * We also take this opportunity to prepend the doctype string onto the
+ * document.
+ *
+ * @param {object} props
+ * @return {string}
+ */
+const renderDocumentToString = props =>
+  '<!doctype html>' + renderToStaticMarkup(<Html {...props} />);
 
 const app = express();
+const compiler = webpack(config);
 
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(require('webpack-dev-middleware')(compiler, {
+  noInfo: true,
+  publicPath: config.output.publicPath,
+}));
 
-//statick nodejs
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(require('webpack-hot-middleware')(compiler));
 
-// setting template
-app.engine('ejs', require('ejs-locals'));
-app.set('views', path.join(__dirname, 'template'));
-app.set('view engine', 'ejs');
-
-// errors
-app.use(require('./middleware/sendHttpError'));
-
-app.use('/', router);
-
-app.use(function(req, res, next) {
-    next(new HttpError(404, "Not found"));
+// Send the boilerplate HTML payload down for all get requests. Routing will be
+// handled entirely client side and we don't make an effort to pre-render pages
+// before they are served when in dev mode.
+app.get('*', (req, res) => {
+  const html = renderDocumentToString({
+    bundle: config.output.publicPath + 'app.js',
+  });
+  res.send(html);
 });
 
-app.use(function(err, req, res, next) {
-    if(typeof err == 'number') {
-        err = new HttpError(err);
-    }
-    if(err instanceof HttpError) {
-        res.sendHttpError(err);
-    }
-    else {
-        if (isDevMode) {
-            res.status(err.status || 500);
-            console.log(err);
-            res.send();
-        }
-        else {
-            log.error(err);
-            res.status(err.status || 500);
-            res.send();
-        }
-    }
+// NOTE: url.parse can't handle URLs without a protocol explicitly defined. So
+// if we parse '//localhost:8888' it doesn't work. We manually add a protocol even
+// though we are only interested in the port.
+const { port } = url.parse('http:' + config.output.publicPath);
+
+app.listen(port, 'localhost', err => {
+  if (err) {
+    console.error(err);
+    return;
+  }
+  console.log(`Dev server listening at http://localhost:${port}`);
 });
-
-var server = http.createServer(app);
-
-server.listen(config.get('port'), function(){
-    log.info('Express server listen on port' + config.get('port'));
-});
-
-module.exports = app;
-

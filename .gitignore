@@ -1,3 +1,9 @@
 node_modules/
-public/build/
+*.DS_Store
+build/
+.tmp/
+nginx.conf
+npm-debug.log
 .idea
+node_modules.bak
+my-site.conf
