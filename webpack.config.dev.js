@@ -19,7 +19,7 @@ module.exports = {
   entry: {
     app: [
       'webpack-hot-middleware/client?path=' + HMR_HOST,
-      './client/index.js',
+      './client/index.tsx',
     ],
   },
 
@@ -31,7 +31,7 @@ module.exports = {
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
+    // new webpack.NoErrorsPlugin(),
     new webpack.LoaderOptionsPlugin({
       options: {
         postcss: [autoprefixer({ browsers: ['last 2 versions'] })],
@@ -45,6 +45,11 @@ module.exports = {
   module: {
     rules: [
       {
+          test: /\.ts(x?)$/,
+          exclude: [/node_modules/, /public/],
+          loader: "babel-loader!eslint-loader!ts-loader"
+      },
+      {
         test: /\.js$/,
         include: path.join(__dirname, 'client'),
         loader: 'babel-loader',
@@ -55,6 +60,10 @@ module.exports = {
           { loader: 'style-loader' },
           { loader: 'css-loader' },
         ],
+      },
+      {
+        test: /\.scss/,
+        loader: 'style-loader!css-loader!sass-loader'
       },
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
