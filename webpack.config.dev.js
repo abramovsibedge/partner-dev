@@ -28,6 +28,13 @@ module.exports = {
     filename: '[name].js',
     publicPath: DEV_HOST,
   },
+  resolve: {
+      extensions: ['.ts', '.tsx', '.js', '.jsx', '.scss'],
+      modules: [
+          path.join(__dirname, "client"),
+          "node_modules"
+      ]
+  },
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
