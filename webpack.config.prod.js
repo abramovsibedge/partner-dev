@@ -6,14 +6,13 @@ const autoprefixer = require('autoprefixer');
 const ReactStaticPlugin = require('react-static-webpack-plugin');
 
 module.exports = {
-	devtool: 'source-map',
-
 	context: __dirname,
 
 	entry: {
 		app: [
 			'./client/index.tsx',
 		],
+		vendor: './package.json'
 	},
 
 	output: {
@@ -54,6 +53,9 @@ module.exports = {
 			sourceMap: true,
 			compressor: {warnings: false},
 		}),
+		new webpack.optimize.CommonsChunkPlugin({
+			name: 'vendor'
+		}),
 		new ReactStaticPlugin({
 			routes: './client/routes.tsx',
 			template: './client/template.js',
@@ -81,7 +83,19 @@ module.exports = {
 			},
 			{
 				test: /\.scss/,
-				loader: 'style-loader!css-loader!sass-loader'
+				loader: ExtractTextPlugin.extract({
+					fallbackLoader: 'style-loader',
+					loader: [
+						{
+							loader: 'css-loader',
+							query: {
+								modules: true,
+								importLoaders: 2,
+							},
+						},
+						{ loader: 'sass-loader' },
+					],
+				}),
 			},
 			{
 				test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,

@@ -3,6 +3,7 @@ const T = React.PropTypes;
 
 const Html = ({
   title = 'Rainbow Unicorns',
+	vendor = 'vendor.js',
   bundle = 'app.js',
   body = '',
   favicon = 'favicon.ico',
@@ -19,6 +20,7 @@ const Html = ({
     </head>
     <body>
       <div id='root' dangerouslySetInnerHTML={{ __html: body }} />
+			<script src={vendor} />
       <script src={bundle} />
     </body>
   </html>
@@ -26,7 +28,8 @@ const Html = ({
 
 Html.propTypes = {
   title: T.string,
-  bundle: T.string,
+	vendor: T.string,
+	bundle: T.string,
   body: T.string,
   favicon: T.string,
   stylesheet: T.string,

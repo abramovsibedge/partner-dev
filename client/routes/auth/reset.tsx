@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import '../../static/scss/reset.scss';
+// import '../../static/scss/reset.scss';
 
 export class Reset extends React.Component {
 	constructor(props: any) {

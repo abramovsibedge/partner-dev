@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import '../static/scss/app.scss';
+// import '../static/scss/app.scss';
 
 export class App extends React.Component {
     static propTypes = {

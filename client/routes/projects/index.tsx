@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import '../../static/scss/projects.scss';
+// import '../../static/scss/projects.scss';
 
 export class Projects extends React.Component {
 	constructor(props: any) {
