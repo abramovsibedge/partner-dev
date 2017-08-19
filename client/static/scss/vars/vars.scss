@@ -1,0 +1,90 @@
+/*
+------------------------------------------------------------------------- 
+Colors vars 
+-------------------------------------------------------------------------
+*/
+/* immutable colors */
+$palette-white: white;
+$palette-black: black;
+$palette-red: red;
+
+$x-palette-dark: #242b33;
+$x-palette-gray: #333333;
+$x-palette-gray_1: #a7a7a7;
+$x-palette-gray_2: #C4C3C3;
+$x-palette-gray_3: #f5f4f2;
+$x-palette-gray_4: #d8d8d8;
+$x-palette-gray_5: #d8d8d8;
+$x-palette-gray_6: #4a4a4a;
+$x-palette-gray_7: #f8f8fd;
+$x-palette-blue_1: #569ae5;
+$x-palette-blue_2: #337ab7;
+$x-palette-blue_3: #2c3e7d;
+$x-palette-blue_4: #09366b;
+$x-palette-blue_5: #0b366b;
+$x-palette-lightred: #d9534f;
+$x-palette-lightgreen: #5cb85c;
+$x-palette-purple: #58328b;
+$x-palette-purple_1: #5c328d;
+$x-palette-lightpurple: #5B328C;
+$x-palette-lightpurple_1: #835ad7;
+$x-palette-pink: #fb2163;
+
+/* mutable colors */
+$bg-color-light: $palette-white;
+$bg-color-dark: $x-palette-dark;
+$text-color-light: $x-palette-gray;
+$text-color-dark: $palette-white;
+$label-light: $x-palette-gray_1;
+$label-dark: lighten( $palette-white, 40% );
+$table-cell-light: #f5f4f2;
+$table-cell-dark: #3e4651;
+
+// brand color
+$palette-brand: #3f9beb;
+
+/*
+------------------------------------------------------------------------- 
+Height vars
+-------------------------------------------------------------------------
+*/
+$x-size-header_height: 80px;
+$x-size-content_title: 38px;
+$x-size-content_width: 92.065%;
+
+/*
+------------------------------------------------------------------------- 
+Mixins
+-------------------------------------------------------------------------
+*/
+@mixin clearfix {
+    &:after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+}
+
+/*
+------------------------------------------------------------------------- 
+Animations
+-------------------------------------------------------------------------
+*/
+
+$offset: 187;
+@keyframes rotator {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(270deg); }
+}
+
+@keyframes dash {
+ 0% { stroke-dashoffset: $offset; }
+ 50% {
+   stroke-dashoffset: $offset/4;
+   transform:rotate(135deg);
+ }
+ 100% {
+   stroke-dashoffset: $offset;
+   transform:rotate(450deg);
+ }
+}
