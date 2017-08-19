@@ -1,9 +1,8 @@
 import * as React from 'react';
-// import s from '../../static/scss/main.scss';
-// const cx = classnames.bind(s);
+
+import '../../static/scss/main.scss';
 
 export class Main extends React.Component {
-
     render() {
         return (
             <div>

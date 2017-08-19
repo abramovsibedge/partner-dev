@@ -1,9 +1,6 @@
 import * as React from 'react';
-import { Link, IndexLink } from 'react-router';
 
-import '../static/scss/main.scss';
-
-// import '../static/favicon.ico';
+import '../static/scss/app.scss';
 
 export class App extends React.Component {
     static propTypes = {
