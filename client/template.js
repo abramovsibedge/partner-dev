@@ -15,13 +15,13 @@ const Html = ({
       <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
       <meta name='viewport' content='width=device-width, initial-scale=1' />
       <title>{title}</title>
-      {favicon ? <link rel='shortcut icon' href={favicon} /> : null}
-      {stylesheet ? <link rel='stylesheet' href={stylesheet} /> : null}
+      {favicon ? <link rel='shortcut icon' href={'/' + favicon} /> : null}
+      {stylesheet ? <link rel='stylesheet' href={'/' + stylesheet} /> : null}
     </head>
     <body>
       <div id="root" className="root" dangerouslySetInnerHTML={{ __html: body }} />
-			{/*<script src={vendor} />*/}
-      <script src={bundle} />
+			<script src={'/' + vendor} />
+      <script src={'/' + bundle} />
     </body>
   </html>
 );

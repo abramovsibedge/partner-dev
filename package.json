@@ -93,6 +93,6 @@
     "bump:minor": "npm version minor -m \"v%s\"",
     "bump:major": "npm version major -m \"v%s\"",
     "bump": "npm run bump:patch",
-    "deploy": "firebase deploy"
+    "deploy": "npm run clean && npm run build:static && firebase deploy"
   }
 }
