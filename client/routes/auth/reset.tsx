@@ -10,12 +10,14 @@ import {
 	IconPerson
 } from '../../components/icons';
 import { emailValidation } from '../../utils';
+import * as firebase from 'firebase';
 
 interface State {
 	inProgress: boolean
 	email: string
 	validationState: boolean
-	formMessage: string
+	formMessage: string,
+	success: boolean
 }
 
 export class Reset extends React.Component<{}, State> {
@@ -26,35 +28,47 @@ export class Reset extends React.Component<{}, State> {
 			inProgress: false,
 			email: "",
 			validationState: true,
-			formMessage: ''
+			formMessage: '',
+			success: false
 		}
 	}
 
 	private submitHandler() {
-		this.setState(update(this.state, {
-			inProgress: { $set: true }
-		}));
-
+		const $t = this;
+		const $state = $t.state;
+		const $email = $state.email;
 		let state: boolean = true;
 		let message: string = '';
 
-		if (!this.state.email || !emailValidation(this.state.email)) {
-			state = false;
-			message += 'Email not valid.';
-		}
+		$t.setState(update($state, {
+			inProgress: { $set: true }
+		}), () => {
+			if (!$email || !emailValidation($email)) {
+				state = false;
+				message += 'Email not valid.';
+			}
 
-		this.setState(update(this.state, {
-			formMessage: { $set: message },
-			validationState: { $set: state }
-		}));
+			$t.setState(update($state, {
+				formMessage: { $set: message },
+				validationState: { $set: state },
+				inProgress: { $set: false }
+			}));
 
-		if (!state && message) return false;
+			if (!state && message) return false;
 
-		this.setState(update(this.state, {
-			inProgress: { $set: false }
-		}));
-
-		console.log( 123 );
+			firebase.auth().sendPasswordResetEmail($email).then(() => {
+				$t.setState(update($state, {
+					success: { $set: true },
+					inProgress: { $set: false }
+				}));
+			}).catch(function(error: any) {
+				$t.setState(update($state, {
+					formMessage: { $set: error.message },
+					inProgress: { $set: false }
+				}));
+				return false;
+			});
+		});
 	}
 
 	private changeHandler(value: string, stateItem: string) {
@@ -68,7 +82,8 @@ export class Reset extends React.Component<{}, State> {
 			inProgress,
 			email,
 			validationState,
-			formMessage
+			formMessage,
+			success
 		} = this.state;
 
 		return (
@@ -76,7 +91,14 @@ export class Reset extends React.Component<{}, State> {
 				<div className="register_logo">
 					<img className="register_logo_img" src={require('../../static/media/poweredbyhss_light.svg')} alt="Partners Portal Logo" width="auto" height="32"/>
 				</div>
-				<Form submit={() => this.submitHandler()}>
+				{success && <div className="register_success">
+					<p>Reset link sended to your email.</p>
+					<div className="register_success_actions">
+						<a href="/auth/signin">Sign in</a>
+						<a href="/">Main page</a>
+					</div>
+				</div>}
+				{!success && <Form submit={() => this.submitHandler()}>
 					<div className="register_error-message">{formMessage}</div>
 
 					<div className="register_header">
@@ -97,7 +119,7 @@ export class Reset extends React.Component<{}, State> {
 					<div className="form_row register_actions">
 						<Button loading={inProgress} type="submit" className="register_submit">Reset password</Button>
 					</div>
-				</Form>
+				</Form>}
 			</div>
 		);
 	}

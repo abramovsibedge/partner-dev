@@ -14,6 +14,7 @@ import {
 	IconLock
 } from '../../components/icons';
 import { emailValidation } from '../../utils';
+import * as firebase from 'firebase';
 
 interface Option {
 	value: string
@@ -89,47 +90,77 @@ export class Signup extends React.Component<{}, State> {
 	}
 
 	private submitHandler() {
-		this.setState(update(this.state, {
-			inProgress: { $set: true }
-		}));
-
+		const $t = this;
+		const $state = $t.state;
 		let state: boolean = true;
 		let message: string = '';
 
-		if (!this.state.firstName
-					|| !this.state.lastName
-					|| !this.state.password
-					|| !this.state.passwordAgain
-					|| !this.state.productsSelected
-					|| !this.state.numberOfUsersSelected
-					|| !this.state.tos) {
-			state = false;
-			message += 'Fill in the highlighted fields.';
-		}
+		$t.setState(update($state, {
+			inProgress: { $set: true }
+		}), () => {
+			if (!$state.firstName
+				|| !$state.lastName
+				|| !$state.password
+				|| !$state.passwordAgain
+				|| !$state.productsSelected
+				|| !$state.numberOfUsersSelected
+				|| !$state.tos) {
+				state = false;
+				message += 'Fill in the highlighted fields.';
+			}
 
-		if (!emailValidation(this.state.email)) {
-			state = false;
-			message += 'Email not valid.'
-		}
+			if (!emailValidation($state.email)) {
+				state = false;
+				message += 'Email not valid.'
+			}
 
-		if (this.state.password !== this.state.passwordAgain) {
-			state = false;
-			message += 'Passwords are not equals.'
-		}
+			if ($state.password !== $state.passwordAgain) {
+				state = false;
+				message += 'Passwords are not equals.'
+			}
 
-		this.setState(update(this.state, {
-			formMessage: { $set: message },
-			validationState: { $set: state }
-		}));
+			$t.setState(update($state, {
+				formMessage: { $set: message },
+				validationState: { $set: state },
+				inProgress: { $set: false }
+			}));
 
-		if (!state && message) return false;
+			if (!state && message) return false;
 
-		this.setState(update(this.state, {
-			inProgress: { $set: false },
-			success: { $set: true }
-		}));
+			firebase.auth().createUserWithEmailAndPassword($state.email, $state.password)
+				.then(function(){
+					firebase.auth().onAuthStateChanged(() => {
+						firebase.auth().currentUser.sendEmailVerification().then(() => {}, (error: any) => {
+							console.log(error);
+						});
 
-		console.log( 123 );
+						firebase.database().ref('users/' + firebase.auth().currentUser.uid).set({
+							first_name: $state.firstName,
+							last_name: $state.lastName,
+							company: $state.companyName,
+							email: $state.email,
+							plan: $state.productsSelected,
+							users: $state.numberOfUsersSelected,
+							tos: Math.floor((new Date()).getTime() / 1000),
+							first: true
+						});
+
+						$t.setState(update($state, {
+							formMessage: { $set: '' },
+							inProgress: { $set: false },
+							success: { $set: true }
+						}));
+
+					});
+				})
+				.catch(function (error: any) {
+					$t.setState(update($state, {
+						formMessage: { $set: error.message },
+						inProgress: { $set: false }
+					}));
+					return false;
+				});
+		});
 	}
 
 	private changeHandler(value: string, stateItem: string) {

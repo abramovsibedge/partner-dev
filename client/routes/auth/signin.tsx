@@ -10,6 +10,7 @@ import {
 	IconPerson,
 	IconLock
 } from '../../components/icons';
+import * as firebase from 'firebase';
 
 interface State {
 	inProgress: boolean
@@ -33,31 +34,41 @@ export class Signin extends React.Component<{}, State> {
 	}
 
 	private submitHandler() {
-		this.setState(update(this.state, {
-			inProgress: { $set: true }
-		}));
-
+		const $t = this;
+		const $state = $t.state;
 		let state: boolean = true;
 		let message: string = '';
 
-		if (!this.state.login
-			|| !this.state.password) {
-			state = false;
-			message += 'Fill in the highlighted fields.';
-		}
+		$t.setState(update($state, {
+			inProgress: { $set: true }
+		}), () => {
+			if (!$state.login || !$state.password) {
+				state = false;
+				message += 'Fill in the highlighted fields.';
+			}
 
-		this.setState(update(this.state, {
-			formMessage: { $set: message },
-			validationState: { $set: state }
-		}));
+			$t.setState(update($state, {
+				formMessage: { $set: message },
+				validationState: { $set: state },
+				inProgress: { $set: false }
+			}));
 
-		if (!state && message) return false;
+			if (!state && message) return false;
 
-		this.setState(update(this.state, {
-			inProgress: { $set: false }
-		}));
-
-		console.log( 123 );
+			firebase.auth().signInWithEmailAndPassword($state.login, $state.password)
+				.then(function(){
+					firebase.auth().onAuthStateChanged((user: any) => {
+						console.log( user );
+					});
+				})
+				.catch(function (error: any) {
+					$t.setState(update($state, {
+						formMessage: { $set: error.message },
+						inProgress: { $set: false }
+					}));
+					return false;
+				});
+		});
 	}
 
 	private changeHandler(value: string, stateItem: string) {
