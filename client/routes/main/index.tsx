@@ -1,4 +1,8 @@
 import * as React from 'react';
+import {
+	IconHTMLTag,
+	IconQuestion
+} from '../../components/icons';
 
 import '../../static/scss/routes/main.scss';
 
@@ -19,8 +23,7 @@ export class Main extends React.Component {
 							<ul className="menu">
 								<li className="menu_item docslink">
 									<span className="menu_link">
-										<svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path
-											d="M8.998 21.6L16.53 2.4h1.99l-7.51 19.2H8.998zM0 13.3l8.8 5.09v-2.13l-6.31-3.557L8.8 9.338V7.212L0 12.108v1.194zm18.352-4.338l-.665 1.7 3.824 2.04-5.93 3.342-.38.974v1.37l8.8-5.088V12.11l-5.648-3.146z"/></svg>
+										<IconHTMLTag width="24" height="24"/>
 										<span>Docs</span>
 									</span>
 									<div className="docslink_drop">
@@ -48,10 +51,7 @@ export class Main extends React.Component {
 								</li>
 								<li className="menu_item">
 									<a className="menu_link" href="mailto:platformpartners@anchorfree.com">
-										<svg height="17" viewBox="0 0 34 34" width="17" xmlns="http://www.w3.org/2000/svg">
-											<path d="M17.123 9.2c-1.44 0-2.642.503-3.604 1.32S11.993 12 11.83 14h2.937c.063-1 .302-1.23.715-1.61s.926-.62 1.54-.62c.616 0 1.117.175 1.505.572.39.396.583.882.583 1.48s-.187 1.094-.558 1.5l-1.772 1.768c-.518.518-.626.934-.78 1.25-.154.314-.003.793-.003 1.44V21h2v-.832c0-.646.29-1.148.58-1.504.113-.13.334-.287.522-.473.186-.186.448-.404.715-.655.267-.25.5-.457.662-.62.16-.16.403-.436.71-.824.534-.646.806-1.455.806-2.426 0-1.408-.45-2.503-1.356-3.29-.908-.782-2.077-1.174-3.517-1.174zM16.94 22.145c-.51 0-.946.18-1.31.534-.365.355-.547.78-.547 1.273 0 .493.186.914.558 1.262.373.348.814.52 1.323.52.51 0 .947-.177 1.31-.532.364-.356.547-.78.547-1.274s-.187-.915-.56-1.264c-.37-.348-.81-.52-1.32-.52z"/>
-											<path d="M17 0C7.61 0 0 7.61 0 17s7.61 17 17 17 17-7.61 17-17S26.39 0 17 0zm0 31C9.268 31 3 24.732 3 17S9.268 3 17 3s14 6.268 14 14-6.268 14-14 14z"/>
-										</svg>
+										<IconQuestion width="17" height="17" />
 										<span>Help</span>
 									</a>
 								</li>
