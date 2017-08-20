@@ -1,4 +1,4 @@
-@import "../app";
+@import "../vars/vars";
 
 .register {
   position: relative;
@@ -15,6 +15,24 @@
     bottom: 0;
     right: 0;
     background: rgba( $palette-brand, .8);
+  }
+
+  &_content {
+    position: absolute;
+    z-index: 100;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%,-50%,0);
+    width: 100%;
+
+    &_logo {
+      margin-bottom: 21px;
+      &_img {
+        display: block;
+        max-height: 32px;
+        margin: 0 auto;
+      }
+    }
   }
 
   &_logo {
@@ -43,13 +61,26 @@
 
     &_name {
       color: $palette-white;
-      font: 24px/29px 'apercubold', Arial, sans-serif;
+      font: 24px/29px $font-bold;
       letter-spacing: -0.5px;
     }
     &_link {
+      margin-left: auto;
       color: $palette-white;
-      font: 13px/18px 'apercubold', Arial, sans-serif;
+      font: 13px/18px $font-bold;
       letter-spacing: -0.2px;
+    }
+  }
+
+  &_footer {
+    display: flex;
+    margin: 0 30px 20px;
+    &_reset {
+      margin-left: auto;
+      margin-top: 11px;
+      color: $palette-white;
+      font: 13px/18px $font-bold;
+      letter-spacing: -.2px;
     }
   }
 
@@ -60,25 +91,36 @@
     background: $x-palette-gray;
     color: $palette-white;
   }
+
+  &_success {
+    p {
+      min-height: 36px;
+      margin-bottom: 15px;
+      color: $palette-white;
+      text-align: center;
+    }
+
+    &_actions {
+      margin: 50px 100px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+
+      > a {
+        color: $palette-white;
+        font: 13px/18px $font-regular;
+        letter-spacing: -0.2px;
+      }
+    }
+  }
 }
 
 .register_signup {
-  position: absolute;
-  z-index: 100;
-  top: 50%;
-  left: 50%;
-  transform: translate3d(-50%,-50%,0);
-  width: 100%;
   max-width: 516px;
+}
 
-  &_logo {
-    margin-bottom: 21px;
-    &_img {
-      display: block;
-      max-height: 32px;
-      margin: 0 auto;
-    }
-  }
+.register_signip {
+  max-width: 390px;
 }
 
 

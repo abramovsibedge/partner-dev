@@ -52,7 +52,7 @@
     outline: none;
     background: transparent;
     color: $x-palette-dark;
-    font: 13px 'apercuregular', Arial, sans-serif;
+    font: 13px $font-regular;
     &:focus,
     &.is-filled,
     &:-webkit-autofill {
@@ -133,14 +133,14 @@
   width: 100%;
   border: none;
   outline: none;
-  font: 13px 'apercuregular', Arial, sans-serif;
+  font: 13px $font-regular;
 
   &_error {
     color: $x-palette-lightred;
   }
 
   option {
-    font: 13px 'apercuregular', Arial, sans-serif;
+    font: 13px $font-regular;
     &[disabled] { color: $x-palette-gray_1; }
   }
 }

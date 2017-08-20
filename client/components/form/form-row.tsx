@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import '../../static/scss/components/form.scss';
-
 export default class FormRow extends React.Component {
 	constructor(props: any) {
 		super(props);

@@ -1,0 +1,33 @@
+@import "../vars/vars";
+
+.spinner {
+  position: relative;
+  z-index: 2;
+  animation: rotator 1.4s linear infinite;
+  margin: 5px;
+  .path {
+    animation: dash 1.4s ease-in-out infinite;
+    stroke: $palette-white;
+    stroke-dasharray: $offset;
+    stroke-dashoffset: 0;
+    transform-origin: center;
+  }
+}
+
+$offset: 187;
+@keyframes rotator {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(270deg); }
+}
+
+@keyframes dash {
+  0% { stroke-dashoffset: $offset; }
+  50% {
+    stroke-dashoffset: $offset/4;
+    transform:rotate(135deg);
+  }
+  100% {
+    stroke-dashoffset: $offset;
+    transform:rotate(450deg);
+  }
+}

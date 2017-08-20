@@ -1,8 +1,7 @@
 import * as React from 'react';
-import * as classnames from 'classnames/bind';
+import * as classNames from 'classnames';
 
-const s = require('../../static/scss/components/form.scss');
-const cx = classnames.bind(s);
+import '../../static/scss/components/form.scss';
 
 interface Props {
 	submit: () => void,
@@ -26,7 +25,7 @@ export default class Form extends React.Component<Props, {}> {
 		} = this.props;
 
 		return (
-			<form className={cx('form', className)} onSubmit={(e) => this.formSubmitHandler(e)} noValidate>
+			<form className={classNames('form', className)} onSubmit={(e) => this.formSubmitHandler(e)} noValidate>
 				{children}
 			</form>
 		);

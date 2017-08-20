@@ -57,6 +57,16 @@ $x-size-content_width: 92.065%;
 Mixins
 -------------------------------------------------------------------------
 */
+
+/*
+-------------------------------------------------------------------------
+Font vars
+-------------------------------------------------------------------------
+*/
+$font-regular: 'apercuregular', Arial, sans-serif;
+$font-bold: 'apercubold', Arial, sans-serif;
+
+
 @mixin clearfix {
     &:after {
         content: '';

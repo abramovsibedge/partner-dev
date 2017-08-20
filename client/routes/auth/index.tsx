@@ -1,21 +1,15 @@
 import * as React from 'react';
-import * as classnames from 'classnames/bind';
 
-const s = require('../../static/scss/routes/auth.scss');
-const cx = classnames.bind(s);
+import '../../static/scss/routes/auth.scss';
 
 export class Auth extends React.Component {
 	constructor(props: any) {
 		super(props);
 	}
 
-	static propTypes = {
-		children: React.PropTypes.node,
-	};
-
 	render() {
 		return (
-			<div className={cx('register')}>
+			<div className="register">
 				{this.props.children}
 			</div>
 		);

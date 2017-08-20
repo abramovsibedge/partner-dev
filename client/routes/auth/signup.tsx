@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as classnames from 'classnames/bind';
 import * as update from 'immutability-helper';
 
 import {
@@ -16,15 +15,13 @@ import {
 } from '../../components/icons';
 import { emailValidation } from '../../utils';
 
-const s = require('../../static/scss/routes/auth.scss');
-const cx = classnames.bind(s);
-
 interface Option {
 	value: string
 	label: string
 }
 
 interface State {
+	inProgress: false,
 	firstName: string
 	lastName: string
 	companyName: string
@@ -37,7 +34,8 @@ interface State {
 	numberOfUsersSelected: string
 	tos: boolean
 	validationState: boolean,
-	formMessage: string
+	formMessage: string,
+	success: boolean
 }
 
 export class Signup extends React.Component<{}, State> {
@@ -45,6 +43,7 @@ export class Signup extends React.Component<{}, State> {
 		super(props);
 
 		this.state = {
+			inProgress: false,
 			firstName: "",
 			lastName: "",
 			companyName: "",
@@ -84,11 +83,16 @@ export class Signup extends React.Component<{}, State> {
 			numberOfUsersSelected: "",
 			tos: false,
 			validationState: true,
-			formMessage: ''
+			formMessage: '',
+			success: false
 		}
 	}
 
 	private submitHandler() {
+		this.setState(update(this.state, {
+			inProgress: { $set: true }
+		}));
+
 		let state: boolean = true;
 		let message: string = '';
 
@@ -100,6 +104,7 @@ export class Signup extends React.Component<{}, State> {
 					|| !this.state.numberOfUsersSelected
 					|| !this.state.tos) {
 			state = false;
+			message += 'Fill in the highlighted fields.';
 		}
 
 		if (!emailValidation(this.state.email)) {
@@ -109,7 +114,7 @@ export class Signup extends React.Component<{}, State> {
 
 		if (this.state.password !== this.state.passwordAgain) {
 			state = false;
-			message += 'Password are not equals.'
+			message += 'Passwords are not equals.'
 		}
 
 		this.setState(update(this.state, {
@@ -119,8 +124,12 @@ export class Signup extends React.Component<{}, State> {
 
 		if (!state && message) return false;
 
-		console.log( 123 );
+		this.setState(update(this.state, {
+			inProgress: { $set: false },
+			success: { $set: true }
+		}));
 
+		console.log( 123 );
 	}
 
 	private changeHandler(value: string, stateItem: string) {
@@ -131,6 +140,7 @@ export class Signup extends React.Component<{}, State> {
 
 	render() {
 		const {
+			inProgress,
 			firstName,
 			lastName,
 			companyName,
@@ -143,16 +153,24 @@ export class Signup extends React.Component<{}, State> {
 			numberOfUsersSelected,
 			tos,
 			validationState,
-			formMessage
+			formMessage,
+			success
 		} = this.state;
 
 		return (
-			<div className={cx('register_signup')}>
+			<div className="register_content register_signup">
 				<div className="register_logo">
-					<img className={cx('register_logo_img')} src={require('../../static/media/poweredbyhss_light.svg')} alt="Partners Portal Logo" width="auto" height="32"/>
+					<img className="register_logo_img" src={require('../../static/media/poweredbyhss_light.svg')} alt="Partners Portal Logo" width="auto" height="32"/>
 				</div>
-				<Form submit={() => this.submitHandler()}>
-					{formMessage && <div className="register_error-message">{formMessage}</div>}
+				{success && <div className="register_success">
+					<p>A confirmation letter was sent to the specified mailbox.<br />Please confirm your account in order to start using the application</p>
+					<div className="register_success_actions">
+						<a href="/auth/signin">Sign in</a>
+						<a href="/">Main page</a>
+					</div>
+				</div>}
+				{!success && <Form submit={() => this.submitHandler()}>
+					<div className="register_error-message">{formMessage}</div>
 
 					<div className="register_header">
 						<h1 className="register_header_name">Sign Up</h1>
@@ -195,7 +213,7 @@ export class Signup extends React.Component<{}, State> {
 							type="email"
 							label="Email"
 							value={email}
-							notValid={!validationState && (!lastName || !emailValidation(email))}
+							notValid={!validationState && (!email || !emailValidation(email))}
 							onChange={(e) => this.changeHandler(e.target.value, 'email')}>
 							<IconPerson width="24" height="24" />
 						</Input>
@@ -254,10 +272,10 @@ export class Signup extends React.Component<{}, State> {
 						</Checkbox>
 					</FormRow>
 
-					<div className={cx('form_row register_actions')}>
-						<Button type="submit" className={cx('register_submit')}>Sign In</Button>
+					<div className="form_row register_actions">
+						<Button loading={inProgress} type="submit" className="register_submit">Sign In</Button>
 					</div>
-				</Form>
+				</Form>}
 			</div>
 		);
 	}

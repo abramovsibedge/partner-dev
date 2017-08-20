@@ -1,8 +1,17 @@
 @import "../vars/vars";
 
 .button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 48px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+
+  &[disabled] {
+    user-pointer: none;
+    cursor: default;
+  }
 }

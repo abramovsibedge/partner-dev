@@ -1,15 +1,122 @@
 import * as React from 'react';
+import * as update from 'immutability-helper';
 
-// import '../../static/scss/signin.scss';
+import {
+	Form,
+	FormRow,
+	Input } from '../../components/form';
+import { Button } from '../../components/button';
+import {
+	IconPerson,
+	IconLock
+} from '../../components/icons';
 
-export class Signin extends React.Component {
+interface State {
+	inProgress: boolean
+	login: string
+	password: string
+	validationState: boolean,
+	formMessage: string
+}
+
+export class Signin extends React.Component<{}, State> {
 	constructor(props: any) {
 		super(props);
+
+		this.state = {
+			inProgress: false,
+			login: "",
+			password: "",
+			validationState: true,
+			formMessage: ''
+		}
 	}
+
+	private submitHandler() {
+		this.setState(update(this.state, {
+			inProgress: { $set: true }
+		}));
+
+		let state: boolean = true;
+		let message: string = '';
+
+		if (!this.state.login
+			|| !this.state.password) {
+			state = false;
+			message += 'Fill in the highlighted fields.';
+		}
+
+		this.setState(update(this.state, {
+			formMessage: { $set: message },
+			validationState: { $set: state }
+		}));
+
+		if (!state && message) return false;
+
+		this.setState(update(this.state, {
+			inProgress: { $set: false }
+		}));
+
+		console.log( 123 );
+	}
+
+	private changeHandler(value: string, stateItem: string) {
+		let newState = {};
+		newState[stateItem] = { $set: value } ;
+		this.setState(update(this.state, newState));
+	}
+
 	render() {
+		const {
+			inProgress,
+			login,
+			password,
+			validationState,
+			formMessage
+		} = this.state;
+
 		return (
-			<div>
-				<h1>signin</h1>
+			<div className="register_content register_signip">
+				<div className="register_logo">
+					<img className="register_logo_img" src={require('../../static/media/poweredbyhss_light.svg')} alt="Partners Portal Logo" width="auto" height="32"/>
+				</div>
+				<Form submit={() => this.submitHandler()}>
+					<div className="register_error-message">{formMessage}</div>
+
+					<div className="register_header">
+						<a className="register_header_link" href="/auth/signup">I don`t have an account</a>
+					</div>
+
+					<FormRow>
+						<Input
+							type="text"
+							label="Login"
+							value={login}
+							notValid={!validationState && !login}
+							onChange={(e) => this.changeHandler(e.target.value, 'login')}>
+							<IconPerson width="24" height="24" />
+						</Input>
+					</FormRow>
+
+					<FormRow>
+						<Input
+							type="text"
+							label="Password"
+							value={password}
+							notValid={!validationState && !password}
+							onChange={(e) => this.changeHandler(e.target.value, 'password')}>
+							<IconLock width="24" height="24" />
+						</Input>
+					</FormRow>
+
+					<div className="register_footer">
+						<a className="register_footer_reset" href="/auth/reset">Forgot password</a>
+					</div>
+
+					<div className="form_row register_actions">
+						<Button loading={inProgress} type="submit" className="register_submit">Sign Up</Button>
+					</div>
+				</Form>
 			</div>
 		);
 	}
