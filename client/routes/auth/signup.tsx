@@ -36,7 +36,8 @@ interface State {
 	numberOfUsers: Option[]
 	numberOfUsersSelected: string
 	tos: boolean
-	validationState: boolean
+	validationState: boolean,
+	formMessage: string
 }
 
 export class Signup extends React.Component<{}, State> {
@@ -82,14 +83,44 @@ export class Signup extends React.Component<{}, State> {
 			}],
 			numberOfUsersSelected: "",
 			tos: false,
-			validationState: true
+			validationState: true,
+			formMessage: ''
 		}
 	}
 
 	private submitHandler() {
+		let state: boolean = true;
+		let message: string = '';
+
+		if (!this.state.firstName
+					|| !this.state.lastName
+					|| !this.state.password
+					|| !this.state.passwordAgain
+					|| !this.state.productsSelected
+					|| !this.state.numberOfUsersSelected
+					|| !this.state.tos) {
+			state = false;
+		}
+
+		if (!emailValidation(this.state.email)) {
+			state = false;
+			message += 'Email not valid.'
+		}
+
+		if (this.state.password !== this.state.passwordAgain) {
+			state = false;
+			message += 'Password are not equals.'
+		}
+
 		this.setState(update(this.state, {
-			validationState: { $set: false }
+			formMessage: { $set: message },
+			validationState: { $set: state }
 		}));
+
+		if (!state && message) return false;
+
+		console.log( 123 );
+
 	}
 
 	private changeHandler(value: string, stateItem: string) {
@@ -111,7 +142,8 @@ export class Signup extends React.Component<{}, State> {
 			numberOfUsers,
 			numberOfUsersSelected,
 			tos,
-			validationState
+			validationState,
+			formMessage
 		} = this.state;
 
 		return (
@@ -120,7 +152,7 @@ export class Signup extends React.Component<{}, State> {
 					<img className={cx('register_logo_img')} src={require('../../static/media/poweredbyhss_light.svg')} alt="Partners Portal Logo" width="auto" height="32"/>
 				</div>
 				<Form submit={() => this.submitHandler()}>
-					<div className="register_error-message">test</div>
+					{formMessage && <div className="register_error-message">{formMessage}</div>}
 
 					<div className="register_header">
 						<h1 className="register_header_name">Sign Up</h1>
@@ -174,7 +206,7 @@ export class Signup extends React.Component<{}, State> {
 							type="password"
 							label="Choose password"
 							value={password}
-							notValid={!validationState && !password}
+							notValid={!validationState && !password || password !== passwordAgain}
 							onChange={(e) => this.changeHandler(e.target.value, 'password')}>
 							<IconLock width="24" height="24" />
 						</Input>
@@ -183,7 +215,7 @@ export class Signup extends React.Component<{}, State> {
 							type="password"
 							label="Repeat password"
 							value={passwordAgain}
-							notValid={!validationState && !passwordAgain}
+							notValid={!validationState && !passwordAgain || password !== passwordAgain}
 							onChange={(e) => this.changeHandler(e.target.value, 'passwordAgain')}>
 							<IconLock width="24" height="24" />
 						</Input>

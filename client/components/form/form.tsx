@@ -26,7 +26,7 @@ export default class Form extends React.Component<Props, {}> {
 		} = this.props;
 
 		return (
-			<form className={cx('form', className)} onSubmit={(e) => this.formSubmitHandler(e)}>
+			<form className={cx('form', className)} onSubmit={(e) => this.formSubmitHandler(e)} noValidate>
 				{children}
 			</form>
 		);
