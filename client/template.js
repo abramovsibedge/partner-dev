@@ -19,8 +19,8 @@ const Html = ({
       {stylesheet ? <link rel='stylesheet' href={stylesheet} /> : null}
     </head>
     <body>
-      <div id='root' dangerouslySetInnerHTML={{ __html: body }} />
-			<script src={vendor} />
+      <div id="root" className="root" dangerouslySetInnerHTML={{ __html: body }} />
+			{/*<script src={vendor} />*/}
       <script src={bundle} />
     </body>
   </html>

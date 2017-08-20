@@ -59,8 +59,8 @@ export class Main extends React.Component {
 								</li>
 							</ul>
 							<ul className={cx('auth')}>
-								<li className={cx('auth_item')}><a className={cx('auth_link','auth_link-active')} href="#/signup">Sign up</a></li>
-								<li className={cx('auth_item')}><a className={cx('auth_link')} href="#/login">Sign in</a></li>
+								<li className={cx('auth_item')}><a className={cx('auth_link','auth_link-active')} href="/auth/signup">Sign up</a></li>
+								<li className={cx('auth_item')}><a className={cx('auth_link')} href="/auth/signin">Sign in</a></li>
 							</ul>
 						</div>
 						<div className={cx('front_header_middle')}>
@@ -190,7 +190,7 @@ export class Main extends React.Component {
 									<li className={cx('footer_top_item')}><a className={cx('footer_top_link')} href="#/front">Docs</a></li>
 									<li className={cx('footer_top_item')}><a className={cx('footer_top_link')} href="mailto:platformpartners@anchorfree.com">Help</a>
 									</li>
-									<li className={cx('footer_top_item"')}><a className={cx('footer_top_link')} href="#/login">Log in</a>&nbsp;&&nbsp;<a
+									<li className={cx('footer_top_item"')}><a className={cx('footer_top_link')} href="#/login">Log in</a>&nbsp;&amp;&nbsp;<a
 										className={cx('footer_top_link')} href="#/signup">Sign up</a></li>
 									{/*<li className={cx('footer_top_item')}><a className={cx('footer_top_link')} href="#/front">Menu & Products</a></li>*/}
 								</ul>

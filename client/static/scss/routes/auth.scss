@@ -1,4 +1,132 @@
-h1 {
-  font-size: 36px;
-  color: #f00;
+@import "../app";
+
+.register {
+  position: relative;
+  min-height: 100%;
+  background: url('../../media/bg-content.jpg') no-repeat center center;
+  background-size: 100% auto;
+
+  &:after {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba( $palette-brand, .8);
+  }
+
+  &_logo {
+    display: flex;
+    margin-bottom: 21px;
+    justify-content: center;
+
+    &_img {
+      max-height: 32px;
+    }
+  }
+
+  &_error-message {
+    min-height: 36px;
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: $palette-red;
+    text-align: center;
+  }
+
+  &_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 30px 20px;
+
+    &_name {
+      color: $palette-white;
+      font: 24px/29px 'apercubold', Arial, sans-serif;
+      letter-spacing: -0.5px;
+    }
+    &_link {
+      color: $palette-white;
+      font: 13px/18px 'apercubold', Arial, sans-serif;
+      letter-spacing: -0.2px;
+    }
+  }
+
+  &_submit {
+    display: block;
+    margin-top: 64px;
+    width: 100%;
+    background: $x-palette-gray;
+    color: $palette-white;
+  }
 }
+
+.register_signup {
+  position: absolute;
+  z-index: 100;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%,-50%,0);
+  width: 100%;
+  max-width: 516px;
+
+  &_logo {
+    margin-bottom: 21px;
+    &_img {
+      display: block;
+      max-height: 32px;
+      margin: 0 auto;
+    }
+  }
+}
+
+
+//.content {
+//  position: relative;
+//  min-height: 100%;
+//  .spinner {
+//    position: absolute;
+//    z-index: 2;
+//    top: 50%;
+//    left: 50%;
+//    transform: translate(-50%,-50%);
+//    width: 65px;
+//    height: 65px;
+//    .path {
+//      stroke-dasharray: $offset;
+//      stroke-dashoffset: 0;
+//      transform-origin: center;
+//    }
+//  }
+//  &.js-init {
+//    background: url('../media/bg-content.jpg') no-repeat center center;
+//    background-size: 100% auto;
+//    &:after {
+//      content: '';
+//      position: absolute;
+//      z-index: 1;
+//      top: 0;
+//      left: 0;
+//      bottom: 0;
+//      right: 0;
+//      background: rgba( $palette-brand, .8);
+//    }
+//    > .spinner {
+//      animation: rotator 1.4s linear infinite;
+//      .path {
+//        animation: dash 1.4s ease-in-out infinite;
+//        stroke: $palette-white;
+//      }
+//    }
+//  }
+//  .js-loading {
+//    > .spinner {
+//      animation: rotator 1.4s linear infinite;
+//      .path {
+//        animation: dash 1.4s ease-in-out infinite;
+//        stroke: $palette-brand;
+//      }
+//    }
+//  }
+//}

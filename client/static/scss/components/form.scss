@@ -1,0 +1,146 @@
+@import "../vars/vars";
+
+.form {
+  $form: &;
+
+  &_row {
+    margin: 0 30px 8px;
+  }
+
+  &_group {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 0 26px 8px;
+
+    > .input {
+      flex: 1 1 100%;
+      margin: 0 4px;
+    }
+  }
+}
+
+.input {
+  $input: &;
+
+  position: relative;
+  height: 48px;
+  padding: 0 12px;
+  background: $palette-white;
+  border-radius: 4px;
+
+  svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translate(0,-50%);
+    fill: $palette-brand;
+    & + #{$input}_input {
+      margin-left: 36px;
+      & + #{$input}_label {
+        padding-left: 48px;
+      }
+    }
+  }
+
+  &_input {
+    position: relative;
+    z-index: 20;
+    width: 87%;
+    margin-top: 22px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: $x-palette-dark;
+    font: 13px 'apercuregular', Arial, sans-serif;
+    &:focus,
+    &.is-filled,
+    &:-webkit-autofill {
+      & + #{$input}_label {
+        padding-top: 8px;
+        font-size: 10px;
+      }
+    }
+  }
+
+  &_label {
+    position: absolute;
+    z-index: 5;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 17px 0 0 12px;
+    color: $x-palette-gray_1;
+    transition: all 0.3s ease-in-out;
+  }
+
+  &_error {
+    label { box-shadow: 0 0 10px $palette-red; }
+    svg { fill: $x-palette-lightred; }
+  }
+}
+
+.checkbox {
+  &_input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    visibility: hidden;
+    &:checked + label:before {
+      background: $palette-white url('../../media/check-blue.svg') no-repeat center;
+      background-size: 95%;
+    }
+  }
+
+  &_label {
+    position: relative;
+    display: inline-block;
+    padding-top: 2px;
+    padding-left: 30px;
+    text-decoration: none;
+    color: $palette-white;
+    cursor: pointer;
+    transition: color ease-in-out .3s;
+    user-select: none;
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 18px;
+      height: 18px;
+      border-radius: 2px;
+      background: $palette-white;
+    }
+  }
+
+  &_error {
+    label:before { box-shadow: 0 0 10px $palette-red; }
+  }
+
+  a {
+    color: $palette-white;
+    font: 13px/18px 'apercubold', Arial, sans-serif;
+    letter-spacing: -0.2px;
+    text-decoration: underline;
+  }
+}
+
+.select {
+  width: 100%;
+  border: none;
+  outline: none;
+  font: 13px 'apercuregular', Arial, sans-serif;
+
+  &_error {
+    color: $x-palette-lightred;
+  }
+
+  option {
+    font: 13px 'apercuregular', Arial, sans-serif;
+    &[disabled] { color: $x-palette-gray_1; }
+  }
+}
