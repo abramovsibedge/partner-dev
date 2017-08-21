@@ -1,17 +1,28 @@
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 import * as React from 'react';
+
 import {
 	IconHTMLTag,
 	IconQuestion
-} from '../../components/icons';
+} from '../../components/icons'
+
+import { MainModel } from '../../reducers/main/model';
+
+interface PropsR {
+    MainModel: MainModel[],
+    dispatch: Dispatch<{}>;
+}
 
 import '../../static/scss/routes/main.scss';
 
-export class Main extends React.Component {
-	constructor(props: any) {
-		super(props);
-	}
+
+class Main extends React.Component<PropsR, void> {
 
 	render() {
+		const {MainModel, dispatch} = this.props;
+		console.log(MainModel);
+
 		return (
 			<div className="front">
 				<div className="front_header">
@@ -215,4 +226,12 @@ export class Main extends React.Component {
 			</div>
 		);
 	}
+
 }
+
+
+export default connect(
+    state => ({
+        mains: state.mains
+	}),({})
+)(Main);

@@ -10,6 +10,7 @@
     "deploy": "npm run clean && npm run build:static && firebase deploy"
   },
   "dependencies": {
+    "@types/classnames": "^2.2.2",
     "@types/immutability-helper": "^2.0.15",
     "@types/lodash": "^4.14.73",
     "@types/node": "^8.0.24",
@@ -19,6 +20,7 @@
     "@types/react-router": "3.0.2",
     "@types/react-router-redux": "4.0.40",
     "@types/redux": "^3.6.0",
+    "@types/redux-actions": "^1.2.8",
     "@types/redux-logger": "^3.0.0",
     "autoprefixer": "^6.5.3",
     "axis": "^0.6.1",
@@ -58,6 +60,7 @@
     "react-transform-catch-errors": "^1.0.2",
     "react-transform-hmr": "^1.0.4",
     "redbox-react": "^1.2.5",
+    "redux-actions": "^2.2.1",
     "rimraf": "^2.5.2",
     "rupture": "^0.6.1",
     "sass-loader": "^4.1.1",
@@ -71,5 +74,8 @@
     "webpack": "^2.2.0",
     "webpack-dev-middleware": "^1.6.1",
     "webpack-hot-middleware": "^2.10.0"
+  },
+  "devDependencies": {
+    "redux-logger": "^3.0.6"
   }
 }
