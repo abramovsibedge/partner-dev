@@ -7,21 +7,26 @@ import {
 	IconQuestion
 } from '../../components/icons'
 
-import { MainModel } from '../../reducers/main/model';
+import * as model from '../../reducers/main/model';
+import * as actions from '../../reducers/main/actions';
 
-interface PropsR {
-    MainModel: MainModel[],
-    dispatch: Dispatch<{}>;
+interface Props {
+    mainmodel: model.MainModel;
+    addId: ()=>void;
 }
 
 import '../../static/scss/routes/main.scss';
 
 
-class Main extends React.Component<PropsR, void> {
+class Main extends React.Component<Props, {}> {
+
+	componentDidMount() {
+		this.props.addId();
+    }
 
 	render() {
-		const {MainModel, dispatch} = this.props;
-		console.log(MainModel);
+		const {mainmodel} = this.props;
+		console.log('mainmodel', mainmodel);
 
 		return (
 			<div className="front">
@@ -229,9 +234,11 @@ class Main extends React.Component<PropsR, void> {
 
 }
 
-
 export default connect(
     state => ({
-        mains: state.mains
-	}),({})
+        mainmodel: state.mains
+	}),
+	({
+        addId: actions.addId
+    })
 )(Main);

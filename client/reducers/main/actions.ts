@@ -4,11 +4,11 @@ import *  as types from './constants';
 
 import { MainModel, IState } from './model';
 
-const addTodo = createAction<void>(
-    types.CHANGE_ID,
-    () => { }
+const addId = createAction<void>(
+    types.ADD_ID,
+    () => {}
 );
 
 export {
-    addTodo
+    addId
 }

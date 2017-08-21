@@ -8,9 +8,10 @@ const initialState: IState = [<MainModel>{
 }];
 
 export default handleActions<IState, MainModel>({
-    [types.CHANGE_ID] : (state: IState, action: Action<MainModel>) : IState => {
+    [types.ADD_ID] : (state: IState, action: Action<MainModel>) : IState => {
         return [{
             id: 5,
         }, ...state];
     },
+
 }, initialState);

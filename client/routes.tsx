@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Route, IndexRoute } from 'react-router';
 
 import { App } from './routes/app';
-import { Main } from './routes/main/';
+import Main  from './routes/main/';
 import { Auth } from './routes/auth/';
 import { Reset } from './routes/auth/reset';
 import { Signin } from './routes/auth/signin';
