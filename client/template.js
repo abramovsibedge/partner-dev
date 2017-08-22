@@ -18,7 +18,7 @@ const Html = ({
       {favicon ? <link rel='shortcut icon' href={'/' + favicon} /> : null}
       {stylesheet ? <link rel='stylesheet' href={'/' + stylesheet} /> : null}
     </head>
-    <body>
+    <body className="dark-theme">
       <div id="root" className="root" dangerouslySetInnerHTML={{ __html: body }} />
 			<script src={'/' + vendor} />
       <script src={'/' + bundle} />

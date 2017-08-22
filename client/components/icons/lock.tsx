@@ -5,7 +5,7 @@ interface Props {
 	height: string
 }
 
-export default class IconLock extends React.Component<Props, {}> {
+export class IconLock extends React.Component<Props, {}> {
 	render() {
 		const {
 			width,

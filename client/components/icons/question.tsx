@@ -5,7 +5,7 @@ interface Props {
 	height: string
 }
 
-export default class IconQuestion extends React.Component<Props, {}> {
+export class IconQuestion extends React.Component<Props, {}> {
 	render() {
 		const {
 			width,

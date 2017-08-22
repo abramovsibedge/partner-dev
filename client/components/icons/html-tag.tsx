@@ -5,7 +5,7 @@ interface Props {
 	height: string
 }
 
-export default class IconHTMLTag extends React.Component<Props, {}> {
+export class IconHTMLTag extends React.Component<Props, {}> {
 	render() {
 		const {
 			width,

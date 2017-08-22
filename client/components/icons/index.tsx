@@ -1,11 +1,13 @@
-import IconPerson from './person';
-import IconLock from './lock';
-import IconHTMLTag from './html-tag';
-import IconQuestion from './question';
+import { IconPerson } from './person';
+import { IconLock } from './lock';
+import { IconHTMLTag } from './html-tag';
+import { IconQuestion } from './question';
+import { IconPlus } from './plus';
 
 export {
 	IconPerson,
 	IconLock,
 	IconHTMLTag,
-	IconQuestion
+	IconQuestion,
+	IconPlus
 };
