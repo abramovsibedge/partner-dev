@@ -27,6 +27,7 @@ interface State {
 	addProjectObject: object
 	projects: any
 	loading: boolean
+	project: any
 }
 
 export default class Projects extends React.Component<{}, State> {
@@ -43,7 +44,8 @@ export default class Projects extends React.Component<{}, State> {
 				message: ''
 			},
 			projects: [],
-			loading: true
+			loading: true,
+			project: null
 		}
 	}
 
@@ -94,6 +96,10 @@ export default class Projects extends React.Component<{}, State> {
 		if (!state && message) return false;
 
 		// TODO save handler
+	}
+
+	loadProjectItem() {
+
 	}
 
 	render() {
@@ -191,9 +197,9 @@ export default class Projects extends React.Component<{}, State> {
 												<button className="modal_btn modal_btn-submit" type="submit">Create project</button>
 											</div>
 										</Form>
-										<button className="modal_close" type="button" onClick={() => this.showAddProject(false)}>
+										<Button type="button" className="modal_close" onClick={() => this.showAddProject(false)}>
 											<IconClose width="24" height="24" />
-										</button>
+										</Button>
 									</Modal>
 								</div>
 							</div>
@@ -238,9 +244,9 @@ export default class Projects extends React.Component<{}, State> {
 												<div className="table_cell_content">{item.description}</div>
 											</div>
 											<div className="table_cell" style={{width: '20%'}}>
-												<button className="project_close js-project-close">
-													<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16.243 17.657L12 13.414l-4.243 4.243-1.414-1.414L10.586 12 6.343 7.757l1.414-1.414L12 10.586l4.243-4.243 1.414 1.414L13.414 12l4.243 4.243"/></svg>
-												</button>
+												<Button type="button" className="project_close">
+													<IconClose width="24" height="24" />
+												</Button>
 											</div>
 											<div className="table_row_content project_pane"></div>
 										</div>

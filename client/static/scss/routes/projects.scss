@@ -1,1 +1,285 @@
 @import "../vars/vars";
+
+.project {
+  &_filter {
+    @include clearfix();
+    &_add { float: right; }
+  }
+  &_edit {
+    &_input {
+      position: relative;
+      height: 48px;
+      margin: 0 52px 8px;
+      background: $x-palette-gray_3;
+      border-radius: 4px;
+      text-align: left;
+      &-disabled:hover {
+        label {
+          cursor: not-allowed;
+        }
+      }
+    }
+    &_label {
+      position: absolute;
+      z-index: 5;
+      top: 0;
+      left: 0;
+      transition: all 0.3s ease-in-out;
+      display: block;
+      width: 100%;
+      height: 100%;
+      padding: 17px 0 0 16px;
+      color: $x-palette-gray_1;
+    }
+    &_field {
+      position: relative;
+      width: 90%;
+      margin: 22px 0 0 16px;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: inherit;
+      font: 13px 'apercuregular', Arial, sans-serif;
+      &:focus,
+      &.project_edit_field-filled,
+      &:-webkit-autofill {
+        z-index: 6;
+        & + {
+          .project_edit_label {
+            padding-top: 8px;
+            font-size: 10px;
+          }
+        }
+      }
+    }
+    &_checkbox {
+      position: relative;
+      margin: 0 52px 8px;
+      text-align: left;
+      &_input[type="checkbox"] {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        visibility: hidden;
+        &:checked + label:before {
+          background: $palette-brand url('../../media/check-white.svg') no-repeat center;
+          background-size: 95%;
+        }
+      }
+      &_label {
+        position: relative;
+        display: inline-block;
+        height: 19px;
+        padding-top: 2px;
+        padding-left: 30px;
+        text-decoration: none;
+        color: $x-palette-gray_1;
+        cursor: pointer;
+        transition: color ease-in-out .3s;
+        &:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 18px;
+          height: 18px;
+          border-radius: 2px;
+          background: rgba( $palette-black, 0.07);
+        }
+      }
+    }
+  }
+  &_close {
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    right: 24px;
+    transform: translate(0,-50%);
+    display: none;
+    padding: 4px;
+    border: 1px solid $palette-white;
+    border-radius: 100%;
+    outline: none;
+    background: $palette-brand;
+    cursor: pointer;
+    svg {
+      display: block;
+      fill: $palette-white;
+    }
+    @at-root {
+      .table_row_open {
+        .project_close { display: block; }
+      }
+    }
+  }
+  &_pane {
+    &_content {
+      position: relative;
+      z-index: 2;
+      margin: 28px 26px 24px;
+      color: $x-palette-gray;
+    }
+    &.js-loading-subscriber {
+      .spinner {
+        position: absolute;
+        z-index: 2;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        width: 65px;
+        height: 65px;
+        animation: rotator 1.4s linear infinite;
+        .path {
+          stroke-dasharray: $offset;
+          stroke-dashoffset: 0;
+          transform-origin: center;
+          animation: dash 1.4s ease-in-out infinite;
+          stroke: $palette-brand;
+        }
+      }
+    }
+  }
+  &_traffic {
+    padding-bottom: 24px;
+    border-bottom: 1px solid darken( $palette-white, 5% );
+    table {
+      width: 100%;
+      th {
+        padding-bottom: 4px;
+        color: $x-palette-gray_1;
+        font-size: 12px;
+        font-weight: 300;
+        letter-spacing: -0.2px;
+      }
+      td {
+        font-size: 13px;
+        letter-spacing: -0.2px;
+      }
+    }
+  }
+  &_tabs {
+    float: left;
+    margin-top: 4px;
+    &_item {
+      display: inline-block;
+      height: 36px;
+      margin-right: 26px;
+      padding: 0;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      outline: none;
+      background: none;
+      font: 13px/38px 'apercuregular', Arial, sans-serif;
+      color: $x-palette-gray_1;
+      cursor: pointer;
+      transition: color .3s ease-in-out;
+      &:hover:not( .subscriber_tabs_item-active ) { color: $palette-brand; }
+      &-active {
+        border-bottom: 2px solid $palette-brand;
+        font: 24px 'apercubold', Arial, sans-serif;
+        color: $x-palette-gray;
+        letter-spacing: -0.5px;
+        cursor: default;
+      }
+    }
+    &_filter {
+      @include clearfix();
+      height: 74px;
+      margin-top: 20px;
+      padding: 13px 10px;
+      border-radius: 4px;
+      background: $x-palette-gray_3;
+      &_form {
+        float: left;
+      }
+    }
+    &_content {
+      position: relative;
+      min-height: 170px;
+    }
+    &_empty {
+      padding-top: 57px;
+      text-align: center;
+      font-size: 13px;
+      line-height: 21px;
+      color: $x-palette-gray_1;
+      span { color: $x-palette-gray; }
+      p:not(:last-child) { margin-bottom: 27px; }
+      a {
+        display: inline-block;
+        margin: 0 15px;
+        text-decoration: none;
+        color: $palette-brand;
+      }
+    }
+  }
+  &_manage {
+    float: right;
+    &_item {
+      height: 48px;
+      margin-left: 8px;
+      padding: 12px;
+      background: none;
+      border: 0;
+      outline: none;
+      font: 13px 'apercuregular', Arial, sans-serif;
+      color: $x-palette-gray_1;
+      cursor: pointer;
+      transition: color .3s ease-in-out;
+      &:hover { color: $palette-brand; }
+      span {
+        display: inline-block;
+        padding-top: 1px;
+        padding-left: 8.5px;
+      }
+      svg { fill: $palette-brand; }
+      span, svg { vertical-align: middle; }
+      &-disable {
+        svg { fill: lighten( $palette-red, 18% ); }
+      }
+      &-enable {
+        svg {
+          transform: rotate(-90deg);
+          background: $palette-brand;
+          border-radius: 100%;
+          fill: $palette-white;
+        }
+      }
+    }
+  }
+  &_buttons {
+    @include clearfix();
+    margin-top: 24px;
+  }
+  &_tab {
+    display: none;
+    &-active {
+      display: block;
+    }
+  }
+}
+
+.user {
+  &_delete {
+    text-align: right;
+    &_btn {
+      padding: 4px;
+      border: 1px solid $x-palette-lightred;
+      border-radius: 100%;
+      outline: none;
+      background: $palette-white;
+      cursor: pointer;
+      svg {
+        display: block;
+        fill: $x-palette-lightred;
+      }
+    }
+  }
+}
+
+.country {
+  &_visibility {
+    text-align: center;
+  }
+}
