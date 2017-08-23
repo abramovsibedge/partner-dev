@@ -9,6 +9,7 @@ interface Props {
 	type: string
 	loading?: boolean
 	className?: string
+	onClick?: () => void
 }
 
 export class Button extends React.Component<Props, {}> {
@@ -21,12 +22,13 @@ export class Button extends React.Component<Props, {}> {
 			type,
 			className,
 			loading,
+			onClick,
 			children
 		} = this.props;
 
 		return (
-			<button type={type} className={classNames("button", className)} disabled={loading}>
-				{loading ? <Spinner width="30px" height="30px" strokeWidth="6"/> : children}
+			<button onClick={onClick} type={type} className={classNames("button", className)} disabled={loading}>
+				{loading ? <Spinner width="30" height="30" strokeWidth="6"/> : children}
 			</button>
 		);
 	}

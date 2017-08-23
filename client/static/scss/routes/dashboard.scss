@@ -1,7 +1,8 @@
 @import "../vars/vars";
 
 .dashboard {
-
+  min-height: 100%;
+  display: flex;
 }
 
 .header {
@@ -29,13 +30,13 @@
   }
   &_toolbar {
     width: 40%;
+    display: flex;
     margin-left: auto;
     &_content {
-      position: absolute;
-      top: 50%;
-      right: 0;
-      transform: translate3d( 0, -50%, 0);
-      width: 100%;
+      margin-left: auto;
+    }
+    button {
+      font: 13px $font-regular;
     }
   }
   &_logo {
@@ -110,7 +111,15 @@
 .layout {
   width: $x-size-content_width;
   margin: 0 auto 30px;
-  padding-bottom: 80px;
+  align-self: stretch;
+  &.is-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg circle {
+      stroke: $palette-brand;
+    }
+  }
   &_head {
     position: fixed;
     top: $x-size-header_height + 15px;

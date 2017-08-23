@@ -1,16 +1,6 @@
 @import "../vars/vars";
 
 .modal {
-  position: fixed;
-  z-index: 10000;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  &_lock {
-    overflow: hidden;
-    margin-right: 17px;
-  }
   &_outer {
     position: fixed;
     z-index: 1;
@@ -30,6 +20,7 @@
     margin-bottom: 20px;
     border-radius: 4px;
     background: $palette-white;
+    outline: none;
   }
   &_close {
     position: absolute;
@@ -52,7 +43,7 @@
   &_header {
     margin: 40px 0 24px;
     color: $x-palette-gray;
-    font: 24px/29px 'apercubold', 'Arial', sans-serif;
+    font: 24px/29px $font-bold;
     text-align: center;
     letter-spacing: -0.5px;
   }
@@ -66,7 +57,6 @@
     margin-bottom: 51px;
     padding: 0 44px;
     color: $x-palette-gray;
-    text-align: center;
   }
   &_footer {
     @include clearfix();
@@ -86,5 +76,13 @@
     &-reset { color: $x-palette-gray_1; }
     &-submit { color: $palette-brand; }
     &_fullwidth { width: 100%; }
+  }
+  &_form {
+    .input {
+      background: $x-palette-gray_3;
+    }
+    label {
+      color: $x-palette-gray_1;
+    }
   }
 }
