@@ -20,7 +20,7 @@ interface State {
 	formMessage: string
 }
 
-export class Signin extends React.Component<{}, State> {
+export default class Signin extends React.Component<{}, State> {
 	constructor(props: any) {
 		super(props);
 
@@ -58,7 +58,9 @@ export class Signin extends React.Component<{}, State> {
 			firebase.auth().signInWithEmailAndPassword($state.login, $state.password)
 				.then(function(){
 					firebase.auth().onAuthStateChanged((user: any) => {
-						console.log( user );
+						if (user) {
+							console.log( user.De );
+						}
 					});
 				})
 				.catch(function (error: any) {

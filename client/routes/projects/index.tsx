@@ -1,20 +1,51 @@
-import { connect } from 'react-redux';
 import * as React from 'react';
+import * as update from 'immutability-helper';
 
 import {
 	IconHTMLTag,
-	IconQuestion
+	IconQuestion,
+	IconPlus
 } from '../../components/icons'
 import Spinner from '../../components/spinner';
+import Modal from '../../components/modal';
+import fetchProjects from '../../functions/fetchProjects'
 
 import '../../static/scss/routes/dashboard.scss';
 import '../../static/scss/routes/projects.scss';
 
-export class Projects extends React.Component {
+interface State {
+	addProjectModalState: boolean
+}
+
+export default class Projects extends React.Component<{}, State> {
 	constructor(props: any) {
 		super(props);
+
+		this.state = {
+			addProjectModalState: false
+		}
 	}
+
+	componentDidMount() {
+		fetchProjects().then((result) => {
+			console.log( result );
+		})
+	}
+
+	addProjectModalTrigger(value: boolean) {
+		const $t = this;
+		const $state = $t.state;
+
+		$t.setState(update($state, {
+			addProjectModalState: { $set: value },
+		}));
+	}
+
 	render() {
+		const {
+			addProjectModalState
+		} = this.state;
+
 		return (
 			<div className="dashboard">
 				<header className='header'>
@@ -55,11 +86,14 @@ export class Projects extends React.Component {
 						</div>
 						<div className="header_toolbar">
 							<div className="header_toolbar_content">
-								<div class="project_filter">
-									<button class="btn project_filter_add js-project-create" type="button">
-										<svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg>
+								<div className="project_filter">
+									<button onClick={() => this.addProjectModalTrigger(true)} className="btn project_filter_add js-project-create" type="button">
+										<IconPlus width="24" height="24" />
 										<span>Add project</span>
 									</button>
+									{addProjectModalState &&  <Modal trigger={() => this.addProjectModalTrigger(false)}>
+										testyyy
+									</Modal> }
 								</div>
 							</div>
 						</div>
@@ -72,8 +106,3 @@ export class Projects extends React.Component {
 		);
 	}
 }
-
-export default connect(
-	state => ({}),
-	({})
-)(Projects);

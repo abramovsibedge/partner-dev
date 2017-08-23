@@ -39,7 +39,7 @@ interface State {
 	success: boolean
 }
 
-export class Signup extends React.Component<{}, State> {
+export default class Signup extends React.Component<{}, State> {
 	constructor(props: any) {
 		super(props);
 

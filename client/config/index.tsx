@@ -1,5 +1,5 @@
 export default {
-	firebaseKey: " AIzaSyALn32lO1RSMPiBopHtUFNx2wiJs5uu-Fw",
-	firebaseAuthDomain: "partner-dev-88932.firebaseapp.com",
-	firebasedatabaseURL: "https://partner-dev-88932.firebaseio.com"
+	firebaseKey: " AIzaSyBjJGXAQW9wuT7O1_bHMoLPaT6YSM1ELGU",
+	firebaseAuthDomain: "web-portal-for-partners.firebaseapp.com",
+	firebasedatabaseURL: "https://web-portal-for-partners.firebaseio.com"
 };

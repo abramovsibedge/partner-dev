@@ -5,7 +5,7 @@ interface Props {
 	height: string
 }
 
-export class IconPlus extends React.Component<Props, {}> {
+export class IconClose extends React.Component<Props, {}> {
 	render() {
 		const {
 			width,
@@ -18,7 +18,7 @@ export class IconPlus extends React.Component<Props, {}> {
 				width={height}
 				viewBox="0 0 24 24"
 				xmlns="http://www.w3.org/2000/svg">
-				<path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg>
+				<path d="M16.243 17.657L12 13.414l-4.243 4.243-1.414-1.414L10.586 12 6.343 7.757l1.414-1.414L12 10.586l4.243-4.243 1.414 1.414L13.414 12l4.243 4.243"/></svg>
 		);
 	}
 };
