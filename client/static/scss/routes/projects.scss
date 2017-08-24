@@ -56,7 +56,7 @@
       position: relative;
       margin: 0 52px 8px;
       text-align: left;
-      &_input[type="checkbox"] {
+      input[type="checkbox"] {
         position: absolute;
         top: 0;
         left: 0;
@@ -67,7 +67,7 @@
           background-size: 95%;
         }
       }
-      &_label {
+      label {
         position: relative;
         display: inline-block;
         height: 19px;
@@ -97,6 +97,8 @@
     right: 24px;
     transform: translate(0,-50%);
     display: none;
+    width: 34px;
+    height: 34px;
     padding: 4px;
     border: 1px solid $palette-white;
     border-radius: 100%;

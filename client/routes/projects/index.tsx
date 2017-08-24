@@ -10,11 +10,14 @@ import {
 	IconClose
 } from '../../components/icons'
 import Spinner from '../../components/spinner';
-import fetchProjects from '../../functions/fetchProjects'
+import fetchProjects from '../../functions/fetchProjects';
+import fetchProjectItem from '../../functions/fetchProjectItem';
 import {
 	Form,
 	FormRow,
-	Input } from '../../components/form';
+	Input,
+	Checkbox
+} from '../../components/form';
 import { Button } from '../../components/button';
 
 import '../../static/scss/routes/dashboard.scss';
@@ -27,7 +30,8 @@ interface State {
 	addProjectObject: object
 	projects: any
 	loading: boolean
-	project: any
+	selectedProjectId: string
+	selectedProject: object
 }
 
 export default class Projects extends React.Component<{}, State> {
@@ -45,7 +49,8 @@ export default class Projects extends React.Component<{}, State> {
 			},
 			projects: [],
 			loading: true,
-			project: null
+			selectedProjectId: '',
+			selectedProject: {}
 		}
 	}
 
@@ -98,8 +103,30 @@ export default class Projects extends React.Component<{}, State> {
 		// TODO save handler
 	}
 
-	loadProjectItem() {
+	openProject(id: string) {
+		const $t = this;
+		const $state = $t.state;
 
+		this.setState(update($state, {
+			selectedProjectId: { $set: id }
+		}));
+
+		fetchProjectItem(id).then(result => {
+			this.setState(update($state, {
+				selectedProjectId: { $set: id },
+				selectedProject: { $set: result }
+			}));
+		})
+	}
+
+	closeProject() {
+		const $t = this;
+		const $state = $t.state;
+
+		this.setState(update($state, {
+			selectedProject: { $set: {} },
+			selectedProjectId: { $set: '' }
+		}));
 	}
 
 	render() {
@@ -107,8 +134,13 @@ export default class Projects extends React.Component<{}, State> {
 			addProjectModalState,
 			addProjectObject,
 			loading,
+			selectedProjectId,
+			selectedProject,
 			projects
 		} = this.state;
+
+		console.log( selectedProjectId );
+		console.log( selectedProject );
 
 		return (
 			<div className="dashboard">
@@ -236,7 +268,7 @@ export default class Projects extends React.Component<{}, State> {
 									</div>
 								</div>}
 								{projects.length > 0 && projects.map((item: any, index: number) => {
-									return <div key={index} className="table_row js-project-item">
+									return <div key={index} className={classNames("table_row", selectedProjectId === item.publickey && "table_row_open")} onClick={() => this.openProject(item.publickey)}>
 											<div className="table_cell" style={{width: '30%'}}>
 												<div className="table_cell_content">{item.publickey}</div>
 											</div>
@@ -244,14 +276,137 @@ export default class Projects extends React.Component<{}, State> {
 												<div className="table_cell_content">{item.description}</div>
 											</div>
 											<div className="table_cell" style={{width: '20%'}}>
-												<Button type="button" className="project_close">
+												<Button type="button" className="project_close" onClick={() => this.closeProject()}>
 													<IconClose width="24" height="24" />
 												</Button>
 											</div>
-											<div className="table_row_content project_pane"></div>
+											<div className={classNames("table_row_content", Object.keys(selectedProject).length === 0 && "is-loading")}>
+												{ selectedProjectId === item.publickey && Object.keys(selectedProject).length === 0
+													&& <Spinner width="65" height="65" strokeWidth="6"/> }
+
+												{ selectedProjectId === item.publickey && Object.keys(selectedProject).length > 0
+												&& <div className="project_pane_content">
+													<div className="project_traffic">
+														<table>
+															<thead>
+															<tr>
+																<th>Private Key</th>
+																<th>URL</th>
+															</tr>
+															</thead>
+															<tbody>
+															<tr>
+																<td>{item.privatekey}</td>
+																<td>https://backend.northghost.com</td>
+															</tr>
+															</tbody>
+														</table>
+													</div>
+													<div className="project_buttons">
+														<div className="project_tabs">
+															{/*<!-- <button className="project_tabs_item project_tabs_item-active" data-type="settings" type="button">Settings</button> -->*/}
+															<button className="project_tabs_item project_tabs_item-active" data-type="vpn-servers" type="button">VPN Servers</button>
+															<button className="project_tabs_item" data-type="access" type="button">Access</button>
+														</div>
+														<div className="project_manage">
+															<button className="project_manage_item project_manage_item-disable js-project-disable" type="button">
+																<svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM4 12c0-4.42 3.58-8 8-8 1.85 0 3.55.63 4.9 1.69L5.69 16.9C4.63 15.55 4 13.85 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1C19.37 8.45 20 10.15 20 12c0 4.42-3.58 8-8 8z"/></svg>
+																<span>Delete project</span>
+															</button>
+														</div>
+													</div>
+													<div className="project_content">
+														{/*<!-- <div id="settings" className="project_tab project_tab-active">*/}
+																{/*settings*/}
+														{/*</div> -->*/}
+														<div id="vpn-servers" className="project_tab project_tab-active">
+															<div className="project_tab_content">
+																{selectedProject['countries'].countries.length === 0 && <div className="project_tabs_empty">
+																	<p>Project has no countries.</p>
+																</div>}
+
+																{selectedProject['countries'].countries.length > 0 && <div className="table inner_table">
+																	<div className="table_head">
+																		<table>
+																			<tbody>
+																			<tr>
+																				<td style={{width: '25%'}}>Country</td>
+																				<td style={{width: '65%'}}>Protocols</td>
+																				<td style={{width: '10%'}}>Visibility</td>
+																			</tr>
+																			</tbody>
+																		</table>
+																	</div>
+																	<div className="table_body">
+																		{selectedProject['countries'].countries.map((item: any, index: number) => {
+																			return <div key={index} className="table_row">
+																				<div className="table_cell" style={{width: '25%'}}>
+																					<div className="table_cell_content">{item.country}</div>
+																				</div>
+																				<div className="table_cell" style={{width: '65%'}}>
+																					<div className="table_cell_content">{item.protocols}</div>
+																				</div>
+																				<div className="table_cell" style={{width: '10%'}}>
+																					<div className="table_cell_content country_visibility">
+																						<Checkbox
+																							className="project_edit_checkbox"
+																							checked={item.visibility}
+																							onChange={(e) => console.log(123)}>&nbsp;</Checkbox>
+																					</div>
+																				</div>
+																			</div>
+																		})}
+																	</div>
+																</div>}
+															</div>
+														</div>
+														<div id="access" className="project_tab user">
+															<div className="project_tab_content">
+																<div className="user_new">
+																	<button className="btn user_new_btn js-user-create" type="button">
+																		<svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg>
+																		<span>Add access email</span>
+																	</button>
+																</div>
+																{selectedProject['emails'].usersMail.length === 0 && <div className="project_tabs_empty">
+																	<p>Project has no users.</p>
+																</div>}
+
+																{selectedProject['emails'].usersMail.length > 0 && <div className="table inner_table">
+																	<div className="table_head">
+																		<table>
+																			<tbody>
+																			<tr>
+																				<td style={{width: '50%'}}>User</td>
+																				<td style={{width: '50%'}}>&nbsp;</td>
+																			</tr>
+																			</tbody>
+																		</table>
+																	</div>
+																	<div className="table_body">
+																		{selectedProject['emails'].usersMail.map((item: any, index: number) => {
+																			return <div key={index} className="table_row user_item">
+																				<div className="table_cell" style={{width: '50%'}}>
+																					<div className="table_cell_content">{item}</div>
+																				</div>
+																				<div className="table_cell" style={{width: '50%'}}>
+																					<div className="table_cell_content user_delete">
+																						<button className="user_delete_btn js-user-delete">
+																							<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16.243 17.657L12 13.414l-4.243 4.243-1.414-1.414L10.586 12 6.343 7.757l1.414-1.414L12 10.586l4.243-4.243 1.414 1.414L13.414 12l4.243 4.243"></path></svg>
+																						</button>
+																					</div>
+																				</div>
+																			</div>
+																		})}
+																	</div>
+																</div>}
+															</div>
+														</div>
+													</div>
+												</div>}
+											</div>
 										</div>
 								})}
-
 							</div>
 						</div>
 					</div>

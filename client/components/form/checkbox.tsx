@@ -5,6 +5,7 @@ import * as _ from 'lodash'
 interface Props {
 	notValid?: boolean
 	checked: boolean
+	className?: string
 	onChange: (e: any) => void
 }
 
@@ -31,6 +32,7 @@ export default class Checkbox extends React.Component<Props, State> {
 			checked,
 			onChange,
 			children,
+			className,
 			notValid
 		} = this.props;
 
@@ -39,7 +41,7 @@ export default class Checkbox extends React.Component<Props, State> {
 		} = this.state;
 
 		return (
-			<div className={classNames('checkbox', (notValid && 'checkbox_error'))}>
+			<div className={classNames('checkbox', className, (notValid && 'checkbox_error'))}>
 				<input id={id} className="checkbox_input" type="checkbox" checked={(checked)} onChange={(e) => onChange(e)} />
 				<label htmlFor={id} className="checkbox_label">{children}</label>
 			</div>

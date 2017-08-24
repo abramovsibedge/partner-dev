@@ -49,6 +49,16 @@ $table_transition_properties: .3s ease-in-out;
       min-height: 0;
       transform-origin: top;
       transition: all $table_transition_properties;
+
+      &.is-loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        svg circle {
+          stroke: $palette-brand;
+        }
+      }
+
       &:after {
         content: '';
         position: absolute;
