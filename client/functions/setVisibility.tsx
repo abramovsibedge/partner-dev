@@ -6,7 +6,7 @@ const setVisibility = (project: string, country: string, visibility: boolean) =>
 	request += '&country=' + country;
 	request += '&visibility=' + visibility;
 
-	return fetch(config.host + 'portal/project/country ?access_token=' + config.firebaseToken + request, {
+	return fetch(config.host + 'portal/project/country?access_token=' + config.firebaseToken + request, {
 		method: 'PUT',
 	})
 		.then(response => response.json())
