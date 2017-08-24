@@ -3,7 +3,7 @@
 .modal {
   &_outer {
     position: fixed;
-    z-index: 1;
+    z-index: 10000;
     top: 0;
     right: 0;
     bottom: 0;
@@ -12,7 +12,7 @@
   }
   &_inner {
     position: absolute;
-    z-index: 2;
+    z-index: 9999;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -57,6 +57,9 @@
     margin-bottom: 51px;
     padding: 0 44px;
     color: $x-palette-gray;
+    &.is-text-center {
+      text-align: center;
+    }
   }
   &_footer {
     @include clearfix();

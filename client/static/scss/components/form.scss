@@ -77,7 +77,8 @@
   }
 
   &_error {
-    label { box-shadow: 0 0 10px $palette-red; }
+    label,
+    &.select_error { box-shadow: 0 0 10px $palette-red; }
     svg { fill: $x-palette-lightred; }
   }
 }

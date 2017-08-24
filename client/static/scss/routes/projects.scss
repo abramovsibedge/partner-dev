@@ -92,10 +92,9 @@
   }
   &_close {
     position: absolute;
-    z-index: 10;
-    top: 50%;
+    z-index: 100;
+    top: 24px;
     right: 24px;
-    transform: translate(0,-50%);
     display: none;
     width: 34px;
     height: 34px;
@@ -254,12 +253,6 @@
     @include clearfix();
     margin-top: 24px;
   }
-  &_tab {
-    display: none;
-    &-active {
-      display: block;
-    }
-  }
 }
 
 .user {
@@ -267,6 +260,8 @@
     text-align: right;
     &_btn {
       padding: 4px;
+      width: 34px;
+      height: 34px;
       border: 1px solid $x-palette-lightred;
       border-radius: 100%;
       outline: none;
@@ -277,6 +272,9 @@
         fill: $x-palette-lightred;
       }
     }
+  }
+  button {
+    font: 13px $font-regular;
   }
 }
 

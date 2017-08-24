@@ -4,6 +4,7 @@ import { IconHTMLTag } from './html-tag';
 import { IconQuestion } from './question';
 import { IconPlus } from './plus';
 import { IconClose } from './close';
+import { IconDelete } from './delete';
 
 export {
 	IconPerson,
@@ -11,5 +12,6 @@ export {
 	IconHTMLTag,
 	IconQuestion,
 	IconPlus,
-	IconClose
+	IconClose,
+	IconDelete
 };
