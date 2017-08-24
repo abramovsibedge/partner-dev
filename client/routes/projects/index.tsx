@@ -231,8 +231,16 @@ export default class Projects extends React.Component<{}, State> {
 	}
 
 	setVisibility(project: string, country: string, visibility: boolean) {
+		const $t = this;
+		const $state = $t.state;
+
 		setVisibility(project, country, visibility).then(() => {
-			console.log( 123 );
+			fetchProjectItem(project).then(result => {
+				this.setState(update($state, {
+					selectedProjectId: { $set: project },
+					selectedProject: { $set: result }
+				}));
+			})
 		});
 	}
 
