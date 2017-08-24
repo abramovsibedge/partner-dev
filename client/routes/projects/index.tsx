@@ -34,6 +34,7 @@ import '../../static/scss/components/modal.scss';
 import '../../static/scss/components/table.scss';
 
 interface State {
+	logoutModalState: boolean
 	addProjectModalState: boolean,
 	addProjectObject: object
 	deleteProjectModalState: boolean
@@ -53,6 +54,7 @@ export default class Projects extends React.Component<{}, State> {
 		super(props);
 
 		this.state = {
+			logoutModalState: false,
 			addProjectModalState: false,
 			addProjectObject: {
 				public_key: '',
@@ -95,6 +97,19 @@ export default class Projects extends React.Component<{}, State> {
 				loading: { $set: false },
 			}));
 		})
+	}
+
+	showLogout(value: boolean) {
+		const $t = this;
+		const $state = $t.state;
+
+		$t.setState(update($state, {
+			logoutModalState: { $set: value },
+		}));
+	}
+
+	logoutConfirm() {
+		// TODO logout function
 	}
 
 	showAddProject(value: boolean) {
@@ -340,7 +355,8 @@ export default class Projects extends React.Component<{}, State> {
 			selectedProjectTab,
 			addUserObject,
 			addUserModalState,
-			deleteUserModalState
+			deleteUserModalState,
+			logoutModalState
 		} = this.state;
 
 		return (
@@ -354,7 +370,24 @@ export default class Projects extends React.Component<{}, State> {
 								</a>
 							</div>
 							<div className="header_logout">
-								Hello test! <a href="#" className="header_logout_link">Logout</a>
+								Hello test! <a href="#" className="header_logout_link" onClick={() => this.showLogout(true)}>Logout</a>
+								<Modal
+									isOpen={logoutModalState}
+									className={{base: 'modal_inner'}}
+									overlayClassName={{base: 'modal_outer'}}
+									contentLabel="test">
+									<div className="modal_header">
+										<h2>Logout</h2>
+									</div>
+									<div className="modal_content is-text-center">Do you really want to logout?</div>
+									<div className="modal_footer">
+										<button className="modal_btn modal_btn-reset" type="button" onClick={() => this.showLogout(false)}>Cancel</button>
+										<button className="modal_btn modal_btn-submit" type="button" onClick={() => this.logoutConfirm()}>Logout</button>
+									</div>
+									<Button type="button" className="modal_close" onClick={() => this.showLogout(false)}>
+										<IconClose width="24" height="24" />
+									</Button>
+								</Modal>
 							</div>
 							<div className="header_links">
 								<div className="header_links_content">
