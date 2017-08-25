@@ -23,6 +23,9 @@ export const logOut = () => firebase.auth().signOut().then(() => window.location
 
 export const signIn = (login: string, password: string) => {
 	return firebase.auth().signInWithEmailAndPassword(login, password)
+		.then(() => {
+			return {type: 'OK'};
+		})
 		.catch((error: any) => {
 			return {type: 'error', error: error};
 		});
@@ -43,6 +46,8 @@ export const signUp = (state: any) => {
 				tos: Math.floor((new Date()).getTime() / 1000),
 				first: true
 			});
+
+			return {type: 'OK'};
 		})
 		.catch((error: any) => {
 			return {type: 'error', error: error};
@@ -51,6 +56,9 @@ export const signUp = (state: any) => {
 
 export const reset = (email: any) => {
 	return firebase.auth().sendPasswordResetEmail(email)
+		.then(() => {
+			return {type: 'OK'};
+		})
 		.catch((error: any) => {
 			return {type: 'error', error: error};
 		});

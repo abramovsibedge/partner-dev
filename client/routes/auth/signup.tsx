@@ -1,8 +1,6 @@
 import * as React from 'react';
 import * as update from 'immutability-helper';
 
-import {signUp} from '../../functions/auth';
-
 import {
 	Form,
 	FormRow,
@@ -18,13 +16,14 @@ import {
 } from '../../components/icons';
 import {emailValidation} from '../../utils';
 
+import {signUp} from '../../functions/auth';
+
 interface Option {
 	value: string
 	label: string
 }
 
 interface State {
-	inProgress: false,
 	firstName: string
 	lastName: string
 	companyName: string
@@ -36,57 +35,56 @@ interface State {
 	numberOfUsers: Option[]
 	numberOfUsersSelected: string
 	tos: boolean
-	validationState: boolean,
-	formMessage: string,
+	valid: boolean,
+	message: string,
 	success: boolean
 }
 
-export default class Signup extends React.Component<{}, State> {
+export class Signup extends React.Component<{}, State> {
 	constructor(props: any) {
 		super(props);
 
 		this.state = {
-			inProgress: false,
-			firstName: "",
-			lastName: "",
-			companyName: "",
-			email: "",
-			password: "",
-			passwordAgain: "",
+			firstName: '',
+			lastName: '',
+			companyName: '',
+			email: '',
+			password: '',
+			passwordAgain: '',
 			products: [{
-				value: "explore",
-				label: "I am just exploring"
+				value: 'explore',
+				label: 'I am just exploring'
 			}, {
-				value: "proxy",
-				label: "Proxy - protection for your app only"
+				value: 'proxy',
+				label: 'Proxy - protection for your app only'
 			}, {
-				value: "vpn",
-				label: "VPN - protection for the whole OS"
+				value: 'vpn',
+				label: 'VPN - protection for the whole OS'
 			}, {
-				value: "other",
-				label: "Other"
+				value: 'other',
+				label: 'Other'
 			}],
-			productsSelected: "",
+			productsSelected: '',
 			numberOfUsers: [{
-				value: "v1",
-				label: "Less than a 100,000"
+				value: 'v1',
+				label: 'Less than a 100,000'
 			}, {
-				value: "v2",
-				label: "More than a 100,000"
+				value: 'v2',
+				label: 'More than a 100,000'
 			}, {
-				value: "v3",
-				label: "More than 500,000"
+				value: 'v3',
+				label: 'More than 500,000'
 			}, {
-				value: "v4",
-				label: "More than a 1,000,000"
+				value: 'v4',
+				label: 'More than a 1,000,000'
 			}, {
-				value: "v5",
-				label: "Not a Production App"
+				value: 'v5',
+				label: 'Not a Production App'
 			}],
-			numberOfUsersSelected: "",
+			numberOfUsersSelected: '',
 			tos: false,
-			validationState: true,
-			formMessage: '',
+			valid: true,
+			message: '',
 			success: false
 		}
 	}
@@ -97,57 +95,49 @@ export default class Signup extends React.Component<{}, State> {
 		let state: boolean = true;
 		let message: string = '';
 
+		if (!$state.firstName
+			|| !$state.lastName
+			|| !$state.password
+			|| !$state.passwordAgain
+			|| !$state.productsSelected
+			|| !$state.numberOfUsersSelected
+			|| !$state.tos) {
+			state = false;
+			message += 'Fill in the highlighted fields.';
+		}
+
+		if (!emailValidation($state.email)) {
+			state = false;
+			message += 'Email not valid.'
+		}
+
+		if ($state.password !== $state.passwordAgain) {
+			state = false;
+			message += 'Passwords are not equals.'
+		}
+
 		$t.setState(update($state, {
-			inProgress: {$set: true}
-		}), () => {
-			if (!$state.firstName
-				|| !$state.lastName
-				|| !$state.password
-				|| !$state.passwordAgain
-				|| !$state.productsSelected
-				|| !$state.numberOfUsersSelected
-				|| !$state.tos) {
-				state = false;
-				message += 'Fill in the highlighted fields.';
-			}
+			message: {$set: message},
+			valid: {$set: state}
+		}));
 
-			if (!emailValidation($state.email)) {
-				state = false;
-				message += 'Email not valid.'
-			}
+		if (!state && message) return false;
 
-			if ($state.password !== $state.passwordAgain) {
-				state = false;
-				message += 'Passwords are not equals.'
-			}
-
-			$t.setState(update($state, {
-				formMessage: {$set: message},
-				validationState: {$set: state},
-				inProgress: {$set: false}
-			}));
-
-			if (!state && message) return false;
-
-			signUp($state)
-				.then((e) => {
-					if (e.type == 'error') {
-						throw {message: e.error.message}
-					} else {
-						$t.setState(update($state, {
-							formMessage: {$set: e.message},
-							inProgress: {$set: false}
-						}));
-					}
-				})
-				.catch((e) => {
+		signUp($state)
+			.then((response) => {
+				if (response && response.type === 'error') {
+					throw {message: response.error.message}
+				} else {
 					$t.setState(update($state, {
-						formMessage: {$set: e.message},
-						inProgress: {$set: false},
 						success: {$set: true}
 					}));
-				})
-		});
+				}
+			})
+			.catch((error) => {
+				$t.setState(update($state, {
+					message: {$set: error.message}
+				}));
+			})
 	}
 
 	private changeHandler(value: string, stateItem: string) {
@@ -158,7 +148,6 @@ export default class Signup extends React.Component<{}, State> {
 
 	render() {
 		const {
-			inProgress,
 			firstName,
 			lastName,
 			companyName,
@@ -170,8 +159,8 @@ export default class Signup extends React.Component<{}, State> {
 			numberOfUsers,
 			numberOfUsersSelected,
 			tos,
-			validationState,
-			formMessage,
+			valid,
+			message,
 			success
 		} = this.state;
 
@@ -190,7 +179,7 @@ export default class Signup extends React.Component<{}, State> {
 					</div>
 				</div>}
 				{!success && <Form submit={() => this.submitHandler()}>
-					<div className="register_error-message">{formMessage}</div>
+					<div className="register_error-message">{message}</div>
 
 					<div className="register_header">
 						<h1 className="register_header_name">Sign Up</h1>
@@ -202,7 +191,7 @@ export default class Signup extends React.Component<{}, State> {
 							type="text"
 							label="First name"
 							value={firstName}
-							notValid={!validationState && !firstName}
+							notValid={!valid && !firstName}
 							onChange={(e) => this.changeHandler(e.target.value, 'firstName')}>
 							<IconPerson width="24" height="24"/>
 						</Input>
@@ -210,7 +199,7 @@ export default class Signup extends React.Component<{}, State> {
 							type="text"
 							label="Last name"
 							value={lastName}
-							notValid={!validationState && !lastName}
+							notValid={!valid && !lastName}
 							onChange={(e) => this.changeHandler(e.target.value, 'lastName')}>
 							<IconPerson width="24" height="24"/>
 						</Input>
@@ -233,7 +222,7 @@ export default class Signup extends React.Component<{}, State> {
 							type="email"
 							label="Email"
 							value={email}
-							notValid={!validationState && (!email || !emailValidation(email))}
+							notValid={!valid && (!email || !emailValidation(email))}
 							onChange={(e) => this.changeHandler(e.target.value, 'email')}>
 							<IconPerson width="24" height="24"/>
 						</Input>
@@ -244,7 +233,7 @@ export default class Signup extends React.Component<{}, State> {
 							type="password"
 							label="Choose password"
 							value={password}
-							notValid={!validationState && !password || password !== passwordAgain}
+							notValid={!valid && !password || password !== passwordAgain}
 							onChange={(e) => this.changeHandler(e.target.value, 'password')}>
 							<IconLock width="24" height="24"/>
 						</Input>
@@ -253,7 +242,7 @@ export default class Signup extends React.Component<{}, State> {
 							type="password"
 							label="Repeat password"
 							value={passwordAgain}
-							notValid={!validationState && !passwordAgain || password !== passwordAgain}
+							notValid={!valid && !passwordAgain || password !== passwordAgain}
 							onChange={(e) => this.changeHandler(e.target.value, 'passwordAgain')}>
 							<IconLock width="24" height="24"/>
 						</Input>
@@ -263,7 +252,7 @@ export default class Signup extends React.Component<{}, State> {
 
 					<FormRow>
 						<Select
-							notValid={!validationState && !productsSelected}
+							notValid={!valid && !productsSelected}
 							value={productsSelected}
 							options={products}
 							onChange={(e) => this.changeHandler(e.target.value, 'productsSelected')}>
@@ -273,7 +262,7 @@ export default class Signup extends React.Component<{}, State> {
 
 					<FormRow>
 						<Select
-							notValid={!validationState && !numberOfUsersSelected}
+							notValid={!valid && !numberOfUsersSelected}
 							value={numberOfUsersSelected}
 							options={numberOfUsers}
 							onChange={(e) => this.changeHandler(e.target.value, 'numberOfUsersSelected')}>
@@ -285,7 +274,7 @@ export default class Signup extends React.Component<{}, State> {
 
 					<FormRow>
 						<Checkbox
-							notValid={!validationState && !tos}
+							notValid={!valid && !tos}
 							checked={tos}
 							onChange={(e) => this.changeHandler(e.target.checked, 'tos')}>
 							I agree with <a target="_blank"
@@ -294,7 +283,7 @@ export default class Signup extends React.Component<{}, State> {
 					</FormRow>
 
 					<div className="form_row register_actions">
-						<Button loading={inProgress} type="submit" className="register_submit">Sign In</Button>
+						<Button type="submit" className="register_submit">Sign In</Button>
 					</div>
 				</Form>}
 			</div>

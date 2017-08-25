@@ -1,7 +1,5 @@
 import * as React from 'react';
-import {
-	check
-} from '../../functions/auth';
+import {check} from '../../functions/auth';
 
 import '../../static/scss/routes/auth.scss';
 

@@ -1,8 +1,6 @@
 import * as React from 'react';
 import * as update from 'immutability-helper';
 
-import {signIn} from '../../functions/auth';
-
 import {
 	Form,
 	FormRow,
@@ -14,65 +12,59 @@ import {
 	IconLock
 } from '../../components/icons';
 
+import {signIn} from '../../functions/auth';
+
 interface State {
-	inProgress: boolean
 	login: string
 	password: string
-	validationState: boolean,
-	formMessage: string
+	valid: boolean,
+	message: string
 }
 
-export default class Signin extends React.Component<{}, State> {
+export class Signin extends React.Component<{}, State> {
 	constructor(props: any) {
 		super(props);
 
 		this.state = {
-			inProgress: false,
-			login: "",
-			password: "",
-			validationState: true,
-			formMessage: ''
+			login: '',
+			password: '',
+			valid: true,
+			message: ''
 		}
 	}
 
 	private submitHandler() {
 		const $t = this;
 		const $state = $t.state;
+
 		let state: boolean = true;
 		let message: string = '';
 
+		if (!$state.login || !$state.password) {
+			state = false;
+			message += 'Fill in the highlighted fields.';
+		}
+
 		$t.setState(update($state, {
-			inProgress: {$set: true}
-		}), () => {
-			if (!$state.login || !$state.password) {
-				state = false;
-				message += 'Fill in the highlighted fields.';
-			}
+			message: {$set: message},
+			valid: {$set: state}
+		}));
 
-			$t.setState(update($state, {
-				formMessage: {$set: message},
-				validationState: {$set: state},
-				inProgress: {$set: false}
-			}));
+		if (!state && message) return false;
 
-			if (!state && message) return false;
-
-			signIn($state.login, $state.password)
-				.then((e) => {
-					if (e.type == 'error') {
-						throw {message: e.error.message}
-					} else {
-						window.location.replace("/projects");
-					}
-				})
-				.catch((e) => {
-					$t.setState(update($state, {
-						formMessage: {$set: e.message},
-						inProgress: {$set: false}
-					}));
-				})
-
-		});
+		signIn($state.login, $state.password)
+			.then((response) => {
+				if (response && response.type === 'error') {
+					throw {message: response.error.message}
+				} else {
+					window.location.replace("/projects");
+				}
+			})
+			.catch((error) => {
+				$t.setState(update($state, {
+					message: {$set: error.message}
+				}));
+			})
 	}
 
 	private changeHandler(value: string, stateItem: string) {
@@ -83,11 +75,10 @@ export default class Signin extends React.Component<{}, State> {
 
 	render() {
 		const {
-			inProgress,
 			login,
 			password,
-			validationState,
-			formMessage
+			valid,
+			message
 		} = this.state;
 
 		return (
@@ -97,7 +88,7 @@ export default class Signin extends React.Component<{}, State> {
 							 alt="Partners Portal Logo" width="auto" height="32"/>
 				</div>
 				<Form submit={() => this.submitHandler()}>
-					<div className="register_error-message">{formMessage}</div>
+					<div className="register_error-message">{message}</div>
 
 					<div className="register_header">
 						<a className="register_header_link" href="/auth/signup">I don`t have an account</a>
@@ -105,10 +96,10 @@ export default class Signin extends React.Component<{}, State> {
 
 					<FormRow>
 						<Input
-							type="text"
-							label="Login"
+							type="email"
+							label="Email"
 							value={login}
-							notValid={!validationState && !login}
+							notValid={!valid && !login}
 							onChange={(e) => this.changeHandler(e.target.value, 'login')}>
 							<IconPerson width="24" height="24"/>
 						</Input>
@@ -116,10 +107,10 @@ export default class Signin extends React.Component<{}, State> {
 
 					<FormRow>
 						<Input
-							type="text"
+							type="password"
 							label="Password"
 							value={password}
-							notValid={!validationState && !password}
+							notValid={!valid && !password}
 							onChange={(e) => this.changeHandler(e.target.value, 'password')}>
 							<IconLock width="24" height="24"/>
 						</Input>
@@ -130,7 +121,7 @@ export default class Signin extends React.Component<{}, State> {
 					</div>
 
 					<div className="form_row register_actions">
-						<Button loading={inProgress} type="submit" className="register_submit">Sign Up</Button>
+						<Button type="submit" className="register_submit">Sign Up</Button>
 					</div>
 				</Form>
 			</div>
