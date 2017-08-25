@@ -55,7 +55,7 @@ export class Signin extends React.Component<{}, State> {
 		signIn($state.login, $state.password)
 			.then((response) => {
 				if (response && response.type === 'error') {
-					throw {message: response.error.message}
+					throw {message: response.error}
 				} else {
 					window.location.replace("/projects");
 				}

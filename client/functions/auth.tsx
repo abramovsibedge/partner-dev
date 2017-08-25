@@ -19,12 +19,17 @@ export const check = () => {
 	return isSigned;
 };
 
-export const logOut = () => firebase.auth().signOut().then(() => window.location.replace("/"));
+export const logOut = () => firebase.auth().signOut().then(() => {
+	localStorage.removeItem('tokens');
+	window.location.replace("/");
+});
 
 export const signIn = (login: string, password: string) => {
 	return firebase.auth().signInWithEmailAndPassword(login, password)
-		.then(() => {
-			return {type: 'OK'};
+		.then((response) => {
+			if (!response.emailVerified) {
+				return {type: 'error', error: 'Please, verify your email before Sign In!'};
+			}
 		})
 		.catch((error: any) => {
 			return {type: 'error', error: error};

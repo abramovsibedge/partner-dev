@@ -22,7 +22,6 @@ import {
 import {Button} from '../../components/button';
 import {emailValidation} from '../../utils';
 
-
 import {
 	loadProjects,
 	loadProjectItem,
@@ -34,7 +33,8 @@ import {
 } from '../../functions/projects';
 
 import {
-	logOut
+	logOut,
+	check
 } from '../../functions/auth';
 
 import '../../static/scss/routes/dashboard.scss';
@@ -43,6 +43,7 @@ import '../../static/scss/components/modal.scss';
 import '../../static/scss/components/table.scss';
 
 interface State {
+	isSigned: boolean
 	logoutModalState: boolean
 	addProjectModalState: boolean,
 	addProjectObject: object
@@ -63,6 +64,7 @@ export class Projects extends React.Component<{}, State> {
 		super(props);
 
 		this.state = {
+			isSigned: check(),
 			logoutModalState: false,
 			addProjectModalState: false,
 			addProjectObject: {
@@ -97,6 +99,10 @@ export class Projects extends React.Component<{}, State> {
 			}],
 			selectedProjectTab: 'vpn-servers'
 		}
+	}
+
+	componentWillMount() {
+		!this.state.isSigned && window.location.replace("/");
 	}
 
 	componentDidMount() {
@@ -536,13 +542,12 @@ export class Projects extends React.Component<{}, State> {
 							</div>
 							<div className="table_body">
 								{projects.length === 0 && <div className="table_row table_row_empty">
-									<div className="table_cell">
+									<div className="table_cell" style={{width: '100%'}}>
 										<div className="table_cell_content">No result for your request.</div>
 									</div>
 								</div>}
 								{projects.length > 0 && projects.map((project: any, index: number) => {
-									return <div key={index}
-															className={classNames("table_row", selectedProjectId === project.publickey && "table_row_open")}>
+									return <div key={index} className={classNames("table_row", selectedProjectId === project.publickey && "table_row_open")}>
 										<div onClick={() => this.openProject(project.publickey)}>
 											<div className="table_cell" style={{width: '30%'}}>
 												<div className="table_cell_content">{project.publickey}</div>
@@ -555,8 +560,7 @@ export class Projects extends React.Component<{}, State> {
 										<Button type="button" className="project_close" onClick={() => this.closeProject()}>
 											<IconClose width="24" height="24"/>
 										</Button>
-										<div
-											className={classNames("table_row_content", Object.keys(selectedProject).length === 0 && "is-loading")}>
+										<div className={classNames("table_row_content", Object.keys(selectedProject).length === 0 && "is-loading")}>
 											{selectedProjectId === project.publickey && Object.keys(selectedProject).length === 0
 											&& <Spinner width="65" height="65" strokeWidth="6"/>}
 
