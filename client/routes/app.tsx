@@ -7,9 +7,7 @@ export class App extends React.Component {
 
 	render() {
 		return (
-			<div className="content">
-				{this.props.children}
-			</div>
+			<div className="content">{this.props.children}</div>
 		);
 	}
 }

@@ -1,29 +1,17 @@
 import * as firebase from 'firebase';
 
-const authHandler = (user: any) => {
-	const data = JSON.stringify({firebaseToken: user.De});
-	localStorage.setItem('tokens', data);
-};
-
-const notAuthHandler = () => {
-	localStorage.removeItem('tokens');
-	window.location.replace("/");
-};
-
 export const check = () => {
 	let isSigned: boolean = true;
 
-	if (!JSON.parse(localStorage.getItem('tokens'))) {
-		notAuthHandler();
-		isSigned = false;
-	}
+	if (!JSON.parse(localStorage.getItem('tokens'))) isSigned = false;
 
 	firebase.auth().onAuthStateChanged((user: any) => {
 		if (user) {
-			authHandler(user);
+			const data = JSON.stringify({firebaseToken: user.De});
+			localStorage.setItem('tokens', data);
 			isSigned = true;
 		} else {
-			notAuthHandler();
+			localStorage.removeItem('tokens');
 			isSigned = false;
 		}
 	});
@@ -31,11 +19,10 @@ export const check = () => {
 	return isSigned;
 };
 
-export const logOut = () => firebase.auth().signOut().then(() => notAuthHandler());
+export const logOut = () => firebase.auth().signOut().then(() => window.location.replace("/"));
 
 export const signIn = (login: string, password: string) => {
 	return firebase.auth().signInWithEmailAndPassword(login, password)
-		.then(() => firebase.auth().onAuthStateChanged((user: any) => user && authHandler(user)))
 		.catch((error: any) => {
 			return {type: 'error', error: error};
 		});
@@ -43,7 +30,7 @@ export const signIn = (login: string, password: string) => {
 
 export const signUp = (state: any) => {
 	return firebase.auth().createUserWithEmailAndPassword(state.email, state.password)
-		.then(() => firebase.auth().onAuthStateChanged(() => {
+		.then(() => {
 			firebase.auth().currentUser.sendEmailVerification();
 
 			firebase.database().ref('users/' + firebase.auth().currentUser.uid).set({
@@ -56,7 +43,7 @@ export const signUp = (state: any) => {
 				tos: Math.floor((new Date()).getTime() / 1000),
 				first: true
 			});
-		}))
+		})
 		.catch((error: any) => {
 			return {type: 'error', error: error};
 		});

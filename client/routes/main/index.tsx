@@ -1,13 +1,33 @@
 import * as React from 'react';
-
+import {
+	check,
+	logOut
+} from '../../functions/auth';
 import {
 	IconHTMLTag,
 	IconQuestion
 } from '../../components/icons'
+
 import '../../static/scss/routes/main.scss';
 
-export default class Main extends React.Component<{}, {}> {
+interface State {
+	isSigned: boolean
+}
+
+export class Main extends React.Component<{}, State> {
+	constructor(props: any) {
+		super(props);
+
+		this.state = {
+			isSigned: check()
+		}
+	}
+
 	render() {
+		const {
+			isSigned
+		} = this.state;
+
 		return (
 			<div className="front">
 				<div className="front_header">
@@ -52,10 +72,14 @@ export default class Main extends React.Component<{}, {}> {
 									</a>
 								</li>
 							</ul>
-							<ul className="auth">
+							{!isSigned && <ul className="auth">
 								<li className="auth_item"><a className="auth_link auth_link-active" href="/auth/signup">Sign up</a></li>
 								<li className="auth_item"><a className="auth_link" href="/auth/signin">Sign in</a></li>
-							</ul>
+							</ul>}
+							{isSigned && <ul className="auth">
+								<li className="auth_item"><a className="auth_link auth_link-active" href="/projects">Dashboard</a></li>
+								<li className="auth_item"><a className="auth_link" href="#" onClick={logOut}>Logout</a></li>
+							</ul>}
 						</div>
 						<div className="front_header_middle">
 							<h1>Freedom as a Service</h1>
@@ -78,7 +102,7 @@ export default class Main extends React.Component<{}, {}> {
 						</h2>
 						<ul className="front_products_list">
 							<li className="front_products_item">
-								<div className="front_products_img front_products_img-1"></div>
+								<div className="front_products_img front_products_img-1">&nbsp;</div>
 								<p className="front_products_promo">Keep Your Users Safe</p>
 								<p className="front_products_promo-big">VPN SDK</p>
 								<p className="front_products_description">Enable a VPN for securing the entire operating system of your
@@ -87,7 +111,7 @@ export default class Main extends React.Component<{}, {}> {
 								<a href="/auth/signup" className="front_products_action">Try it now</a>
 							</li>
 							<li className="front_products_item">
-								<div className="front_products_img front_products_img-2"></div>
+								<div className="front_products_img front_products_img-2">&nbsp;</div>
 								<p className="front_products_promo">Make Your App Unstoppable</p>
 								<p className="front_products_promo-big">Proxy SDK</p>
 								<p className="front_products_description">Protects your app from throttling, censorship, or any kind of
@@ -96,7 +120,7 @@ export default class Main extends React.Component<{}, {}> {
 								<a href="/auth/signup" className="front_products_action">Try it now</a>
 							</li>
 							<li className="front_products_item">
-								<div className="front_products_img front_products_img-3"></div>
+								<div className="front_products_img front_products_img-3">&nbsp;</div>
 								<p className="front_products_promo">Secure Your Business Connection</p>
 								<p className="front_products_promo-big">VPN for business</p>
 								<p className="front_products_description">Use AnchorFree’s proprietary, lightning-fast Hydra VPN and the
@@ -115,14 +139,13 @@ export default class Main extends React.Component<{}, {}> {
 						<div className="features_pane">
 							<h3>Our key features</h3>
 							<div className="features_content">
-								<img className="features_img" src={require('../../static/media/front_features.png')} alt="VPN Services by AnchorFree" width="867"
-										 height="2141"/>
+								<img className="features_img" src={require('../../static/media/front_features.png')} alt="VPN Services by AnchorFree" width="867" height="2141"/>
 								<div className="features_item features_item-1">
 									<h4 className="features_header">Protocols and Platforms</h4>
 									<p className="features_text">We support popular VPN protocols and major client platforms</p>
-									<p className="features_text">We support popular VPN protocols:<br/><a href="/">OpenVPN</a>, <a
-										href="/">IPSEC</a>, <a href="/">Hydra</a><br/><br/>and major client platforms:<br/><a
-										href="/">iOS</a>, <a href="/">OSX</a>, <a href="/">Android</a>, <a href="/">Windows</a>
+									<p className="features_text">We support popular VPN protocols:<br/><a href="/">OpenVPN</a>,
+										<a href="/">IPSEC</a>, <a href="/">Hydra</a><br/><br/>and major client platforms:<br/><a href="/">iOS</a>,
+										 <a href="/">OSX</a>, <a href="/">Android</a>, <a href="/">Windows</a>
 									</p>
 								</div>
 								<div className="features_item features_item-2">
@@ -165,9 +188,9 @@ export default class Main extends React.Component<{}, {}> {
 								<span className="front_getkey_header">Our Partners</span>
 							</h2>
 							<ul className="getkey_clients_list">
-								<li className="getkey_clients_item getkey_clients_item-1"></li>
-								<li className="getkey_clients_item getkey_clients_item-2"></li>
-								<li className="getkey_clients_item getkey_clients_item-3"></li>
+								<li className="getkey_clients_item getkey_clients_item-1">&nbsp;</li>
+								<li className="getkey_clients_item getkey_clients_item-2">&nbsp;</li>
+								<li className="getkey_clients_item getkey_clients_item-3">&nbsp;</li>
 							</ul>
 						</div>
 					</div>

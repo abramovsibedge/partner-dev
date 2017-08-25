@@ -1,22 +1,30 @@
 import * as React from 'react';
-import {check} from '../../functions/auth';
+import {
+	check
+} from '../../functions/auth';
 
 import '../../static/scss/routes/auth.scss';
 
-export class Auth extends React.Component {
+interface State {
+	isSigned: boolean
+}
+
+export class Auth extends React.Component<{}, State> {
 	constructor(props: any) {
 		super(props);
+
+		this.state = {
+			isSigned: check()
+		}
 	}
 
 	componentWillMount() {
-		check() && window.location.replace("/");
+		this.state.isSigned && window.location.replace("/projects");
 	}
 
 	render() {
 		return (
-			<div className="register">
-				{this.props.children}
-			</div>
+			<div className="register">{this.props.children}</div>
 		);
 	}
 }
