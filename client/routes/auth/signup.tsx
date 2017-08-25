@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as update from 'immutability-helper';
 
-
 import {signUp} from '../../functions/auth';
 
 import {
@@ -10,19 +9,19 @@ import {
 	FormGroup,
 	Input,
 	Checkbox,
-	Select } from '../../components/form';
-import { Button } from '../../components/button';
+	Select
+} from '../../components/form';
+import {Button} from '../../components/button';
 import {
 	IconPerson,
 	IconLock
 } from '../../components/icons';
-import { emailValidation } from '../../utils';
+import {emailValidation} from '../../utils';
 
 interface Option {
 	value: string
 	label: string
 }
-
 
 interface State {
 	inProgress: false,
@@ -57,13 +56,13 @@ export default class Signup extends React.Component<{}, State> {
 			products: [{
 				value: "explore",
 				label: "I am just exploring"
-			},{
+			}, {
 				value: "proxy",
 				label: "Proxy - protection for your app only"
-			},{
+			}, {
 				value: "vpn",
 				label: "VPN - protection for the whole OS"
-			},{
+			}, {
 				value: "other",
 				label: "Other"
 			}],
@@ -71,16 +70,16 @@ export default class Signup extends React.Component<{}, State> {
 			numberOfUsers: [{
 				value: "v1",
 				label: "Less than a 100,000"
-			},{
+			}, {
 				value: "v2",
 				label: "More than a 100,000"
-			},{
+			}, {
 				value: "v3",
 				label: "More than 500,000"
-			},{
+			}, {
 				value: "v4",
 				label: "More than a 1,000,000"
-			},{
+			}, {
 				value: "v5",
 				label: "Not a Production App"
 			}],
@@ -99,7 +98,7 @@ export default class Signup extends React.Component<{}, State> {
 		let message: string = '';
 
 		$t.setState(update($state, {
-			inProgress: { $set: true }
+			inProgress: {$set: true}
 		}), () => {
 			if (!$state.firstName
 				|| !$state.lastName
@@ -123,39 +122,37 @@ export default class Signup extends React.Component<{}, State> {
 			}
 
 			$t.setState(update($state, {
-				formMessage: { $set: message },
-				validationState: { $set: state },
-				inProgress: { $set: false }
+				formMessage: {$set: message},
+				validationState: {$set: state},
+				inProgress: {$set: false}
 			}));
 
 			if (!state && message) return false;
 
-
 			signUp($state)
-                .then((e) => {
-					if(e.error) {
-                        throw {message: e.error.message}
+				.then((e) => {
+					if (e.type == 'error') {
+						throw {message: e.error.message}
 					} else {
-                        $t.setState(update($state, {
-                            formMessage: { $set: e.message },
-                            inProgress: { $set: false }
-                        }));
+						$t.setState(update($state, {
+							formMessage: {$set: e.message},
+							inProgress: {$set: false}
+						}));
 					}
-                })
-                .catch((e)=> {
-                    $t.setState(update($state, {
-                        formMessage: { $set: '' },
-                        inProgress: { $set: false },
-                        success: { $set: true }
-                    }));
-                })
-
+				})
+				.catch((e) => {
+					$t.setState(update($state, {
+						formMessage: {$set: e.message},
+						inProgress: {$set: false},
+						success: {$set: true}
+					}));
+				})
 		});
 	}
 
 	private changeHandler(value: string, stateItem: string) {
 		let newState = {};
-		newState[stateItem] = { $set: value } ;
+		newState[stateItem] = {$set: value};
 		this.setState(update(this.state, newState));
 	}
 
@@ -181,10 +178,12 @@ export default class Signup extends React.Component<{}, State> {
 		return (
 			<div className="register_content register_signup">
 				<div className="register_logo">
-					<img className="register_logo_img" src={require('../../static/media/poweredbyhss_light.svg')} alt="Partners Portal Logo" width="auto" height="32"/>
+					<img className="register_logo_img" src={require('../../static/media/poweredbyhss_light.svg')}
+							 alt="Partners Portal Logo" width="auto" height="32"/>
 				</div>
 				{success && <div className="register_success">
-					<p>A confirmation letter was sent to the specified mailbox.<br />Please confirm your account in order to start using the application</p>
+					<p>A confirmation letter was sent to the specified mailbox.<br/>Please confirm your account in order to start
+						using the application</p>
 					<div className="register_success_actions">
 						<a href="/auth/signin">Sign in</a>
 						<a href="/">Main page</a>
@@ -205,7 +204,7 @@ export default class Signup extends React.Component<{}, State> {
 							value={firstName}
 							notValid={!validationState && !firstName}
 							onChange={(e) => this.changeHandler(e.target.value, 'firstName')}>
-							<IconPerson width="24" height="24" />
+							<IconPerson width="24" height="24"/>
 						</Input>
 						<Input
 							type="text"
@@ -213,7 +212,7 @@ export default class Signup extends React.Component<{}, State> {
 							value={lastName}
 							notValid={!validationState && !lastName}
 							onChange={(e) => this.changeHandler(e.target.value, 'lastName')}>
-							<IconPerson width="24" height="24" />
+							<IconPerson width="24" height="24"/>
 						</Input>
 					</FormGroup>
 
@@ -223,7 +222,7 @@ export default class Signup extends React.Component<{}, State> {
 							label="Company name"
 							value={companyName}
 							onChange={(e) => this.changeHandler(e.target.value, 'companyName')}>
-							<IconPerson width="24" height="24" />
+							<IconPerson width="24" height="24"/>
 						</Input>
 					</FormRow>
 
@@ -236,7 +235,7 @@ export default class Signup extends React.Component<{}, State> {
 							value={email}
 							notValid={!validationState && (!email || !emailValidation(email))}
 							onChange={(e) => this.changeHandler(e.target.value, 'email')}>
-							<IconPerson width="24" height="24" />
+							<IconPerson width="24" height="24"/>
 						</Input>
 					</FormRow>
 
@@ -247,7 +246,7 @@ export default class Signup extends React.Component<{}, State> {
 							value={password}
 							notValid={!validationState && !password || password !== passwordAgain}
 							onChange={(e) => this.changeHandler(e.target.value, 'password')}>
-							<IconLock width="24" height="24" />
+							<IconLock width="24" height="24"/>
 						</Input>
 
 						<Input
@@ -256,7 +255,7 @@ export default class Signup extends React.Component<{}, State> {
 							value={passwordAgain}
 							notValid={!validationState && !passwordAgain || password !== passwordAgain}
 							onChange={(e) => this.changeHandler(e.target.value, 'passwordAgain')}>
-							<IconLock width="24" height="24" />
+							<IconLock width="24" height="24"/>
 						</Input>
 					</FormGroup>
 
@@ -289,7 +288,8 @@ export default class Signup extends React.Component<{}, State> {
 							notValid={!validationState && !tos}
 							checked={tos}
 							onChange={(e) => this.changeHandler(e.target.checked, 'tos')}>
-							I agree with <a target="_blank" href="/docs/AnchorFree_Self_Service_Developer_Platform_Terms_of_Service.pdf">TOS</a>
+							I agree with <a target="_blank"
+															href="/docs/AnchorFree_Self_Service_Developer_Platform_Terms_of_Service.pdf">TOS</a>
 						</Checkbox>
 					</FormRow>
 

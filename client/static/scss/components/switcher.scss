@@ -1,0 +1,38 @@
+@import "../vars/vars";
+
+.menubox {
+  position: fixed;
+  z-index: 100;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  &_item {
+    display: inline-block;
+    background: $x-palette-gray_8;
+    &:first-child { border-radius: 4px 0 0 4px; }
+    &:last-child { border-radius: 0 4px 4px 0; }
+    &-active {
+      background: $palette-brand;
+    }
+  }
+  &_link {
+    position: relative;
+    display: block;
+    width: 112px;
+    height: 72px;
+    > span {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font: 12px/14px 'apercuregular', Arial, sans-serif;
+      text-align: center;
+      text-decoration: none;
+      color: $palette-white;
+      svg { fill: $palette-white; }
+    }
+  }
+}

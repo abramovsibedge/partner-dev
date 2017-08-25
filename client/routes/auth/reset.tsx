@@ -4,12 +4,13 @@ import * as update from 'immutability-helper';
 import {
 	Form,
 	FormRow,
-	Input } from '../../components/form';
-import { Button } from '../../components/button';
+	Input
+} from '../../components/form';
+import {Button} from '../../components/button';
 import {
 	IconPerson
 } from '../../components/icons';
-import { emailValidation } from '../../utils';
+import {emailValidation} from '../../utils';
 import * as firebase from 'firebase';
 
 import {reset} from '../../functions/auth';
@@ -43,7 +44,7 @@ export class Reset extends React.Component<{}, State> {
 		let message: string = '';
 
 		$t.setState(update($state, {
-			inProgress: { $set: true }
+			inProgress: {$set: true}
 		}), () => {
 			if (!$email || !emailValidation($email)) {
 				state = false;
@@ -51,39 +52,39 @@ export class Reset extends React.Component<{}, State> {
 			}
 
 			$t.setState(update($state, {
-				formMessage: { $set: message },
-				validationState: { $set: state },
-				inProgress: { $set: false }
+				formMessage: {$set: message},
+				validationState: {$set: state},
+				inProgress: {$set: false}
 			}));
 
 			if (!state && message) return false;
 
 
-            reset($email)
-                .then((e) => {
-            		if (e.error) {
-                        throw e.message;
+			reset($email)
+				.then((e) => {
+					if (e.type == 'error') {
+						throw {message: e.error.message}
 					}
 					else {
-                        $t.setState(update($state, {
-                            success: { $set: true },
-                            inProgress: { $set: false }
-                        }));
+						$t.setState(update($state, {
+							success: {$set: true},
+							inProgress: {$set: false}
+						}));
 					}
-                })
-                .catch((e)=> {
-                    $t.setState(update($state, {
-                        formMessage: { $set: e },
-                        inProgress: { $set: false }
-                    }));
-                })
+				})
+				.catch((e) => {
+					$t.setState(update($state, {
+						formMessage: {$set: e},
+						inProgress: {$set: false}
+					}));
+				})
 
 		});
 	}
 
 	private changeHandler(value: string, stateItem: string) {
 		let newState = {};
-		newState[stateItem] = { $set: value } ;
+		newState[stateItem] = {$set: value};
 		this.setState(update(this.state, newState));
 	}
 
@@ -99,7 +100,8 @@ export class Reset extends React.Component<{}, State> {
 		return (
 			<div className="register_content register_signip">
 				<div className="register_logo">
-					<img className="register_logo_img" src={require('../../static/media/poweredbyhss_light.svg')} alt="Partners Portal Logo" width="auto" height="32"/>
+					<img className="register_logo_img" src={require('../../static/media/poweredbyhss_light.svg')}
+							 alt="Partners Portal Logo" width="auto" height="32"/>
 				</div>
 				{success && <div className="register_success">
 					<p>Reset link sended to your email.</p>
@@ -122,7 +124,7 @@ export class Reset extends React.Component<{}, State> {
 							value={email}
 							notValid={!validationState && (!email || !emailValidation(email))}
 							onChange={(e) => this.changeHandler(e.target.value, 'email')}>
-							<IconPerson width="24" height="24" />
+							<IconPerson width="24" height="24"/>
 						</Input>
 					</FormRow>
 

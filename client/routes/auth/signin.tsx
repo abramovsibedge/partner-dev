@@ -1,14 +1,14 @@
 import * as React from 'react';
 import * as update from 'immutability-helper';
 
-
 import {signIn} from '../../functions/auth';
 
 import {
 	Form,
 	FormRow,
-	Input } from '../../components/form';
-import { Button } from '../../components/button';
+	Input
+} from '../../components/form';
+import {Button} from '../../components/button';
 import {
 	IconPerson,
 	IconLock
@@ -42,7 +42,7 @@ export default class Signin extends React.Component<{}, State> {
 		let message: string = '';
 
 		$t.setState(update($state, {
-			inProgress: { $set: true }
+			inProgress: {$set: true}
 		}), () => {
 			if (!$state.login || !$state.password) {
 				state = false;
@@ -50,29 +50,26 @@ export default class Signin extends React.Component<{}, State> {
 			}
 
 			$t.setState(update($state, {
-				formMessage: { $set: message },
-				validationState: { $set: state },
-				inProgress: { $set: false }
+				formMessage: {$set: message},
+				validationState: {$set: state},
+				inProgress: {$set: false}
 			}));
 
 			if (!state && message) return false;
 
-
-            signIn($state.login, $state.password)
+			signIn($state.login, $state.password)
 				.then((e) => {
 					if (e.type == 'error') {
-                        throw {message: e.error.message}
+						throw {message: e.error.message}
+					} else {
+						window.location.replace("/projects");
 					}
-					else {
-                        console.log('projects');
-                        window.location.replace("/projects");
-                    }
-            	})
-                .catch((e)=> {
-                    $t.setState(update($state, {
-                        formMessage: { $set: e.message },
-                        inProgress: { $set: false }
-                    }));
+				})
+				.catch((e) => {
+					$t.setState(update($state, {
+						formMessage: {$set: e.message},
+						inProgress: {$set: false}
+					}));
 				})
 
 		});
@@ -80,7 +77,7 @@ export default class Signin extends React.Component<{}, State> {
 
 	private changeHandler(value: string, stateItem: string) {
 		let newState = {};
-		newState[stateItem] = { $set: value } ;
+		newState[stateItem] = {$set: value};
 		this.setState(update(this.state, newState));
 	}
 
@@ -96,7 +93,8 @@ export default class Signin extends React.Component<{}, State> {
 		return (
 			<div className="register_content register_signip">
 				<div className="register_logo">
-					<img className="register_logo_img" src={require('../../static/media/poweredbyhss_light.svg')} alt="Partners Portal Logo" width="auto" height="32"/>
+					<img className="register_logo_img" src={require('../../static/media/poweredbyhss_light.svg')}
+							 alt="Partners Portal Logo" width="auto" height="32"/>
 				</div>
 				<Form submit={() => this.submitHandler()}>
 					<div className="register_error-message">{formMessage}</div>
@@ -112,7 +110,7 @@ export default class Signin extends React.Component<{}, State> {
 							value={login}
 							notValid={!validationState && !login}
 							onChange={(e) => this.changeHandler(e.target.value, 'login')}>
-							<IconPerson width="24" height="24" />
+							<IconPerson width="24" height="24"/>
 						</Input>
 					</FormRow>
 
@@ -123,7 +121,7 @@ export default class Signin extends React.Component<{}, State> {
 							value={password}
 							notValid={!validationState && !password}
 							onChange={(e) => this.changeHandler(e.target.value, 'password')}>
-							<IconLock width="24" height="24" />
+							<IconLock width="24" height="24"/>
 						</Input>
 					</FormRow>
 

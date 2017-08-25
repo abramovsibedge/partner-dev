@@ -11,6 +11,7 @@ import {
 	IconDelete
 } from '../../components/icons'
 import Spinner from '../../components/spinner';
+import Switcher from '../../components/switcher';
 import fetchProjects from '../../functions/fetchProjects';
 import fetchProjectItem from '../../functions/fetchProjectItem';
 import addProject from '../../functions/addProject';
@@ -18,6 +19,8 @@ import deleteProject from '../../functions/deleteProject';
 import addUser from '../../functions/addUser';
 import deleteUser from '../../functions/deleteUser';
 import setVisibility from '../../functions/setVisibility';
+import {logOut} from '../../functions/auth';
+
 import {
 	Form,
 	FormRow,
@@ -109,7 +112,7 @@ export default class Projects extends React.Component<{}, State> {
 	}
 
 	logoutConfirm() {
-		// TODO logout function
+		logOut();
 	}
 
 	showAddProject(value: boolean) {
@@ -721,6 +724,8 @@ export default class Projects extends React.Component<{}, State> {
 						</div>
 					</div>
 				</section>}
+
+				<Switcher current="projects"/>
 			</div>
 		);
 	}
