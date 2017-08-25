@@ -6,7 +6,7 @@ export const check = () => {
 	if (!JSON.parse(localStorage.getItem('tokens'))) isSigned = false;
 
 	firebase.auth().onAuthStateChanged((user: any) => {
-		if (user) {
+		if (user && user.emailVerified) {
 			const data = JSON.stringify({firebaseToken: user.De});
 			localStorage.setItem('tokens', data);
 			isSigned = true;
