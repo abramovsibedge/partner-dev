@@ -12,6 +12,8 @@ import {
 import { emailValidation } from '../../utils';
 import * as firebase from 'firebase';
 
+import {reset} from '../../functions/auth';
+
 interface State {
 	inProgress: boolean
 	email: string
@@ -56,18 +58,26 @@ export class Reset extends React.Component<{}, State> {
 
 			if (!state && message) return false;
 
-			firebase.auth().sendPasswordResetEmail($email).then(() => {
-				$t.setState(update($state, {
-					success: { $set: true },
-					inProgress: { $set: false }
-				}));
-			}).catch(function(error: any) {
-				$t.setState(update($state, {
-					formMessage: { $set: error.message },
-					inProgress: { $set: false }
-				}));
-				return false;
-			});
+
+            reset($email)
+                .then((e) => {
+            		if (e.error) {
+                        throw e.message;
+					}
+					else {
+                        $t.setState(update($state, {
+                            success: { $set: true },
+                            inProgress: { $set: false }
+                        }));
+					}
+                })
+                .catch((e)=> {
+                    $t.setState(update($state, {
+                        formMessage: { $set: e },
+                        inProgress: { $set: false }
+                    }));
+                })
+
 		});
 	}
 

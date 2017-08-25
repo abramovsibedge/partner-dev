@@ -1,6 +1,9 @@
 import * as React from 'react';
 import * as update from 'immutability-helper';
 
+
+import {signUp} from '../../functions/auth';
+
 import {
 	Form,
 	FormRow,
@@ -14,12 +17,12 @@ import {
 	IconLock
 } from '../../components/icons';
 import { emailValidation } from '../../utils';
-import * as firebase from 'firebase';
 
 interface Option {
 	value: string
 	label: string
 }
+
 
 interface State {
 	inProgress: false,
@@ -127,39 +130,26 @@ export default class Signup extends React.Component<{}, State> {
 
 			if (!state && message) return false;
 
-			firebase.auth().createUserWithEmailAndPassword($state.email, $state.password)
-				.then(function(){
-					firebase.auth().onAuthStateChanged(() => {
-						firebase.auth().currentUser.sendEmailVerification().then(() => {}, (error: any) => {
-							console.log(error);
-						});
 
-						firebase.database().ref('users/' + firebase.auth().currentUser.uid).set({
-							first_name: $state.firstName,
-							last_name: $state.lastName,
-							company: $state.companyName,
-							email: $state.email,
-							plan: $state.productsSelected,
-							users: $state.numberOfUsersSelected,
-							tos: Math.floor((new Date()).getTime() / 1000),
-							first: true
-						});
+			signUp($state)
+                .then((e) => {
+					if(e.error) {
+                        throw {message: e.error.message}
+					} else {
+                        $t.setState(update($state, {
+                            formMessage: { $set: e.message },
+                            inProgress: { $set: false }
+                        }));
+					}
+                })
+                .catch((e)=> {
+                    $t.setState(update($state, {
+                        formMessage: { $set: '' },
+                        inProgress: { $set: false },
+                        success: { $set: true }
+                    }));
+                })
 
-						$t.setState(update($state, {
-							formMessage: { $set: '' },
-							inProgress: { $set: false },
-							success: { $set: true }
-						}));
-
-					});
-				})
-				.catch(function (error: any) {
-					$t.setState(update($state, {
-						formMessage: { $set: error.message },
-						inProgress: { $set: false }
-					}));
-					return false;
-				});
 		});
 	}
 

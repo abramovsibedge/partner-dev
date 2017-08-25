@@ -196,6 +196,7 @@ export default class Projects extends React.Component<{}, State> {
 		const $state = $t.state;
 
 		deleteProject(project).then((result) => {
+			console.log('result', result);
 			$t.setState(update($state, {
 				deleteProjectModalState: { $set: false },
 				loading: { $set: true },
@@ -358,6 +359,7 @@ export default class Projects extends React.Component<{}, State> {
 			deleteUserModalState,
 			logoutModalState
 		} = this.state;
+
 
 		return (
 			<div className="dashboard">

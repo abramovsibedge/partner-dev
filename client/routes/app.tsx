@@ -9,11 +9,12 @@ export class App extends React.Component {
 
 	componentDidMount() {
 		firebase.initializeApp({
-			apiKey: config.firebaseKey,
-			authDomain: config.firebaseAuthDomain,
-			databaseURL: config.firebasedatabaseURL
-		});
+            apiKey: config.firebaseKey,
+            authDomain: config.firebaseAuthDomain,
+            databaseURL: config.firebasedatabaseURL
+        });
 	}
+
 
 	render() {
 		return (

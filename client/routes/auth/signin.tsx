@@ -1,6 +1,9 @@
 import * as React from 'react';
 import * as update from 'immutability-helper';
 
+
+import {signIn} from '../../functions/auth';
+
 import {
 	Form,
 	FormRow,
@@ -10,7 +13,6 @@ import {
 	IconPerson,
 	IconLock
 } from '../../components/icons';
-import * as firebase from 'firebase';
 
 interface State {
 	inProgress: boolean
@@ -55,21 +57,24 @@ export default class Signin extends React.Component<{}, State> {
 
 			if (!state && message) return false;
 
-			firebase.auth().signInWithEmailAndPassword($state.login, $state.password)
-				.then(function(){
-					firebase.auth().onAuthStateChanged((user: any) => {
-						if (user) {
-							console.log( user.De );
-						}
-					});
+
+            signIn($state.login, $state.password)
+				.then((e) => {
+					if (e.type == 'error') {
+                        throw {message: e.error.message}
+					}
+					else {
+                        console.log('projects');
+                        window.location.replace("/projects");
+                    }
+            	})
+                .catch((e)=> {
+                    $t.setState(update($state, {
+                        formMessage: { $set: e.message },
+                        inProgress: { $set: false }
+                    }));
 				})
-				.catch(function (error: any) {
-					$t.setState(update($state, {
-						formMessage: { $set: error.message },
-						inProgress: { $set: false }
-					}));
-					return false;
-				});
+
 		});
 	}
 

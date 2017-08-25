@@ -11,11 +11,15 @@ import Projects from './routes/projects/';
 import { Subscribers } from './routes/subscribers/';
 import { NotFound } from './routes/404/';
 
+import {check} from '../client/functions/auth';
+
 export const routes = (
   <Route path='/' component={App}>
     <IndexRoute component={Main} />
-    <Route path='projects' component={Projects} />
-    <Route path='subscribers' component={Subscribers} />
+
+    <Route path='projects' component={Projects} onEnter={check} />
+    <Route path='subscribers' component={Subscribers} onEnter={check} />
+
     <Route path='auth' component={Auth}>
         <Route path='reset' component={Reset} />
         <Route path='signin' component={Signin} />
