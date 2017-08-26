@@ -133,7 +133,35 @@ class AddSubscriber extends React.Component<{}, State>{
 				return;
 			}
 
+			this.setState({
+				showModal: false,
+				addObject: {
+					extref: {
+						value: '',
+						valid: true,
+						check: new RegExp('^\\w+$')
+					},
+					licence: {
+						value: '',
+						valid: true,
+						check: new RegExp('^[0-9]+$')
+					},
+					username: {
+						value: '',
+						valid: true,
+						check: new RegExp('^\\w+$')
+					},
+					oauth_token: {
+						value: '',
+						valid: true,
+						check: new RegExp('^\\w+$')
+					},
+					message: ''
+				}
+			});
+
 			this.showAddSubscriber(false);
+			Signal.dispatch('subscriberAdded', true);
 		});
 	}
 

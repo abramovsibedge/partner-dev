@@ -28,6 +28,10 @@ class SubscribersList extends React.Component<{}, State> {
 		Signal.attach('projectChanged', () => {
 			this.getSubscribers();
 		});
+
+		Signal.attach('subscriberAdded', () => {
+			this.getSubscribers();
+		});
 	}
 
 	getSubscribers() {

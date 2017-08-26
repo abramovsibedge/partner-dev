@@ -51,6 +51,7 @@ export class Subscribers extends React.Component<{}, State> {
 		new Signal('loaded');
 		new Signal('changeProject');
 		new Signal('projectChanged');
+		new Signal('subscriberAdded');
 
 		Signal.attach('changeProject', (newProject: string) => {
 			for(let k in this.state.projectsList) {
