@@ -1,4 +1,8 @@
-const firebaseToken = localStorage.getItem('tokens') ? JSON.parse(localStorage.getItem('tokens')).firebaseToken : null;
+import {storageHelper} from '../utils';
+
+const storage = new storageHelper;
+
+const firebaseToken = storage.get('tokens') ? JSON.parse(storage.get('tokens')).firebaseToken : null;
 
 export default {
 	host: 'http://vpn-backend.northghost.com/',

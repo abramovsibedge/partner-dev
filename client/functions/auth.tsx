@@ -1,17 +1,20 @@
 import * as firebase from 'firebase';
+import {storageHelper} from '../utils';
+
+const storage = new storageHelper;
 
 export const check = () => {
 	let isSigned: boolean = true;
 
-	if (!JSON.parse(localStorage.getItem('tokens'))) isSigned = false;
+	if (!JSON.parse(storage.get('tokens'))) isSigned = false;
 
 	firebase.auth().onAuthStateChanged((user: any) => {
 		if (user && user.emailVerified) {
 			const data = JSON.stringify({firebaseToken: user.De});
-			localStorage.setItem('tokens', data);
+			storage.add('tokens', data);
 			isSigned = true;
 		} else {
-			localStorage.removeItem('tokens');
+			storage.remove('tokens');
 			isSigned = false;
 		}
 	});
@@ -20,7 +23,7 @@ export const check = () => {
 };
 
 export const logOut = () => firebase.auth().signOut().then(() => {
-	localStorage.removeItem('tokens');
+	storage.remove('tokens');
 	window.location.replace("/");
 });
 

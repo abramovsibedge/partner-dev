@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import Header from './Header';
 import Body   from './Body';
-import Loader from './loader';
+import Loading from './Loading';
 
 import '../../static/scss/routes/subscribers.scss';
 import '../../static/scss/components/modal.scss';
@@ -117,7 +117,7 @@ export class Subscribers extends React.Component<{}, State> {
 
 		if(!this.state.loaded) {
 			content.push(
-				<Loader key="loader" />
+				<Loading key="loader" />
 			)
 		}
 		else {

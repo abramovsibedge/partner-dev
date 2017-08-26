@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Spinner from '../../components/spinner';
 
-class Loader extends React.Component {
+class Loading extends React.Component {
 	render() {
 		return (
 			<section className="layout is-loading">
@@ -11,4 +11,4 @@ class Loader extends React.Component {
 	}
 }
 
-export default Loader;
+export default Loading;

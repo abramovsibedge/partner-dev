@@ -1,5 +1,7 @@
-import { emailValidation } from './email-validation';
+import { emailValidation } from './emailValidation';
+import { storageHelper } from './storage';
 
 export {
-	emailValidation
+	emailValidation,
+	storageHelper
 }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import Signal from '../../../functions/Signal';
-import Loader from '../Loader';
+import Loader from '../Loading';
 
 import {
 	getSubscribersList

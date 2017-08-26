@@ -1,4 +1,7 @@
 import config from '../config';
+import {storageHelper} from '../utils';
+
+const storage = new storageHelper;
 
 export const logIn = (login: string, password: string) => {
 	let request:string = config.host + 'partner/login?access_token=' + config.firebaseToken;
@@ -10,11 +13,11 @@ export const logIn = (login: string, password: string) => {
 		.then(responseJson => {
 			if(responseJson['result'] === 'OK') {
 				try {
-					let rest = localStorage.getItem('REST') ? JSON.parse(localStorage.getItem('REST')) : {};
+					let rest = storage.get('REST') ? JSON.parse(storage.get('REST')) : {};
 					rest['token'] = responseJson['access_token'];
 					rest['activeProject'] = login;
 
-					localStorage.setItem('REST', JSON.stringify(rest));
+					storage.add('REST', JSON.stringify(rest));
 					return true;
 				} catch (e) {
 					// @todo fallback
@@ -26,7 +29,7 @@ export const logIn = (login: string, password: string) => {
 
 export const checkLogin = () => {
 	try {
-		let rest = JSON.parse(localStorage.getItem('REST'));
+		let rest = JSON.parse(storage.get('REST'));
 		if(rest['token']) return true;
 	} catch(e) {
 		return false;
@@ -35,7 +38,7 @@ export const checkLogin = () => {
 
 export const getActiveProject = () => {
 	try {
-		let rest = JSON.parse(localStorage.getItem('REST'));
+		let rest = JSON.parse(storage.get('REST'));
 		if(rest['activeProject']) return rest['activeProject'];
 	} catch(e) {
 		return '';
@@ -44,7 +47,7 @@ export const getActiveProject = () => {
 
 export const getAccessToken = () => {
 	try {
-		let rest = JSON.parse(localStorage.getItem('REST'));
+		let rest = JSON.parse(storage.get('REST'));
 		if(rest['token']) return rest['token'];
 	} catch(e) {
 		return '';
