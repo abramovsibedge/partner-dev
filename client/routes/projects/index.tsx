@@ -8,7 +8,8 @@ import {
 	IconQuestion,
 	IconPlus,
 	IconClose,
-	IconDelete
+	IconDelete,
+	IconDocs
 } from '../../components/icons'
 import Spinner from '../../components/spinner';
 import Switcher from '../../components/switcher';
@@ -115,10 +116,7 @@ export class Projects extends React.Component<{}, State> {
 	}
 
 	showLogout(value: boolean) {
-		const $t = this;
-		const $state = $t.state;
-
-		$t.setState(update($state, {
+		this.setState(update(this.state, {
 			logoutModalState: {$set: value},
 		}));
 	}
@@ -128,19 +126,13 @@ export class Projects extends React.Component<{}, State> {
 	}
 
 	showAddProject(value: boolean) {
-		const $t = this;
-		const $state = $t.state;
-
-		$t.setState(update($state, {
+		this.setState(update(this.state, {
 			addProjectModalState: {$set: value},
 		}));
 	}
 
 	showDeleteProject(value: boolean) {
-		const $t = this;
-		const $state = $t.state;
-
-		$t.setState(update($state, {
+		this.setState(update(this.state, {
 			deleteProjectModalState: {$set: value},
 		}));
 	}
@@ -207,12 +199,8 @@ export class Projects extends React.Component<{}, State> {
 	}
 
 	deleteProjectConfirm(project: any) {
-		const $t = this;
-		const $state = $t.state;
-
 		deleteProject(project).then((result) => {
-			console.log('result', result);
-			$t.setState(update($state, {
+			this.setState(update(this.state, {
 				deleteProjectModalState: {$set: false},
 				loading: {$set: true},
 			}), () => {
@@ -227,15 +215,12 @@ export class Projects extends React.Component<{}, State> {
 	}
 
 	openProject(id: string) {
-		const $t = this;
-		const $state = $t.state;
-
-		this.setState(update($state, {
+		this.setState(update(this.state, {
 			selectedProjectId: {$set: id}
 		}));
 
 		loadProjectItem(id).then(result => {
-			this.setState(update($state, {
+			this.setState(update(this.state, {
 				selectedProjectId: {$set: id},
 				selectedProject: {$set: result}
 			}));
@@ -243,31 +228,22 @@ export class Projects extends React.Component<{}, State> {
 	}
 
 	closeProject() {
-		const $t = this;
-		const $state = $t.state;
-
-		this.setState(update($state, {
+		this.setState(update(this.state, {
 			selectedProject: {$set: {}},
 			selectedProjectId: {$set: ''}
 		}));
 	}
 
 	tabSwitcher(tab: string) {
-		const $t = this;
-		const $state = $t.state;
-
-		this.setState(update($state, {
+		this.setState(update(this.state, {
 			selectedProjectTab: {$set: tab}
 		}));
 	}
 
 	setVisibility(project: string, country: string, visibility: boolean) {
-		const $t = this;
-		const $state = $t.state;
-
 		setVisibility(project, country, visibility).then(() => {
 			loadProjectItem(project).then(result => {
-				this.setState(update($state, {
+				this.setState(update(this.state, {
 					selectedProjectId: {$set: project},
 					selectedProject: {$set: result}
 				}));
@@ -276,10 +252,7 @@ export class Projects extends React.Component<{}, State> {
 	}
 
 	showAddUser(value: boolean) {
-		const $t = this;
-		const $state = $t.state;
-
-		$t.setState(update($state, {
+		this.setState(update(this.state, {
 			addUserModalState: {$set: value},
 		}));
 	}
@@ -335,21 +308,15 @@ export class Projects extends React.Component<{}, State> {
 	}
 
 	showDeleteUser(value: boolean) {
-		const $t = this;
-		const $state = $t.state;
-
-		$t.setState(update($state, {
+		this.setState(update(this.state, {
 			deleteUserModalState: {$set: value},
 		}));
 	}
 
 	deleteUserConfirm(project: string, email: string) {
-		const $t = this;
-		const $state = $t.state;
-
 		deleteUser(project, email).then(() => {
 			loadProjectItem(project).then(result => {
-				this.setState(update($state, {
+				this.setState(update(this.state, {
 					selectedProjectId: {$set: project},
 					selectedProject: {$set: result},
 					deleteUserModalState: {$set: false}
@@ -375,7 +342,6 @@ export class Projects extends React.Component<{}, State> {
 			logoutModalState
 		} = this.state;
 
-
 		return (
 			<div className="dashboard">
 				<header className='header'>
@@ -383,8 +349,7 @@ export class Projects extends React.Component<{}, State> {
 						<div className="header_user">
 							<div className="header_logo">
 								<a href="/">
-									<img className="header_logo_img" src={require('../../static/media/poweredbyhss_light.svg')}
-											 alt="Partners Portal Logo" width="auto" height="24"/>
+									<img className="header_logo_img" src={require('../../static/media/poweredbyhss_light.svg')} alt="Partners Portal Logo" width="auto" height="24"/>
 								</a>
 							</div>
 							<div className="header_logout">
@@ -414,35 +379,32 @@ export class Projects extends React.Component<{}, State> {
 							<div className="header_links">
 								<div className="header_links_content">
                     <span className="header_links_link">
-											<IconHTMLTag width="24" height="24"/>
+											<IconDocs width="24" height="24"/>
 											<span>Docs</span>
                     </span>
 									<div className="header_links_drop">
 										<ul className="header_links_list">
-											<li className="header_links_list_item"><a className="header_links_list_link"
-																																href="/docs/proxy_sdk_android.html" target="_blank">Proxy
+											<li>
+												<a className="header_links_list_link" href="/docs/proxy_sdk_android.html" target="_blank">Proxy
 												SDK for Android</a></li>
-											<li className="header_links_list_item"><a className="header_links_list_link"
-																																href="/docs/proxy_sdk_ios.html" target="_blank">Proxy
+											<li>
+												<a className="header_links_list_link" href="/docs/proxy_sdk_ios.html" target="_blank">Proxy
 												SDK for iOS</a></li>
-											<li className="header_links_list_item"><a className="header_links_list_link"
-																																href="/docs/vpn_sdk_android_openvpn.html"
-																																target="_blank">VPN SDK for Android (OpenVPN)</a></li>
-											<li className="header_links_list_item"><a className="header_links_list_link"
-																																href="/docs/vpn_sdk_ios_ipsec.html" target="_blank">VPN
+											<li>
+												<a className="header_links_list_link" href="/docs/vpn_sdk_android_openvpn.html" target="_blank">VPN SDK for Android (OpenVPN)</a></li>
+											<li>
+												<a className="header_links_list_link" href="/docs/vpn_sdk_ios_ipsec.html" target="_blank">VPN
 												SDK for iOS (IPsec)</a></li>
-											<li className="header_links_list_item"><a className="header_links_list_link"
-																																href="http://backend.northghost.com/doc/partner/index.html"
-																																target="_blank">Partner API</a></li>
-											<li className="header_links_list_item"><a className="header_links_list_link"
-																																href="https://backend.northghost.com/doc/user/index.html"
-																																target="_blank">User API</a></li>
+											<li>
+												<a className="header_links_list_link" href="http://backend.northghost.com/doc/partner/index.html" target="_blank">Partner API</a></li>
+											<li>
+												<a className="header_links_list_link" href="https://backend.northghost.com/doc/user/index.html" target="_blank">User API</a></li>
 										</ul>
 									</div>
 								</div>
 								<div className="header_links_content">
 									<a className="header_links_link" href="mailto:platformpartners@anchorfree.com">
-										<IconQuestion width="17" height="17"/>
+										<IconQuestion width="24" height="24"/>
 										<span>Help</span>
 									</a>
 								</div>
@@ -450,69 +412,67 @@ export class Projects extends React.Component<{}, State> {
 						</div>
 						<div className="header_toolbar">
 							<div className="header_toolbar_content">
-								<div className="project_filter">
-									<Button type="submit" className="is-transparent" onClick={() => this.showAddProject(true)}>
-										<IconPlus width="24" height="24"/>
-										<span>Add project</span>
-									</Button>
-									<Modal
-										isOpen={addProjectModalState}
-										className={{base: 'modal_inner'}}
-										overlayClassName={{base: 'modal_outer'}}
-										contentLabel="test">
-										<div className="modal_header">
-											<h2>Create project</h2>
+								<Button type="submit" className="is-transparent" onClick={() => this.showAddProject(true)}>
+									<IconPlus width="24" height="24"/>
+									<span>Add project</span>
+								</Button>
+								<Modal
+									isOpen={addProjectModalState}
+									className={{base: 'modal_inner'}}
+									overlayClassName={{base: 'modal_outer'}}
+									contentLabel="test">
+									<div className="modal_header">
+										<h2>Create project</h2>
+									</div>
+									<Form submit={() => this.addProjectSubmit()} className="modal_form">
+										<div className="modal_error">{addProjectObject['message']}</div>
+										<div className="modal_content">
+											<FormRow>
+												<Input
+													type="text"
+													label="Public Key"
+													value={addProjectObject['public_key']}
+													notValid={!addProjectObject['validationState'] && !addProjectObject['public_key']}
+													onChange={(e) => this.addProjectHandler(e.target.value, 'public_key')}>
+												</Input>
+											</FormRow>
+											<FormRow>
+												<Input
+													type="text"
+													label="Private Key"
+													value={addProjectObject['private_key']}
+													onChange={(e) => this.addProjectHandler(e.target.value, 'private_key')}>
+												</Input>
+											</FormRow>
+											<FormRow>
+												<Input
+													type="text"
+													label="Description"
+													value={addProjectObject['description']}
+													onChange={(e) => this.addProjectHandler(e.target.value, 'description')}>
+												</Input>
+											</FormRow>
+											<FormRow>
+												<Select
+													notValid={!addProjectObject['validationState'] && !addProjectObject['project_type']}
+													value={addProjectObject['project_type']}
+													options={productTypes}
+													onChange={(e) => this.addProjectHandler(e.target.value, 'project_type')}>
+													Project type
+												</Select>
+											</FormRow>
 										</div>
-										<Form submit={() => this.addProjectSubmit()} className="modal_form">
-											<div className="modal_error">{addProjectObject['message']}</div>
-											<div className="modal_content">
-												<FormRow>
-													<Input
-														type="text"
-														label="Public Key"
-														value={addProjectObject['public_key']}
-														notValid={!addProjectObject['validationState'] && !addProjectObject['public_key']}
-														onChange={(e) => this.addProjectHandler(e.target.value, 'public_key')}>
-													</Input>
-												</FormRow>
-												<FormRow>
-													<Input
-														type="text"
-														label="Private Key"
-														value={addProjectObject['private_key']}
-														onChange={(e) => this.addProjectHandler(e.target.value, 'private_key')}>
-													</Input>
-												</FormRow>
-												<FormRow>
-													<Input
-														type="text"
-														label="Description"
-														value={addProjectObject['description']}
-														onChange={(e) => this.addProjectHandler(e.target.value, 'description')}>
-													</Input>
-												</FormRow>
-												<FormRow>
-													<Select
-														notValid={!addProjectObject['validationState'] && !addProjectObject['project_type']}
-														value={addProjectObject['project_type']}
-														options={productTypes}
-														onChange={(e) => this.addProjectHandler(e.target.value, 'project_type')}>
-														Project type
-													</Select>
-												</FormRow>
-											</div>
-											<div className="modal_footer">
-												<button className="modal_btn modal_btn-reset" type="button"
-																onClick={() => this.showAddProject(false)}>Cancel
-												</button>
-												<button className="modal_btn modal_btn-submit" type="submit">Create project</button>
-											</div>
-										</Form>
-										<Button type="button" className="modal_close" onClick={() => this.showAddProject(false)}>
-											<IconClose width="24" height="24"/>
-										</Button>
-									</Modal>
-								</div>
+										<div className="modal_footer">
+											<button className="modal_btn modal_btn-reset" type="button"
+															onClick={() => this.showAddProject(false)}>Cancel
+											</button>
+											<button className="modal_btn modal_btn-submit" type="submit">Create project</button>
+										</div>
+									</Form>
+									<Button type="button" className="modal_close" onClick={() => this.showAddProject(false)}>
+										<IconClose width="24" height="24"/>
+									</Button>
+								</Modal>
 							</div>
 						</div>
 					</div>
@@ -548,7 +508,7 @@ export class Projects extends React.Component<{}, State> {
 								</div>}
 								{projects.length > 0 && projects.map((project: any, index: number) => {
 									return <div key={index} className={classNames("table_row", selectedProjectId === project.publickey && "table_row_open")}>
-										<div onClick={() => this.openProject(project.publickey)}>
+										<div className="table_row_wrapper" onClick={() => this.openProject(project.publickey)}>
 											<div className="table_cell" style={{width: '30%'}}>
 												<div className="table_cell_content">{project.publickey}</div>
 											</div>
@@ -583,8 +543,7 @@ export class Projects extends React.Component<{}, State> {
 													</table>
 												</div>
 												<div className="project_buttons">
-													<div className="project_tabs">
-														{/*<!-- <button className="project_tabs_item project_tabs_item-active" data-type="settings" type="button">Settings</button> -->*/}
+													<div>
 														<button
 															className={classNames("project_tabs_item", selectedProjectTab === "vpn-servers" && "project_tabs_item-active")}
 															onClick={() => this.tabSwitcher("vpn-servers")} type="button">VPN Servers
@@ -625,12 +584,7 @@ export class Projects extends React.Component<{}, State> {
 													</div>
 												</div>
 												<div className="project_content">
-													{/*<!-- <div id="settings" className="project_tab project_tab-active">*/}
-													{/*settings*/}
-													{/*</div> -->*/}
-													{selectedProjectTab === "vpn-servers" &&
-													<div id="vpn-servers" className="project_tab project_tab-active">
-														<div className="project_tab_content">
+													{selectedProjectTab === "vpn-servers" && <div>
 															{selectedProject['countries'].countries.length === 0 &&
 															<div className="project_tabs_empty">
 																<p>Project has no countries.</p>
@@ -651,85 +605,87 @@ export class Projects extends React.Component<{}, State> {
 																<div className="table_body">
 																	{selectedProject['countries'].countries.map((country: any, index: number) => {
 																		return <div key={index} className="table_row">
-																			<div className="table_cell" style={{width: '25%'}}>
-																				<div className="table_cell_content">{country.country}</div>
-																			</div>
-																			<div className="table_cell" style={{width: '65%'}}>
-																				<div className="table_cell_content">{country.protocols}</div>
-																			</div>
-																			<div className="table_cell" style={{width: '10%'}}>
-																				<div className="table_cell_content country_visibility">
-																					<Checkbox
-																						className="project_edit_checkbox"
-																						checked={country.visibility}
-																						onChange={() => this.setVisibility(project.publickey, country.country, !country.visibility)}>&nbsp;</Checkbox>
+																			<div className="table_row_wrapper">
+																				<div className="table_cell" style={{width: '25%'}}>
+																					<div className="table_cell_content">{country.country}</div>
+																				</div>
+																				<div className="table_cell" style={{width: '65%'}}>
+																					<div className="table_cell_content">{country.protocols}</div>
+																				</div>
+																				<div className="table_cell" style={{width: '10%'}}>
+																					<div className="table_cell_content country_visibility">
+																						<Checkbox
+																							className="project_edit_checkbox"
+																							checked={country.visibility}
+																							onChange={() => this.setVisibility(project.publickey, country.country, !country.visibility)}>&nbsp;</Checkbox>
+																					</div>
 																				</div>
 																			</div>
 																		</div>
 																	})}
 																</div>
 															</div>}
-														</div>
-													</div>}
-													{selectedProjectTab === "access" && <div id="access" className="project_tab user">
-														<div className="project_tab_content">
-															<div className="user_new">
-																<Button type="button" className="user_new_btn is-transparent"
-																				onClick={() => this.showAddUser(true)}>
-																	<IconPlus width="24" height="24"/>
-																	<span>Add access email</span>
-																</Button>
-																<Modal
-																	isOpen={addUserModalState}
-																	className={{base: 'modal_inner'}}
-																	overlayClassName={{base: 'modal_outer'}}
-																	contentLabel="test">
-																	<div className="modal_header">
-																		<h2>Create user</h2>
-																	</div>
-																	<Form submit={() => this.addUserSubmit(project.publickey)} className="modal_form">
-																		<div className="modal_error">{addUserObject['message']}</div>
-																		<div className="modal_content">
-																			<FormRow>
-																				<Input
-																					type="email"
-																					label="User email"
-																					value={addUserObject['email']}
-																					notValid={!addUserObject['validationState'] && !addUserObject['email']}
-																					onChange={(e) => this.addUserHandler(e.target.value, 'email')}>
-																				</Input>
-																			</FormRow>
-																		</div>
-																		<div className="modal_footer">
-																			<button className="modal_btn modal_btn-reset" type="button"
-																							onClick={() => this.showAddUser(false)}>Cancel
-																			</button>
-																			<button className="modal_btn modal_btn-submit" type="submit">Create user</button>
-																		</div>
-																	</Form>
-																	<Button type="button" className="modal_close" onClick={() => this.showAddUser(false)}>
-																		<IconClose width="24" height="24"/>
-																	</Button>
-																</Modal>
-															</div>
-															{selectedProject['emails'].usersMail.length === 0 && <div className="project_tabs_empty">
-																<p>Project has no users.</p>
-															</div>}
+														</div>}
 
-															{selectedProject['emails'].usersMail.length > 0 && <div className="table inner_table">
-																<div className="table_head">
-																	<table>
-																		<tbody>
-																		<tr>
-																			<td style={{width: '50%'}}>User</td>
-																			<td style={{width: '50%'}}>&nbsp;</td>
-																		</tr>
-																		</tbody>
-																	</table>
+													{selectedProjectTab === "access" && <div>
+														<div className="user_new">
+															<Button type="button" className="user_new_btn is-transparent"
+																			onClick={() => this.showAddUser(true)}>
+																<IconPlus width="24" height="24"/>
+																<span>Add access email</span>
+															</Button>
+															<Modal
+																isOpen={addUserModalState}
+																className={{base: 'modal_inner'}}
+																overlayClassName={{base: 'modal_outer'}}
+																contentLabel="test">
+																<div className="modal_header">
+																	<h2>Create user</h2>
 																</div>
-																<div className="table_body">
-																	{selectedProject['emails'].usersMail.map((email: any, index: number) => {
-																		return <div key={index} className="table_row user_item">
+																<Form submit={() => this.addUserSubmit(project.publickey)} className="modal_form">
+																	<div className="modal_error">{addUserObject['message']}</div>
+																	<div className="modal_content">
+																		<FormRow>
+																			<Input
+																				type="email"
+																				label="User email"
+																				value={addUserObject['email']}
+																				notValid={!addUserObject['validationState'] && !addUserObject['email']}
+																				onChange={(e) => this.addUserHandler(e.target.value, 'email')}>
+																			</Input>
+																		</FormRow>
+																	</div>
+																	<div className="modal_footer">
+																		<button className="modal_btn modal_btn-reset" type="button"
+																						onClick={() => this.showAddUser(false)}>Cancel
+																		</button>
+																		<button className="modal_btn modal_btn-submit" type="submit">Create user</button>
+																	</div>
+																</Form>
+																<Button type="button" className="modal_close" onClick={() => this.showAddUser(false)}>
+																	<IconClose width="24" height="24"/>
+																</Button>
+															</Modal>
+														</div>
+														{selectedProject['emails'].usersMail.length === 0 && <div className="project_tabs_empty">
+															<p>Project has no users.</p>
+														</div>}
+
+														{selectedProject['emails'].usersMail.length > 0 && <div className="table inner_table">
+															<div className="table_head">
+																<table>
+																	<tbody>
+																	<tr>
+																		<td style={{width: '50%'}}>User</td>
+																		<td style={{width: '50%'}}>&nbsp;</td>
+																	</tr>
+																	</tbody>
+																</table>
+															</div>
+															<div className="table_body">
+																{selectedProject['emails'].usersMail.map((email: any, index: number) => {
+																	return <div key={index} className="table_row">
+																		<div className="table_row_wrapper">
 																			<div className="table_cell" style={{width: '50%'}}>
 																				<div className="table_cell_content">{email}</div>
 																			</div>
@@ -767,10 +723,10 @@ export class Projects extends React.Component<{}, State> {
 																				</div>
 																			</div>
 																		</div>
-																	})}
-																</div>
-															</div>}
-														</div>
+																	</div>
+																})}
+															</div>
+														</div>}
 													</div>}
 												</div>
 											</div>}

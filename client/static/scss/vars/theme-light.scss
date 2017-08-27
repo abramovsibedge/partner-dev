@@ -1,72 +1,85 @@
 $table_transition_properties: .3s ease-in-out;
 
 body {
-    &.light-theme {
-        background: $bg-color-light;
-        color: $text-color-light;
-        .header {
-            background: $bg-color-light;
-            color: $x-palette-gray_1;
-            &_content { border-bottom-color: darken( $palette-white, 5% ); } 
-        }
-        .table {
-            &_label { 
-                background: darken( $table-cell-light, 5% ); 
-                transition: background $table_transition_properties; 
-            }
-            &_row:hover,
-            &_row_open {
-                .table_cell { 
-                    .table_label { 
-                        background-color: darken( $palette-brand, 20% );
-                        transition: background-color $table_transition_properties; 
-                    }
-                    .table_enable:before { 
-                        background-color: $palette-white; 
-                        transition: background-color $table_transition_properties; 
-                    }
-                    .table_disable:before {
-                        border-color: $palette-white;
-                        background-color: transparent;
-                        transition: all $table_transition_properties; 
-                    }
-                }
-            }
-            &_disable:before {
-                border-color: darken( $table-cell-light, 5% );
-                background: darken( $table-cell-light, 5% );
-            }
-            &_cell { border-top-color: darken( $table-cell-light, 5%); }
-            &_time { color: $label-light; }
-            &.main_table {
-                > .table_head { color: $label-light; }
-                background: $table-cell-light;
-                > .table_head_sticked { 
-                    table { 
-                        border-bottom: 1px solid darken( $table-cell-light, 5%);
-                        background: $table-cell-light; 
-                    } 
-                }
-                > .table_body {
-                    > .table_row:not(.table_row_empty):hover,
-                    > .table_row_open {
-                        > .table_cell { 
-                            border-color: transparent;                         
-                            .table_time { color: darken( $palette-white, 10% ); }
-                        }
-                    }
-                }
-            }
-        }
-        .subscriber_filter_form-showed {
-            .subscriber_filter_form_form,
-            .subscriber_filter_form_input { background: $table-cell-light; }
-            .subscriber-filter_form_input { 
-                color: $x-palette-dark; 
-                &:after {
-                    background: linear-gradient(to left, $table-cell-light 0%, transparent 100%);
-                }
-            }
-        }
+  &.light-theme {
+    background: $bg-color-light;
+    color: $text-color-light;
+    .header {
+      background: $bg-color-light;
+      color: $x-palette-gray_1;
+      &_content {
+        border-bottom-color: darken($palette-white, 5%);
+      }
     }
+    .table {
+      &_label {
+        background: darken($table-cell-light, 5%);
+        transition: background $table_transition_properties;
+      }
+      &_row:hover,
+      &_row_open {
+        .table_cell {
+          .table_label {
+            background-color: darken($palette-brand, 20%);
+            transition: background-color $table_transition_properties;
+          }
+          .table_enable:before {
+            background-color: $palette-white;
+            transition: background-color $table_transition_properties;
+          }
+          .table_disable:before {
+            border-color: $palette-white;
+            background-color: transparent;
+            transition: all $table_transition_properties;
+          }
+        }
+      }
+      &_disable:before {
+        border-color: darken($table-cell-light, 5%);
+        background: darken($table-cell-light, 5%);
+      }
+      &_cell {
+        border-top-color: darken($table-cell-light, 5%);
+      }
+      &_time {
+        color: $label-light;
+      }
+      &.main_table {
+        > .table_head {
+          color: $label-light;
+        }
+        background: $table-cell-light;
+        > .table_head_sticked {
+          table {
+            border-bottom: 1px solid darken($table-cell-light, 5%);
+            background: $table-cell-light;
+          }
+        }
+        > .table_body {
+          > .table_row:not(.table_row_empty):hover .table_row_wrapper,
+          > .table_row_open .table_row_wrapper {
+            > .table_cell {
+              border-color: transparent;
+              transition: border-top-color 0s linear 0s;
+              .table_time {
+                color: darken($palette-white, 10%);
+              }
+            }
+          }
+        }
+      }
+    }
+    .subscriber_filter_form-showed {
+      .subscriber_filter_form_form,
+      .subscriber_filter_form_input {
+        background: $table-cell-light;
+      }
+      .subscriber-filter_form_input {
+        color: $x-palette-dark;
+        &:after {
+          background: linear-gradient(to left, $table-cell-light 0%, transparent 100%);
+        }
+      }
+    }
+  }
 }

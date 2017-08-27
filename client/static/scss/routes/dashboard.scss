@@ -15,29 +15,18 @@
   justify-content: center;
   width: 100%;
   height: $x-size-header_height;
+  a {
+    text-decoration: none;
+  }
   &_content {
-    @include clearfix();
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    position: relative;
     width: $x-size-content_width;
     border-bottom: 1px solid;
   }
   &_user {
     display: flex;
     align-items: center;
-  }
-  &_toolbar {
-    width: 40%;
-    display: flex;
-    margin-left: auto;
-    &_content {
-      margin-left: auto;
-    }
-    button {
-      font: 13px $font-regular;
-    }
   }
   &_logo {
     padding: 12px 8px;
@@ -50,7 +39,6 @@
     margin-right: 20px;
     &_link {
       color: $palette-brand;
-      text-decoration: none;
     }
   }
   &_links {
@@ -68,10 +56,9 @@
       align-items: center;
       vertical-align: middle;
       color: $palette-brand;
-      text-decoration: none;
       letter-spacing: 0.1px;
       svg {
-        fill: $palette-white;
+        fill: $x-palette-gray_1;
         margin-right: 11px;
       }
     }
@@ -94,16 +81,25 @@
       &_link {
         display: block;
         padding: 10px 15px;
-        background-color: transparent;
-        font: 12px/15px 'apercubold';
+        font: 12px/15px $font-bold;
         color: $x-palette-gray;
-        text-decoration: none;
         transition: background-color .3s linear;
         &:hover {
           background-color: $x-palette-pink;
           transition: background-color .3s linear;
         }
       }
+    }
+  }
+  &_toolbar {
+    width: 40%;
+    display: flex;
+    margin-left: auto;
+    &_content {
+      margin-left: auto;
+    }
+    button {
+      font: 13px $font-regular;
     }
   }
 }
@@ -127,37 +123,16 @@
     width: 100%;
     height: $x-size-content_title;
     &_content {
+      display: flex;
+      align-items: center;
       width: $x-size-content_width;
       margin: 0 auto;
     }
   }
   &_h1 {
-    display: inline-block;
-    vertical-align: middle;
-    font: 24px/29px 'apercubold', 'Arial', sans-serif;
-  }
-  &_filter {
-    padding-bottom: 10px;
-    border-bottom: 2px solid lighten( $x-palette-gray, 10% );
+    font: 24px/29px $font-bold;
   }
   &_content {
     padding-top: $x-size-header_height + 15px + $x-size-content_title + 10px;
-    margin-bottom: 10px;
-  }
-  &_footer {
-    text-align: center;
-    &.js-loading-footer {
-      position: relative;
-      height: 65px;
-      > .spinner {
-        top: 0;
-        transform: translate(0, -50%);
-        animation: rotator 1.4s linear infinite;
-        .path {
-          animation: dash 1.4s ease-in-out infinite;
-          stroke: $palette-brand;
-        }
-      }
-    }
   }
 }

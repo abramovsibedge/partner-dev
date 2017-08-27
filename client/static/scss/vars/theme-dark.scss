@@ -1,73 +1,88 @@
 $table_transition_properties: .3s ease-in-out;
 
 body {
-    &.dark-theme {
-        background: $bg-color-dark;
-        color: $text-color-dark;
-        .header {
-            background: $bg-color-dark;
-            color: $x-palette-gray_1;
-            &_content { border-bottom-color: rgba( $palette-white, .05 ); } 
-        }
-        .table {
-            &_label { 
-                background-color: darken( $table-cell-dark, 5% );
-                transition: background-color $table_transition_properties; 
-            }
-            &_row:hover,
-            &_row_open {
-                .table_cell { 
-                    .table_time { color: darken( $palette-white, 10% ); }
-                    .table_label { 
-                        background-color: darken( $palette-brand, 20% ); 
-                        transition: background-color $table_transition_properties; 
-                    }
-                    .table_enable:before { 
-                        background-color: $palette-white;
-                        transition: background-color $table_transition_properties;  
-                    }
-                    .table_disable:before {
-                        border-color: $palette-white;
-                        background-color: transparent;
-                        transition: all $table_transition_properties; 
-                    }
-                }
-            }
-            &_disable:before {
-                border-color: darken( $table-cell-dark, 5% );
-                background: darken( $table-cell-dark, 5% );
-            }
-            &_cell { border-top-color: darken( $table-cell-dark, 5%); }
-            &_time { color: $label-dark; }
-            &.main_table {
-                background: $table-cell-dark;
-                > .table_head { color: $label-dark; }
-                > .table_head_sticked { 
-                    table { 
-                        border-bottom: 1px solid darken( $table-cell-dark, 5%); 
-                        background: $table-cell-dark; 
-                    } 
-                }
-                > .table_body {
-                    > .table_row:not(.table_row_empty):hover,
-                    > .table_row_open {
-                        > .table_cell { 
-                            border-color: transparent;                         
-                            .table_time { color: rgba( $palette-white, .4 ); }
-                        }
-                    }
-                }
-            }
-        }
-        .subscriber_filter_form-showed {
-            .subscriber_filter_form_form,
-            .subscriber_filter_form_input { background: $table-cell-dark; }
-            .subscriber_filter_form_input {
-                color: $palette-white;
-                &:after {
-                    background: linear-gradient(to left, $table-cell-dark 0%, transparent 100%);
-                } 
-            }
-        }
+  &.dark-theme {
+    background: $bg-color-dark;
+    color: $text-color-dark;
+    .header {
+      background: $bg-color-dark;
+      color: $x-palette-gray_1;
+      &_content {
+        border-bottom-color: rgba($palette-white, .05);
+      }
     }
+    .table {
+      &_label {
+        background-color: darken($table-cell-dark, 5%);
+        transition: background-color $table_transition_properties;
+      }
+      &_row:hover,
+      &_row_open {
+        .table_cell {
+          .table_time {
+            color: darken($palette-white, 10%);
+          }
+          .table_label {
+            background-color: darken($palette-brand, 20%);
+            transition: background-color $table_transition_properties;
+          }
+          .table_enable:before {
+            background-color: $palette-white;
+            transition: background-color $table_transition_properties;
+          }
+          .table_disable:before {
+            border-color: $palette-white;
+            background-color: transparent;
+            transition: all $table_transition_properties;
+          }
+        }
+      }
+      &_disable:before {
+        border-color: darken($table-cell-dark, 5%);
+        background: darken($table-cell-dark, 5%);
+      }
+      &_cell {
+        border-top-color: darken($table-cell-dark, 5%);
+      }
+      &_time {
+        color: $label-dark;
+      }
+      &.main_table {
+        background: $table-cell-dark;
+        > .table_head {
+          color: $label-dark;
+        }
+        > .table_head_sticked {
+          table {
+            border-bottom: 1px solid darken($table-cell-dark, 5%);
+            background: $table-cell-dark;
+          }
+        }
+        > .table_body {
+          > .table_row:not(.table_row_empty):hover .table_row_wrapper,
+          > .table_row_open .table_row_wrapper {
+            > .table_cell {
+              border-color: transparent;
+              transition: border-top-color 0s linear 0s;
+              .table_time {
+                color: rgba($palette-white, .4);
+              }
+            }
+          }
+        }
+      }
+    }
+    .subscriber_filter_form-showed {
+      .subscriber_filter_form_form,
+      .subscriber_filter_form_input {
+        background: $table-cell-dark;
+      }
+      .subscriber_filter_form_input {
+        color: $palette-white;
+        &:after {
+          background: linear-gradient(to left, $table-cell-dark 0%, transparent 100%);
+        }
+      }
+    }
+  }
 }

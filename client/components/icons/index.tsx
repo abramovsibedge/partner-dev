@@ -5,6 +5,7 @@ import { IconQuestion } from './question';
 import { IconPlus } from './plus';
 import { IconClose } from './close';
 import { IconDelete } from './delete';
+import { IconDocs } from './docs';
 
 export {
 	IconPerson,
@@ -13,5 +14,6 @@ export {
 	IconQuestion,
 	IconPlus,
 	IconClose,
-	IconDelete
+	IconDelete,
+	IconDocs
 };
