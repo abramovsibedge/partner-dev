@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as update from 'immutability-helper';
+import { connect } from 'react-redux';
 
 import {
 	Form,
@@ -12,7 +13,11 @@ import {
 	IconLock
 } from '../../components/icons';
 
+// TODO delete functions
 import {signIn} from '../../functions/auth';
+
+import * as model from '../../reducers/auth/model';
+import * as actions from '../../reducers/auth/actions';
 
 interface State {
 	login: string
@@ -21,7 +26,13 @@ interface State {
 	message: string
 }
 
-export class Signin extends React.Component<{}, State> {
+interface Props {
+    authmodel: model.AuthModel;
+    changeStatusSignIn: (authmodel:string)=>void;
+}
+
+
+class Signin extends React.Component<Props, State> {
 	constructor(props: any) {
 		super(props);
 
@@ -32,6 +43,10 @@ export class Signin extends React.Component<{}, State> {
 			message: ''
 		}
 	}
+    componentDidMount() {
+		this.props.changeStatusSignIn('ololo');
+    }
+
 
 	private submitHandler() {
 		const $t = this;
@@ -74,6 +89,11 @@ export class Signin extends React.Component<{}, State> {
 	}
 
 	render() {
+
+        const {authmodel} = this.props;
+        console.log('mainmodel', authmodel);
+
+
 		const {
 			login,
 			password,
@@ -128,3 +148,12 @@ export class Signin extends React.Component<{}, State> {
 		);
 	}
 }
+
+export default connect(
+    state => ({
+        authmodel: state.auth
+    }),
+    ({
+        changeStatusSignIn: actions.changeStatusSignIn
+    })
+)(Signin);
