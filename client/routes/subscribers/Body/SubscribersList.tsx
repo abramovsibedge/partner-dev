@@ -101,32 +101,34 @@ class SubscribersList extends React.Component<{}, State> {
 
 			content.push(
 				<div key={k} className="table_row user_item">
-					<div className="table_cell" style={{width: '8.15%'}}>
-						<div className="table_cell_content">{subscriber.id}</div>
-					</div>
-					<div className="table_cell" style={{width: '25%'}}>
-						<div className="table_cell_content">{subscriber.name}</div>
-					</div>
-					<div className="table_cell" style={{width: '8.55%'}}>
-						<div className="table_cell_content">{subscriber.bundle.name}</div>
-					</div>
-					<div className="table_cell" style={{width: '11.05%'}}>
-						<div className="table_cell_content">{subscriber.activated_devices}</div>
-					</div>
-					<div className="table_cell" style={{width: '9.9%'}}>
-						<div className="table_cell_content">{subscriber.active_sessions}</div>
-					</div>
-					<div className="table_cell" style={{width: '8.5%'}}>
-						<div className="table_cell_content">{subscriber.condition}</div>
-					</div>
-					<div className="table_cell" style={{width: '10.9%'}}>
-						<div className="table_cell_content">{rt.getDate() + ' ' + monthNames[rt.getMonth()] + ' ' + rt.getFullYear() + ' ' + rt.getHours() + ':' + rt.getMinutes()}</div>
-					</div>
-					<div className="table_cell" style={{width: '10.45%'}}>
-						<div className="table_cell_content">{ct.getDate() + ' ' + monthNames[ct.getMonth()] + ' ' + ct.getFullYear() + ' ' + ct.getHours() + ':' + ct.getMinutes()}</div>
-					</div>
-					<div className="table_cell" style={{width: '7.5%'}}>
-						<div className="table_cell_content">{subscriber.purchases.length}</div>
+					<div className="table_row_wrapper">
+						<div className="table_cell" style={{width: '8.15%'}}>
+							<div className="table_cell_content">{subscriber.id}</div>
+						</div>
+						<div className="table_cell" style={{width: '25%'}}>
+							<div className="table_cell_content">{subscriber.name}</div>
+						</div>
+						<div className="table_cell" style={{width: '8.55%'}}>
+							<div className="table_cell_content">{subscriber.bundle.name}</div>
+						</div>
+						<div className="table_cell" style={{width: '11.05%'}}>
+							<div className="table_cell_content">{subscriber.activated_devices}</div>
+						</div>
+						<div className="table_cell" style={{width: '9.9%'}}>
+							<div className="table_cell_content">{subscriber.active_sessions}</div>
+						</div>
+						<div className="table_cell" style={{width: '8.5%'}}>
+							<div className="table_cell_content">{subscriber.condition}</div>
+						</div>
+						<div className="table_cell" style={{width: '10.9%'}}>
+							<div className="table_cell_content">{rt.getDate() + ' ' + monthNames[rt.getMonth()] + ' ' + rt.getFullYear() + ' ' + rt.getHours() + ':' + rt.getMinutes()}</div>
+						</div>
+						<div className="table_cell" style={{width: '10.45%'}}>
+							<div className="table_cell_content">{ct.getDate() + ' ' + monthNames[ct.getMonth()] + ' ' + ct.getFullYear() + ' ' + ct.getHours() + ':' + ct.getMinutes()}</div>
+						</div>
+						<div className="table_cell" style={{width: '7.5%'}}>
+							<div className="table_cell_content">{subscriber.purchases.length}</div>
+						</div>
 					</div>
 				</div>
 			);

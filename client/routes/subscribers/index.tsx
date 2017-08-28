@@ -9,6 +9,7 @@ import '../../static/scss/components/modal.scss';
 import '../../static/scss/components/table.scss';
 
 import Switcher from '../../components/switcher';
+import Dashboard from '../../components/dashboard';
 
 import {
 	loadProjects
@@ -127,11 +128,10 @@ export class Subscribers extends React.Component<{}, State> {
 		}
 
 		return (
-			<div className="dashboard">
+			<Dashboard current="subscribers">
 				<Header key="Header" loaded={this.state.loaded} />,
 				{content}
-				<Switcher current="subscribers"/>
-			</div>
+			</Dashboard>
 		);
 	}
 }
