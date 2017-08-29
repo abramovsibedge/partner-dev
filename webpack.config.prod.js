@@ -10,6 +10,7 @@ module.exports = {
 
 	entry: {
 		app: [
+			'babel-polyfill',
 			'./client/index.tsx',
 		],
 		vendor: './package.json'

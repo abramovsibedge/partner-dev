@@ -11,14 +11,13 @@ const autoprefixer = require('autoprefixer');
 // https://github.com/glenjamin/webpack-hot-middleware/issues/37
 const DEV_PORT = process.env.DEV_PORT || 3000;
 const DEV_HOST = '//localhost:' + DEV_PORT + '/';
-const HMR_HOST = DEV_HOST + '__webpack_hmr';
 
 module.exports = {
   devtool: 'inline-source-map',
 
   entry: {
     app: [
-      'webpack-hot-middleware/client?path=' + HMR_HOST,
+			'babel-polyfill',
       './client/index.tsx',
     ],
   },
@@ -39,7 +38,9 @@ module.exports = {
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    // new webpack.NoErrorsPlugin(),
+		new webpack.ProvidePlugin({
+			Promise: 'es6-promise-promise',
+		}),
     new webpack.LoaderOptionsPlugin({
       options: {
         postcss: [autoprefixer({ browsers: ['last 2 versions'] })],

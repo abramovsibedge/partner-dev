@@ -1,20 +1,20 @@
+import axios from 'axios';
 import config from '../config';
 
 export const loadProjects = () => {
 	const request = config.host + 'portal/projects?access_token=' + config.firebaseToken;
 
-	return fetch(request)
-		.then(response => response.json())
-		.then(responseJson => responseJson)
+	return axios(request)
+		.then(response => response.data)
 		.catch(error => error);
 };
 
 export const loadProjectItem = (id: string) => {
 	const countriesRequest = config.host + 'portal/project/countries?access_token=' + config.firebaseToken+ '&publickey=' + id;
-	const countries = fetch(countriesRequest, { method: 'POST' }).then(response => response.json());
+	const countries = axios(countriesRequest, { method: 'POST' }).then(response => response.data);
 
 	const emailsRequest = config.host + 'portal/project/access?access_token=' + config.firebaseToken + '&publickey=' + id;
-	const emails = fetch(emailsRequest).then(response => response.json());
+	const emails = axios(emailsRequest).then(response => response.data);
 
 	const combinedData = {"countries":{},"emails":{}};
 
@@ -32,9 +32,7 @@ export const addProject = (data: object) => {
 	request += '&description=' + data['description'];
 	request += '&project_type=' + data['project_type'];
 
-	return fetch(request, { method: 'POST', })
-		.then(response => response.json())
-		.then(responseJson => responseJson)
+	return axios(request, { method: 'POST' }).then(response => response.data)
 };
 
 export const deleteProject = (item: object) => {
@@ -42,9 +40,7 @@ export const deleteProject = (item: object) => {
 	request += '&publickey=' + item['publickey'];
 	request += '&privatekey=' + item['privatekey'];
 
-	return fetch(request, { method: 'DELETE', })
-		.then(response => response.json())
-		.then(responseJson => responseJson)
+	return axios(request, { method: 'DELETE' }).then(response => response.data)
 };
 
 export const addUser = (project: string, email: string) => {
@@ -52,9 +48,7 @@ export const addUser = (project: string, email: string) => {
 	request += '&publickey=' + project;
 	request += '&email=' + email;
 
-	return fetch(request, { method: 'POST' })
-		.then(response => response.json())
-		.then(responseJson => responseJson)
+	return axios(request, { method: 'POST' }).then(response => response.data)
 };
 
 export const deleteUser = (project: string, email: string) => {
@@ -62,9 +56,7 @@ export const deleteUser = (project: string, email: string) => {
 	request += '&publickey=' + project;
 	request += '&email=' + email;
 
-	return fetch(request, { method: 'DELETE' })
-		.then(response => response.json())
-		.then(responseJson => responseJson)
+	return axios(request, { method: 'DELETE' }).then(response => response.data)
 };
 
 export const setVisibility = (project: string, country: string, visibility: boolean) => {
@@ -73,7 +65,5 @@ export const setVisibility = (project: string, country: string, visibility: bool
 	request += '&country=' + country;
 	request += '&visibility=' + visibility;
 
-	return fetch(request, { method: 'PUT' })
-		.then(response => response.json())
-		.then(responseJson => responseJson)
+	return axios(request, { method: 'PUT' }).then(response => response.data)
 };
