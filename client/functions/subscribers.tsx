@@ -81,3 +81,63 @@ export const getSubscribersList = () => {
 			return responseJson;
 		});
 };
+
+export const getSubscriber = (subscriberId: number) => {
+	return fetch(config.host + 'partner/subscribers/' + subscriberId + '?access_token=' + getAccessToken())
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const deleteSubscriber = (subscriberId: number) => {
+	return fetch(config.host + 'partner/subscribers/' + subscriberId + '?access_token=' + getAccessToken(), {method: 'POST'})
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const modifySubscriber = (subscriberId: number, params: any) => {
+	let request:string = config.host + 'partner/subscribers/' + subscriberId + '?access_token=' + getAccessToken();
+
+	for(let k in params) {
+		request += '&'+k+'='+params[k];
+	}
+
+	return fetch(request, {method: 'PUT'})
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const getTraffic = (subscriberId: number) => {
+	return fetch(config.host + 'partner/subscribers/' + subscriberId + '/traffic?access_token=' + getAccessToken())
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const deleteTraffic = (subscriberId: number) => {
+	return fetch(config.host + 'partner/subscribers/' + subscriberId + '/traffic?access_token=' + getAccessToken(), {method: 'DELETE'})
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const modifyTraffic = (subscriberId: number, params: any) => {
+	let request:string = config.host + 'partner/subscribers/' + subscriberId + '/traffic?access_token=' + getAccessToken();
+
+	for(let k in params) {
+		request += '&'+k+'='+params[k];
+	}
+
+	return fetch(request, {method: 'POST'})
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};

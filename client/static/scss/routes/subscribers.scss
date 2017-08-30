@@ -7,3 +7,211 @@
     bottom: 3px;
   }
 }
+
+@import "../vars/vars";
+
+.subscriber {
+  &_close {
+    position: absolute;
+    z-index: 100;
+    top: 24px;
+    right: 24px;
+    display: none;
+    width: 34px;
+    height: 34px;
+    padding: 4px;
+    border: 1px solid $palette-white;
+    border-radius: 100%;
+    background: $palette-brand;
+    svg {
+      display: block;
+      fill: $palette-white;
+    }
+    @at-root {
+      .table_row_open {
+        .subscriber_close { display: block; }
+      }
+    }
+  }
+  &_pane_content {
+    position: relative;
+    z-index: 2;
+    padding: 28px 26px 24px;
+    color: $x-palette-gray;
+  }
+  &_traffic {
+    padding-bottom: 24px;
+    border-bottom: 1px solid darken( $palette-white, 5% );
+    table {
+      width: 100%;
+      th {
+        padding-bottom: 4px;
+        color: $x-palette-gray_1;
+        font-size: 12px;
+        font-weight: 300;
+        letter-spacing: -0.2px;
+      }
+      td {
+        font-size: 13px;
+        letter-spacing: -0.2px;
+      }
+    }
+  }
+  &_buttons {
+    display: flex;
+    align-items: center;
+    margin-top: 24px;
+
+    .subscriber_manage {
+      .subscriber_manage-button {
+        float: left;
+      }
+    }
+  }
+  &_tabs {
+    &_item {
+      height: 36px;
+      margin-right: 26px;
+      padding: 0;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      outline: none;
+      background: none;
+      font: 13px/38px $font-regular;
+      color: $x-palette-gray_1;
+      cursor: pointer;
+      transition: color .3s ease-in-out;
+      &-active {
+        border-bottom: 2px solid $palette-brand;
+        font: 24px $font-bold;
+        color: $x-palette-gray;
+        letter-spacing: -0.5px;
+        cursor: default;
+      }
+    }
+    &_empty {
+      padding-top: 57px;
+      text-align: center;
+      font-size: 13px;
+      line-height: 21px;
+      color: $x-palette-gray_1;
+      span { color: $x-palette-gray; }
+      p:not(:last-child) { margin-bottom: 27px; }
+      a {
+        display: inline-block;
+        margin: 0 15px;
+        text-decoration: none;
+        color: $palette-brand;
+      }
+    }
+  }
+  &_manage {
+    margin-left: auto;
+    &_item {
+      padding: 12px;
+      background: none;
+      font: 13px $font-regular;
+      color: $x-palette-gray_1;
+      cursor: pointer;
+      &:hover { color: $palette-brand; }
+      &-disable svg { fill: lighten( $palette-red, 18% ); }
+    }
+  }
+  &_edit_checkbox {
+    position: relative;
+    input[type="checkbox"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      visibility: hidden;
+      &:checked + label:before {
+        background: $palette-brand url('../../media/check-white.svg') no-repeat center;
+        background-size: 95%;
+      }
+    }
+    label {
+      position: relative;
+      display: inline-block;
+      height: 19px;
+      padding-top: 20px;
+      padding-left: 18px;
+      text-decoration: none;
+      color: $x-palette-gray_1;
+      cursor: pointer;
+      transition: color ease-in-out .3s;
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 18px;
+        height: 18px;
+        border-radius: 2px;
+        background: rgba( $palette-black, 0.07);
+      }
+    }
+  }
+
+  &_edit_checkbox {
+    label {
+      padding-top: 2px;
+      padding-left: 30px;
+    }
+  }
+
+  &_body_content {
+    .session_filter {
+      height: 74px;
+      margin-top: 20px;
+      padding: 13px 10px;
+      border-radius: 4px;
+      background: #f5f4f2;
+
+      .calendar {
+        position: relative;
+        float: left;
+        margin-right: 10px;
+
+        .button {
+          height: 48px;
+          border: none;
+          outline: 0;
+          background: 0 0;
+          font: 13px apercuregular,Arial,sans-serif;
+          color: inherit;
+          cursor: pointer;
+          letter-spacing: -.2px;
+          transition: color .3s ease-in-out;
+          width: 285px;
+          padding: 9px 12px;
+          border-radius: 4px;
+          background: #fff;
+          text-align: left;
+        }
+      }
+    }
+  }
+}
+
+.user_delete {
+  text-align: right;
+  width: 100%;
+  &_btn {
+    display: inline-flex;
+    padding: 4px;
+    width: 34px;
+    height: 34px;
+    border: 1px solid $x-palette-lightred;
+    border-radius: 100%;
+    svg {
+      display: block;
+      fill: $x-palette-lightred;
+    }
+  }
+}
+
+.country_visibility {
+  width: 100%;
+  text-align: center;
+}

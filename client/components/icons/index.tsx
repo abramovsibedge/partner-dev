@@ -6,6 +6,9 @@ import { IconPlus } from './plus';
 import { IconClose } from './close';
 import { IconDelete } from './delete';
 import { IconDocs } from './docs';
+import { IconPlay } from './play';
+import { IconPen } from './pen';
+import { IconCalendar } from './calendar';
 
 export {
 	IconPerson,
@@ -15,5 +18,8 @@ export {
 	IconPlus,
 	IconClose,
 	IconDelete,
-	IconDocs
+	IconDocs,
+	IconPlay,
+	IconPen,
+	IconCalendar,
 };
