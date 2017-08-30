@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import AddSubscriber from './AddSubscriber';
+import SearchSubscriber from './Search';
 import DashboardHeader from '../../../components/dashboard/dashboardHeader';
 
 import Signal from '../../../functions/Signal';
@@ -33,7 +34,10 @@ export default class Header extends React.Component <Parent, State>{
 	render() {
 		return (
 			<DashboardHeader>
-				{this.state.loaded && <AddSubscriber />}
+				{this.state.loaded && <div className="subscriber_filter">
+					<SearchSubscriber />
+					<AddSubscriber />
+				</div>}
 			</DashboardHeader>
 		);
 	}

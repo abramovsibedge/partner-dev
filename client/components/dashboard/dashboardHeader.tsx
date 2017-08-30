@@ -102,9 +102,7 @@ class DashboardHeader extends React.Component<{}, State> {
 						</div>
 					</div>
 					<div className="header_toolbar">
-						<div className="header_toolbar_content">
-							{this.props.children}
-						</div>
+						{this.props.children}
 					</div>
 				</div>
 			</header>

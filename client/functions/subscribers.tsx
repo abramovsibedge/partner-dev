@@ -141,3 +141,14 @@ export const modifyTraffic = (subscriberId: number, params: any) => {
 			return responseJson;
 		});
 };
+
+export const searchSubscriber = (params: any) => {
+	const filterType: string = params.type === 'userId' ? '/' : '/' + params.type + '/';
+	let request: string = config.host + 'partner/subscribers' + filterType + params.value + '?access_token=' + getAccessToken();
+
+	return fetch(request, {method: 'GET'})
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
