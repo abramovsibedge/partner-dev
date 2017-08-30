@@ -17,7 +17,7 @@ export class Auth extends React.Component<{}, State> {
 	}
 
 	componentWillMount() {
-		this.state.isSigned && window.location.replace("/projects");
+		// this.state.isSigned && window.location.replace('/projects');
 	}
 
 	render() {

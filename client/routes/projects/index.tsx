@@ -30,7 +30,7 @@ export class Projects extends React.Component<{}, State> {
 	}
 
 	componentWillMount() {
-		!this.state.isSigned && window.location.replace("/");
+		!this.state.isSigned && window.location.replace('/');
 	}
 
 	componentDidMount() {
