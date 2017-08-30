@@ -8,12 +8,10 @@ import Header from './Header';
 import Body from './Body';
 
 import {loadProjects} from '../../functions/projects';
-import {check} from '../../functions/auth';
 
 import '../../static/scss/routes/projects.scss';
 
 interface State {
-	isSigned: boolean
 	loading: boolean,
 	projects: any
 }
@@ -23,14 +21,9 @@ export class Projects extends React.Component<{}, State> {
 		super(props);
 
 		this.state = {
-			isSigned: check(),
 			loading: true,
 			projects: []
 		}
-	}
-
-	componentWillMount() {
-		!this.state.isSigned && window.location.replace('/');
 	}
 
 	componentDidMount() {

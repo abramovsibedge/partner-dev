@@ -6,7 +6,7 @@ const storage = new storageHelper;
 export const check = () => {
 	let isSigned: boolean = true;
 
-	if (storage.get('tokens') && !JSON.parse(storage.get('tokens'))) isSigned = false;
+	if (!storage.get('tokens')) isSigned = false;
 
 	firebase.auth().onAuthStateChanged((user: any) => {
 		if (user && user.emailVerified) {

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-	check,
 	logOut
 } from '../../functions/auth';
 import {
@@ -9,6 +8,8 @@ import {
 } from '../../components/icons'
 
 import '../../static/scss/routes/main.scss';
+
+import {check} from '../../../client/functions/auth';
 
 interface State {
 	isSigned: boolean
@@ -19,7 +20,7 @@ export class Main extends React.Component<{}, State> {
 		super(props);
 
 		this.state = {
-			isSigned: check()
+			isSigned: check(),
 		}
 	}
 
