@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Button} from "../../../../components/button/index";
-import * as DayPicker from 'react-day-picker';
-import 'react-day-picker/lib/style.css';
+//import * as DayPicker from 'react-day-picker';
+//import 'react-day-picker/lib/style.css';
 
 import {
 	IconCalendar,
@@ -39,11 +39,13 @@ class SubscriberSessions extends React.Component<Parent, State> {
 
 		//console.log(el)
 
+		//<DayPicker numberOfMonths={2} fixedWeeks />
+
 		return (
 			<div className="subscriber_body_content">
 				<div className="session_filter">
 					<div className="calendar">
-						<DayPicker numberOfMonths={2} fixedWeeks />
+
 					</div>
 				</div>
 			</div>

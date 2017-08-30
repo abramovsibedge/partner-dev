@@ -4,6 +4,7 @@ import Spinner from '../../../../components/spinner';
 
 import {
 	getTraffic,
+	dateString
 } from '../../../../functions/subscribers';
 
 import SubscriberModify       from './SubscriberModify';
@@ -96,13 +97,13 @@ class SubscriberRowOpened extends React.Component<Parent, State> {
 				content =  <SubscriberSessions />;
 				break;
 			case 'devices':
-				content =  <SubscriberDevices />;
+				content =  <SubscriberDevices subscriber={this.state.subscriber}/>;
 				break;
 			case 'purchases':
 				content =  <SubscriberPurchases subscriber={this.state.subscriber}/>;
 				break;
 			case 'social':
-				content =  <SubscriberSocial />;
+				content =  <SubscriberSocial  subscriber={this.state.subscriber}/>;
 				break;
 		}
 
@@ -171,9 +172,6 @@ class SubscriberRowOpened extends React.Component<Parent, State> {
 			);
 		}
 
-		let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
-		let ct = new Date(this.state.trafic.start);
-
 		return (
 			<div className="subscriber_traffic">
 				<table>
@@ -190,7 +188,7 @@ class SubscriberRowOpened extends React.Component<Parent, State> {
 					<tbody>
 					<tr>
 						<td>false</td>
-						<td>{ct.getDate() + ' ' + monthNames[ct.getMonth()] + ' ' + ct.getFullYear() + ' ' + ct.getHours() + ':' + ((ct.getMinutes()>10)?ct.getMinutes():('0'+ct.getMinutes().toString()))} </td>
+						<td>{dateString(this.state.trafic.start)} </td>
 						<td>{this.countTrafic(this.state.trafic.used)}</td>
 						<td>{this.countTrafic(this.state.trafic.remaining)}</td>
 						<td>{this.countTrafic(this.state.trafic.limit)}</td>
