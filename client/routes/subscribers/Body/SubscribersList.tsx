@@ -4,7 +4,8 @@ import Signal from '../../../functions/Signal';
 import Loader from '../Loading';
 
 import {
-	getSubscribersList
+	getSubscribersList,
+	searchSubscriber
 } from '../../../functions/subscribers';
 
 interface State {
@@ -46,7 +47,14 @@ class SubscribersList extends React.Component<{}, State> {
 	}
 
 	searchSubscriber(params: any) {
+		this.setState({loaded: true});
 
+		searchSubscriber(params).then((subscribers) => {
+			this.setState({
+				loaded: true,
+				subscribers: subscribers.result==='OK' ? subscribers.subscribers : []
+			});
+		}).catch();
 	}
 
 	getSubscribers() {
@@ -113,6 +121,11 @@ class SubscribersList extends React.Component<{}, State> {
 		return (
 			<div className="table_body">
 				{content}
+				{content.length === 0 && <div className="table_row table_row_empty">
+					<div className="table_cell" style={{width: '100%'}}>
+						<div className="table_cell_content">No result for your request.</div>
+					</div>
+				</div>}
 			</div>
 		);
 	}

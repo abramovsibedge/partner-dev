@@ -180,3 +180,14 @@ export const dateString = (time: number) => {
 
 	return (date.getDate() + ' ' + monthNames[date.getMonth()] + ' ' + date.getFullYear() + ' ' + date.getHours() + ':' + ((date.getMinutes()>10)?date.getMinutes():('0'+date.getMinutes().toString())));
 };
+
+export const searchSubscriber = (params: any) => {
+	const filterType: string = params.type === 'userId' ? '/' : '/' + params.type + '/';
+	let request: string = config.host + 'partner/subscribers' + filterType + params.value + '?access_token=' + getAccessToken();
+
+	return fetch(request, {method: 'GET'})
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};

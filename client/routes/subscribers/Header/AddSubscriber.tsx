@@ -179,7 +179,7 @@ class AddSubscriber extends React.Component<{}, State>{
 
 	render() {
 		return (
-			<div className="project_filter">
+			<div>
 				<Button type="submit" className="is-transparent" onClick={() => this.showAddSubscriber(true)}>
 					<IconPlus width="24" height="24" />
 					<span>Add subscriber</span>

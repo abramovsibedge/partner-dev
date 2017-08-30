@@ -40,7 +40,7 @@ $table_transition_properties: .3s ease-in-out;
       align-items: center;
       height: $table_body_height;
     }
-    &_empty {
+    &_empty .table_cell {
       padding: 20px 0;
     }
     &_content {
