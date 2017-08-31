@@ -1,9 +1,11 @@
 import * as React from 'react';
 import * as DayPicker from 'react-day-picker';
 import {Button} from "../../../../components/button/index";
+import ReactInputMask from 'react-input-mask';
+
+import Signal from '../../../../functions/signal';
 
 import {
-	Input,
 	Checkbox2 as Checkbox
 } from '../../../../components/form';
 
@@ -14,7 +16,9 @@ import {
 } from '../../../../components/icons'
 
 interface Parent {
-
+	updateSearch: () => void,
+	calendarOpened: () => void,
+	devicesDropdown: boolean
 }
 
 interface State {
@@ -22,12 +26,24 @@ interface State {
 	time: any,
 	currentMonth: any,
 	customTime: boolean,
-	show: boolean
+	show: boolean,
+	devicesDropdown: boolean
 }
 
 const MS_IN_DAY = 86400000;
 
 class Calendar extends React.Component<Parent, State> {
+	updateSearch: (time: any) => void;
+	defaultTime: any;
+	calendarOpened: () => void
+
+	formatChars:any = {
+		'1':'[0-2]',
+		'2':'[0-3]',
+		'3':'[0-5]',
+		'4':'[0-9]'
+	};
+
 	constructor(props: any) {
 		super(props);
 
@@ -44,8 +60,78 @@ class Calendar extends React.Component<Parent, State> {
 			},
 			currentMonth: new Date(),
 			customTime: false,
-			show: false
+			show: false,
+			devicesDropdown: false
 		};
+
+		this.updateSearch = props.updateSearch;
+		this.calendarOpened = props.calendarOpened;
+	}
+
+	componentDidMount() {
+		this.update()
+	}
+
+	componentWillReceiveProps(props: any) {
+		if(!this.state.show) return;
+
+		if(this.state.show && props.devicesDropdown) this.closeCalendar();
+	}
+
+	update() {
+		this.defaultTime = {
+			days: {
+				from: this.state.days.from,
+				till: this.state.days.till,
+			},
+			time: {
+				from: this.state.time.from,
+				till: this.state.time.till,
+			}
+		};
+
+		this.updateSearch(
+			{
+				from: [(new Date(this.state.days.from + ' ' + this.state.time.from.replace(/_/g, '0')).getTime()), this.state.days.from],
+				till: [(new Date(this.state.days.till + ' ' + this.state.time.till.replace(/_/g, '0')).getTime()), this.state.days.till]
+			}
+		);
+	}
+
+	showCalendar(state: boolean) {
+		if(state) this.openCalendar();
+		else this.closeCalendar();
+	}
+
+	openCalendar() {
+		this.calendarOpened();
+
+		this.defaultTime = {
+			days: {
+				from: this.state.days.from,
+				till: this.state.days.till,
+			},
+			time: {
+				from: this.state.time.from,
+				till: this.state.time.till,
+			}
+		};
+
+		this.setState({show: true});
+	}
+
+	closeCalendar() {
+		this.setState({
+			days: {
+				from: this.defaultTime.days.from,
+				till: this.defaultTime.days.till,
+			},
+			time:  {
+				from: this.defaultTime.time.from,
+				till: this.defaultTime.time.till,
+			},
+			show: false
+		})
 	}
 
 	handleDayClick(input: string) {
@@ -73,10 +159,6 @@ class Calendar extends React.Component<Parent, State> {
 		this.setState({days: days});
 	}
 
-	getCurrentWeek() {
-
-	}
-
 	renderDay(input: string) {
 		let day = new Date(input),
 				className = this.checkIfSelected( day );
@@ -92,8 +174,9 @@ class Calendar extends React.Component<Parent, State> {
 		let ts   = new Date(day).getTime();
 		let date = (day.getMonth()+1)+'/'+day.getDate()+'/'+day.getFullYear();
 
-		let from = new Date(this.state.days.from + ' ' + this.state.time.from.replace('_', '0')).getTime();
-		let till = new Date(this.state.days.till + ' ' + this.state.time.till.replace('_', '0')).getTime();
+
+		let from = new Date(this.state.days.from).getTime();
+		let till = new Date(this.state.days.till).getTime()+MS_IN_DAY-1;
 
 		if(
 			from > ts
@@ -197,22 +280,27 @@ class Calendar extends React.Component<Parent, State> {
 	}
 
 	inputHandler(value: string, source: string) {
+		let newState = this.state.time;
+		newState[source] = value;
 
+		this.setState({
+			time: newState
+		});
 	}
 
 	render() {
 		return (
-			<div id="calendar">
-				<Button type="button" className={'calendar_button'+(this.state.show?' opened':'')} onClick={() => {this.setState({show: !this.state.show})}}>
+			<div className="session_button_container">
+				<Button type="button" className={'calendar_button'+(this.state.show?' opened':'')} onClick={() => this.showCalendar(!this.state.show)}>
 					<IconCalendar width="24" height="24" />
 					<div className="calendar_date from">
 						<div className="date">{this.state.days.from}</div>
-						<div className="time">{this.state.time.from}</div>
+						<div className="time">{this.state.time.from.replace(/_/g, '0')}</div>
 					</div>
 					<div className="calendar_separator" />
 					<div className="calendar_date to">
 						<div className="date">{this.state.days.till}</div>
-						<div className="time">{this.state.time.till}</div>
+						<div className="time">{this.state.time.till.replace(/_/g, '0')}</div>
 					</div>
 					<div className="arrow"><IconPlay width="24" height="24" /></div>
 				</Button>
@@ -269,24 +357,36 @@ class Calendar extends React.Component<Parent, State> {
 					<div className={'calendar_dropdown_custom_time'+(this.state.customTime?' opened':'')}>
 						<Button type="button" className={'calendar_button small time_button'} onClick={() => {}}>
 							<IconClock width="24" height="24" />
-							<Input
-								type="input"
-								label="Start time (24 hours)"
-								value={this.state.time.from}
-								notValid={false}
-								onChange={(e) => this.inputHandler(e.target.value, 'from')}>
-							</Input>
+							<div className="input">
+								<ReactInputMask
+									mask="12:34"
+									maskChar="_"
+									value={this.state.time.from}
+									onChange={(e) => this.inputHandler(e.target.value, 'from')}
+									formatChars={this.formatChars}
+									className="input_input"
+								/>
+								<label className="input_label">Start time (24 hours)</label>
+							</div>
 						</Button>
 						<Button type="button" className={'calendar_button small time_button'} onClick={() => {}}>
 							<IconClock width="24" height="24" />
-							<Input
-								type="input"
-								label="End time (24 hours)"
-								value={this.state.time.till}
-								notValid={false}
-								onChange={(e) => this.inputHandler(e.target.value, 'till')}>
-							</Input>
+							<div className="input">
+								<ReactInputMask
+									mask="12:34"
+									maskChar="_"
+									value={this.state.time.till}
+									onChange={(e) => this.inputHandler(e.target.value, 'till')}
+									formatChars={this.formatChars}
+									className="input_input"
+								/>
+								<label className="input_label">End time (24 hours)</label>
+							</div>
 						</Button>
+					</div>
+					<div className="modal_footer">
+						<button className="modal_btn modal_btn-reset" type="button" onClick={() => this.showCalendar(!this.state.show)}>Cancel</button>
+						<button className="modal_btn modal_btn-submit update_search"  onClick={() => {this.update(); this.closeCalendar();}}>Search</button>
 					</div>
 				</div>
 			</div>

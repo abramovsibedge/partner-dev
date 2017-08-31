@@ -166,6 +166,7 @@
       padding: 13px 10px;
       border-radius: 4px;
       background: #f5f4f2;
+      position: relative;
 
       .calendar {
         position: relative;
@@ -178,6 +179,7 @@
   &_filter {
     display: flex;
     width: 100%;
+
     &_form {
       @include clearfix();
       position: relative;
@@ -362,8 +364,22 @@
   text-align: center;
 }
 
-#calendar {
+.session_button_container {
   position: relative;
+
+  &.devices {
+    position: absolute;
+    left: 300px;
+    top: 13px;
+
+    span {
+      display: inline-block;
+      overflow: hidden;
+      width: 213px;
+      height: 15px;
+      line-height: 15px;
+    }
+  }
 
   .calendar_button {
     width: 285px;
@@ -381,6 +397,11 @@
     &.time_button {
       .input {
         top: -9px;
+      }
+
+      label {
+        padding-top: 8px;
+        font-size: 10px;
       }
 
       svg {
@@ -423,6 +444,43 @@
         .time {color: rgba(255,255,255,.4);}
       }
       svg {fill: #fff;}
+    }
+  }
+
+  .sessions_devices_drop {
+    position: absolute;
+    z-index: 20;
+    top: 56px;
+    left: 0;
+    display: none;
+    width: 100%;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px 0 rgba(0,0,0,.1),0 2px 50px 0 rgba(62,70,81,.1);
+    background: #fff;
+
+    &.opened {
+      display: block;
+    }
+
+    .device {
+      height: 48px;
+      padding: 0 25px;
+      line-height: 48px;
+      transition: all .3s ease-in-out;
+      cursor: pointer;
+
+      &:hover {
+        background: #3f9beb;
+        color: #fff;
+      }
+    }
+
+    .device:first-child {
+      border-radius: 4px 4px 0 0;
+    }
+
+    .device:last-child {
+      border-radius: 0 0 4px 4px;
     }
   }
 
@@ -628,6 +686,35 @@
         position: absolute;
         right: 0;
       }
+    }
+  }
+
+  .update_search {
+    background: #3f9beb;
+    color: #fff;
+  }
+}
+
+.js-sessions-traffic {
+  position: absolute;
+  right: 0;
+  top: 10px;
+
+  .sessions_traffic_item {
+    float: left;
+    min-width: 80px;
+    margin-top: 8px;
+
+    .sessions_traffic_label {
+      margin-bottom: 4px;
+      font-size: 12px;
+      color: #a7a7a7;
+    }
+
+    .sessions_traffic_value {
+      font-size: 13px;
+      font-family: apercubold,Arial,sans-serif;
+      color: #242b33;
     }
   }
 }

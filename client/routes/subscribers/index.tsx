@@ -10,6 +10,10 @@ import '../../static/scss/components/modal.scss';
 import '../../static/scss/components/table.scss';
 import '../../static/scss/routes/subscribers.scss';
 
+import {
+	logOut
+} from '../../functions/auth'
+
 import Dashboard from '../../components/dashboard';
 
 import {
@@ -89,7 +93,7 @@ export class Subscribers extends React.Component<{}, State> {
 
 				this.setState(state);
 			});
-		});
+		}).catch(() => logOut());
 	}
 
 	logIn(project: object) {

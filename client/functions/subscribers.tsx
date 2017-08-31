@@ -191,3 +191,26 @@ export const searchSubscriber = (params: any) => {
 			return responseJson;
 		});
 };
+
+
+export const getSessions = (subscriberId: number, params: any) => {
+	let request: string = config.host + 'partner/subscribers/' + subscriberId + '/sessions?access_token=' + getAccessToken();
+
+	for(let k in params) {
+		request += '&'+k+'='+params[k];
+	}
+
+	return fetch(request)
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const byteConvert = (bytes: number) => {
+	if((bytes / (1024*1024*1024)) > 1) return ((bytes / (1024*1024*1024)).toFixed(2) + ' Gb');
+	else if((bytes / (1024*1024)) > 1) return ((bytes / (1024*1024)).toFixed(2) + ' Mb');
+	else if((bytes / (1024)) > 1) return ((bytes / (1024)).toFixed(2) + ' Kb');
+
+	return (bytes.toString() + ' B');
+};
