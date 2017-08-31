@@ -15,8 +15,6 @@ class SubscriberSocial extends React.Component<Parent, State> {
 		this.state = {
 			subscriber: props.subscriber
 		};
-
-		console.log(this.state.subscriber)
 	}
 
 	render() {

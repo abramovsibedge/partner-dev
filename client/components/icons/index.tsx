@@ -10,6 +10,7 @@ import { IconPlay } from './play';
 import { IconPen } from './pen';
 import { IconCalendar } from './calendar';
 import { IconSearch } from './search';
+import { IconClock } from './clock';
 
 export {
 	IconPerson,
@@ -23,5 +24,6 @@ export {
 	IconPlay,
 	IconPen,
 	IconCalendar,
-	IconSearch
+	IconSearch,
+	IconClock
 };
