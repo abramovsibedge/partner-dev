@@ -10,12 +10,7 @@ import '../../static/scss/components/modal.scss';
 import '../../static/scss/components/table.scss';
 import '../../static/scss/routes/subscribers.scss';
 
-import Switcher from '../../components/switcher';
 import Dashboard from '../../components/dashboard';
-
-import {
-	check as checkAuth
-} from '../../functions/auth';
 
 import {
 	loadProjects
@@ -28,7 +23,6 @@ import {
 } from '../../functions/subscribers';
 
 interface State {
-	isSigned: boolean,
 	projectsList: any,
 	loaded: boolean
 };
@@ -40,7 +34,6 @@ export class Subscribers extends React.Component<{}, State> {
 		super(props);
 
 		this.state = {
-			isSigned: checkAuth(),
 			projectsList: [],
 			loaded: false
 		};
@@ -64,10 +57,6 @@ export class Subscribers extends React.Component<{}, State> {
 				}
 			}
 		});
-	}
-
-	componentWillMount() {
-		!this.state.isSigned && window.location.replace("/");
 	}
 
 	componentDidMount() {
