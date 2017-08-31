@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {AuthMessage} from './messages';
 
 import '../../static/scss/routes/auth.scss';
 
@@ -12,7 +13,7 @@ export class Auth extends React.Component<{}, {}> {
 	render() {
 		return (
 			<div className="register">
-				{check() ? 'qwr' : this.props.children}
+				{check() ? <AuthMessage isSigned={check()} /> : this.props.children}
 			</div>
 		);
 	}

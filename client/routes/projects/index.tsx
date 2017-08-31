@@ -35,11 +35,11 @@ export class Projects extends React.Component<{}, State> {
 		})
 	}
 
-	reloadProjects() {
+	reloadProjects = () => {
 		this.setState(update(this.state, {
 			loading: {$set: true},
 		}), () => this.componentDidMount());
-	}
+	};
 
 	render() {
 		const {
@@ -50,10 +50,10 @@ export class Projects extends React.Component<{}, State> {
 		return (
 			<Dashboard current="projects">
 				<DashboardHeader>
-					<Header onUpdate={this.reloadProjects} />
+					<Header onUpdate={() => this.reloadProjects()} />
 				</DashboardHeader>
 				{loading && <Loading />}
-				{!loading && <Body projects={projects} onUpdate={this.reloadProjects} />}
+				{!loading && <Body projects={projects} onUpdate={() => this.reloadProjects()} />}
 			</Dashboard>
 		);
 	}

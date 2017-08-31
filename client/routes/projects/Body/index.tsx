@@ -1,7 +1,8 @@
 import * as React from 'react';
+import * as update from 'immutability-helper';
+import * as classNames from 'classnames';
 
 import ProjectItem from './ProjectItem';
-
 
 interface Props {
 	onUpdate: () => void
@@ -17,6 +18,7 @@ interface State {
 	selectedProjectId: string
 	selectedProject: object
 	selectedProjectTab: string
+	stickedTableHead: boolean
 }
 
 class Body extends React.Component<Props, State> {
@@ -35,11 +37,37 @@ class Body extends React.Component<Props, State> {
 			loading: true,
 			selectedProjectId: '',
 			selectedProject: {},
-			selectedProjectTab: 'vpn-servers'
+			selectedProjectTab: 'vpn-servers',
+			stickedTableHead: false
 		}
 	}
 
+	componentDidMount(){
+		window && window.addEventListener('scroll',this.stickTableHead);
+	}
+
+	componentWillUnmount(){
+		window && window.removeEventListener('scroll',this.stickTableHead);
+	}
+
+	stickTableHead = () => {
+		let {stickedTableHead} = this.state;
+
+		window && window.scrollY > 80 ?
+			!stickedTableHead && this.setState(update(this.state, {
+				stickedTableHead: {$set: true}
+			}))
+			:
+			stickedTableHead && this.setState(update(this.state, {
+				stickedTableHead: {$set: false}
+			}));
+	};
+
 	render() {
+		const {
+			stickedTableHead
+		} = this.state;
+
 		const {
 			projects
 		} = this.props;
@@ -53,7 +81,7 @@ class Body extends React.Component<Props, State> {
 				</header>
 				<div className="layout_content">
 					<div className="table main_table">
-						<div className="table_head">
+						<div className={classNames("table_head", stickedTableHead && "table_head_sticked")}>
 							<table>
 								<tbody>
 								<tr>

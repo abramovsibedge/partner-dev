@@ -56,19 +56,19 @@ class Header extends React.Component<Props, State> {
 		}
 	}
 
-	showAddProject(value: boolean) {
+	showAddProject = (value: boolean) => {
 		this.setState(update(this.state, {
 			addProjectModalState: {$set: value},
 		}));
-	}
+	};
 
-	addProjectHandler(value: string, stateItem: string) {
+	addProjectHandler = (value: string, stateItem: string) => {
 		let newState = {};
 		newState['addProjectObject'] = {[stateItem]: {$set: value}};
 		this.setState(update(this.state, newState));
-	}
+	};
 
-	addProjectSubmit() {
+	addProjectSubmit = () => {
 		const $t = this;
 		const $state = $t.state;
 		let state: boolean = true;
@@ -103,8 +103,7 @@ class Header extends React.Component<Props, State> {
 						validationState: {$set: true},
 						message: {$set: ''}
 					},
-					addProjectModalState: {$set: false},
-					loading: {$set: true},
+					addProjectModalState: {$set: false}
 				}), () => this.props.onUpdate());
 			})
 			.catch((error) => {
@@ -114,7 +113,7 @@ class Header extends React.Component<Props, State> {
 					}
 				}));
 			});
-	}
+	};
 
 	render() {
 		const {
