@@ -15,12 +15,12 @@ class Checkbox extends React.Component {
         this.setState({ id: id });
     }
     render() {
-        const { checked, onChange, children, notValid } = this.props;
+        const { checked, onChange, label, className, notValid } = this.props;
         const { id } = this.state;
-        return (React.createElement("div", { className: classNames('checkbox', (notValid && 'checkbox_error')) },
+        return (React.createElement("div", { className: classNames('checkbox', className, (notValid && 'checkbox_error')) },
             React.createElement("input", { id: id, className: "checkbox_input", type: "checkbox", checked: (checked), onChange: (e) => onChange(e) }),
-            React.createElement("label", { htmlFor: id, className: "checkbox_label" }, children)));
+            React.createElement("label", { htmlFor: id, className: "checkbox_label" }, label)));
     }
 }
 exports.default = Checkbox;
-//# sourceMappingURL=checkbox.js.map
+//# sourceMappingURL=checkbox2.js.map
