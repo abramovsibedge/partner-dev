@@ -4,6 +4,10 @@ import Signal from '../../../../functions/Signal';
 import SubscriberRowOpened from './SubscriberRowOpened';
 
 import {
+	dateString
+} from '../../../../functions/subscribers';
+
+import {
 	IconClose
 } from '../../../../components/icons';
 import {Button} from '../../../../components/button';
@@ -72,12 +76,8 @@ export default class SubscriberRow extends React.Component <Parent, State> {
 	}
 
 	render() {
-		let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
-
 		let subscriber = this.state.subscriber;
 
-		let ct   = new Date(subscriber.connection_time);
-		let rt   = new Date(subscriber.registration_time);
 		let free = (subscriber.purchases.length===0);
 		let condition = (subscriber.condition===0);
 
@@ -107,10 +107,10 @@ export default class SubscriberRow extends React.Component <Parent, State> {
 						</div>
 					</div>
 					<div className="table_cell" style={{width: '10.9%'}}>
-						<div className="table_cell_content">{rt.getDate() + ' ' + monthNames[rt.getMonth()] + ' ' + rt.getFullYear() + ' ' + rt.getHours() + ':' + ((rt.getMinutes()>10)?rt.getMinutes():('0'+rt.getMinutes().toString()))}</div>
+						<div className="table_cell_content">{dateString(subscriber.registration_time)}</div>
 					</div>
 					<div className="table_cell" style={{width: '10.45%'}}>
-						<div className="table_cell_content">{ct.getDate() + ' ' + monthNames[ct.getMonth()] + ' ' + ct.getFullYear() + ' ' + ct.getHours() + ':' + ((ct.getMinutes()>10)?ct.getMinutes():('0'+ct.getMinutes().toString()))}</div>
+						<div className="table_cell_content">{dateString(subscriber.connection_time)}</div>
 					</div>
 					{!this.state.isOpened &&
 					<div className="table_cell" style={{width: '7.5%'}}>

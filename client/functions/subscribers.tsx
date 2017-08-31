@@ -142,6 +142,45 @@ export const modifyTraffic = (subscriberId: number, params: any) => {
 		});
 };
 
+export const getPurchases = (subscriberId: number) => {
+	return fetch(config.host + 'partner/subscribers/' + subscriberId + '/purchase?access_token=' + getAccessToken())
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const deletePurchase = (subscriberId: number, purchase_id: number) => {
+	return fetch(config.host + 'partner/subscribers/' + subscriberId + '/purchase?access_token=' + getAccessToken() + '&purchase_id='+purchase_id, {method: 'DELETE'})
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const getDevices = (subscriberId: number) => {
+	return fetch(config.host + 'partner/subscribers/' + subscriberId + '/devices?access_token=' + getAccessToken())
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const deleteDevice = (subscriberId: number, device_id: number) => {
+	return fetch(config.host + 'partner/subscribers/' + subscriberId + '/devices/' + device_id + '?access_token=' + getAccessToken(), {method: 'DELETE'})
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const dateString = (time: number) => {
+	let date = new Date(time);
+	let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+
+	return (date.getDate() + ' ' + monthNames[date.getMonth()] + ' ' + date.getFullYear() + ' ' + date.getHours() + ':' + ((date.getMinutes()>10)?date.getMinutes():('0'+date.getMinutes().toString())));
+};
+
 export const searchSubscriber = (params: any) => {
 	const filterType: string = params.type === 'userId' ? '/' : '/' + params.type + '/';
 	let request: string = config.host + 'partner/subscribers' + filterType + params.value + '?access_token=' + getAccessToken();
