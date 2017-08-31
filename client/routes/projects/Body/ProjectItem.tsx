@@ -209,14 +209,16 @@ class ProjectItem extends React.Component<Props, State> {
 
 		return (
 			<div className={classNames("table_row", selectedProjectId === project.publickey && "table_row_open")}>
-				<div className="table_row_wrapper" onClick={() => this.openProject(project.publickey)}>
+				<div className="table_row_wrapper" onClick={() => !project.deleteTaskCode && this.openProject(project.publickey)}>
 					<div className="table_cell" style={{width: '30%'}}>
 						<div className="table_cell_content">{project.publickey}</div>
 					</div>
 					<div className="table_cell" style={{width: '50%'}}>
 						<div className="table_cell_content">{project.description}</div>
 					</div>
-					<div className="table_cell" style={{width: '20%'}}>&nbsp;</div>
+					<div className="table_cell" style={{width: '20%'}}>
+						<div className="table_cell_content">{project.deleteTaskCode && <span className="table_label table_label-red">Deleted</span>}</div>
+					</div>
 				</div>
 				<Button type="button" className="project_close" onClick={() => this.closeProject()}>
 					<IconClose width="24" height="24"/>

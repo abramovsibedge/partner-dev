@@ -143,12 +143,13 @@ class ProjectItem extends React.Component {
         const { selectedProjectId, selectedProject, deleteProjectModalState, selectedProjectTab, addUserObject, addUserModalState, deleteUserModalState } = this.state;
         const { project } = this.props;
         return (React.createElement("div", { className: classNames("table_row", selectedProjectId === project.publickey && "table_row_open") },
-            React.createElement("div", { className: "table_row_wrapper", onClick: () => this.openProject(project.publickey) },
+            React.createElement("div", { className: "table_row_wrapper", onClick: () => !project.deleteTaskCode && this.openProject(project.publickey) },
                 React.createElement("div", { className: "table_cell", style: { width: '30%' } },
                     React.createElement("div", { className: "table_cell_content" }, project.publickey)),
                 React.createElement("div", { className: "table_cell", style: { width: '50%' } },
                     React.createElement("div", { className: "table_cell_content" }, project.description)),
-                React.createElement("div", { className: "table_cell", style: { width: '20%' } }, "\u00A0")),
+                React.createElement("div", { className: "table_cell", style: { width: '20%' } },
+                    React.createElement("div", { className: "table_cell_content" }, project.deleteTaskCode && React.createElement("span", { className: "table_label table_label-red" }, "Deleted")))),
             React.createElement(button_1.Button, { type: "button", className: "project_close", onClick: () => this.closeProject() },
                 React.createElement(icons_1.IconClose, { width: "24", height: "24" })),
             React.createElement("div", { className: classNames("table_row_content", Object.keys(selectedProject).length === 0 && "is-loading") },

@@ -1,13 +1,18 @@
 import * as React from 'react';
 import * as update from 'immutability-helper';
+import {storageHelper} from '../../utils';
+
+const storage = new storageHelper;
 
 import Dashboard from '../../components/dashboard';
 import DashboardHeader from '../../components/dashboard/dashboardHeader';
 import Loading from './Loading';
 import Header from './Header';
 import Body from './Body';
+import {AuthMessage} from '../auth/messages';
 
 import {loadProjects} from '../../functions/projects';
+import {check} from '../../functions/auth';
 
 import '../../static/scss/routes/projects.scss';
 
@@ -27,12 +32,23 @@ export class Projects extends React.Component<{}, State> {
 	}
 
 	componentDidMount() {
-		loadProjects().then((result) => {
-			this.setState(update(this.state, {
-				projects: {$set: result.projects},
-				loading: {$set: false},
-			}));
-		})
+		loadProjects()
+			.then((result) => {
+				if (result.result !== "OK") {
+					if (result.result === "NOT_AUTHORIZED") {
+						console.log( 123 );
+						storage.remove('tokens');
+					}
+				}
+
+				this.setState(update(this.state, {
+					projects: {$set: result.projects},
+					loading: {$set: false},
+				}));
+			})
+			.catch((error) => {
+				console.log( error );
+			})
 	}
 
 	reloadProjects = () => {
@@ -47,14 +63,15 @@ export class Projects extends React.Component<{}, State> {
 			projects
 		} = this.state;
 
-		return (
-			<Dashboard current="projects">
-				<DashboardHeader>
-					<Header onUpdate={() => this.reloadProjects()} />
-				</DashboardHeader>
-				{loading && <Loading />}
-				{!loading && <Body projects={projects} onUpdate={() => this.reloadProjects()} />}
-			</Dashboard>
+		return (<div>
+				{!check() ? <AuthMessage isSigned={!check()} /> : <Dashboard current="projects">
+					<DashboardHeader>
+						<Header onUpdate={() => this.reloadProjects()} />
+					</DashboardHeader>
+					{loading && <Loading />}
+					{!loading && <Body projects={projects} onUpdate={() => this.reloadProjects()} />}
+				</Dashboard>}
+			</div>
 		);
 	}
 }
