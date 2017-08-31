@@ -1,14 +1,29 @@
+import * as firebase from 'firebase';
 import * as ReduxActions from "redux-actions";
-
 import *  as types from './constants';
 
-import { AuthModel, IState } from './model';
+function signIn(email: string, password: string) {
 
-const changeStatusSignIn = ReduxActions.createAction<AuthModel, AuthModel>(
-    types.CNANGE_STATUS_SIGNIN,
-    (authmodel: AuthModel) => ({authmodel})
+    return firebase.auth().signInWithEmailAndPassword(email, password)
+        .then((response) => {
+            if (!response.emailVerified) {
+                throw ('Please, verify your email before Sign In!');
+            }
+            else {
+                return response;
+            }
+        })
+        .catch((error: any) => {
+            throw (error.message);
+        });
+
+}
+
+const actionSignIn = ReduxActions.createAction<any, string, string>(
+    types.ACTIONS_SIGNIN,
+    (email: string, password: string) => signIn(email, password)
 )
 
 export {
-    changeStatusSignIn
+    actionSignIn
 }

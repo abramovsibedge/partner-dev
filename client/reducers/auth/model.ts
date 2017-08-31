@@ -1,5 +1,6 @@
 export type AuthModel = {
-    statusSignin: boolean;
+    statusAuth: boolean,
+    errorMessages: string
 };
 
 export type IState = AuthModel;

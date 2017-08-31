@@ -1,4 +1,8 @@
+require("babel-core/register");
+require("babel-polyfill");
+
 import * as React from 'react';
+import promiseMiddleware from 'redux-promise-middleware';
 import { render } from 'react-dom';
 import { Router, browserHistory } from 'react-router';
 import { routes } from './routes';
@@ -14,7 +18,15 @@ const logger = createLogger({duration: true});
 const initialState = {};
 
 
-const store: Store<any> = createStore(rootReducer, initialState, applyMiddleware());
+const store: Store<any> = createStore(
+	rootReducer,
+	initialState,
+	applyMiddleware(promiseMiddleware(
+        {
+            promiseTypeSuffixes: ['LOADING', 'SUCCESS', 'ERROR']
+        }
+	))
+);
 
 render((
 	<Provider store={store}>

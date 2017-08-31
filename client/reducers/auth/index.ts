@@ -4,12 +4,18 @@ import { AuthModel, IState } from './model';
 import *  as types from './constants';
 
 const initialState: IState = <AuthModel>{
-    statusSignin: false
+    errorMessages: ''
 };
 
-export default handleActions<IState, AuthModel>({
-    [types.CNANGE_STATUS_SIGNIN] : (state: IState, action: Action<AuthModel>) : IState => {
-        return [statusSignin: action.payload.status , ...state];
+export default handleActions<IState>({
+    [`${types.ACTIONS_SIGNIN}_LOADING`] : (state: IState, action: Action<string>) : IState => {
+        return {statusAuth: false, errorMessages: ''};
+    },
+    [`${types.ACTIONS_SIGNIN}_SUCCESS`] : (state: IState, action: Action<string>) : IState => {
+        return {statusAuth: true, errorMessages: ''};
+    },
+    [`${types.ACTIONS_SIGNIN}_ERROR`] : (state: IState, action: Action<string>) : IState => {
+        return {statusAuth: false, errorMessages: action.payload};
     },
 
 }, initialState);

@@ -23,6 +23,7 @@
     "@types/redux": "^3.6.0",
     "@types/redux-actions": "^1.2.8",
     "@types/redux-logger": "^3.0.0",
+    "@types/redux-promise-middleware": "0.0.7",
     "autoprefixer": "^6.5.3",
     "axis": "^0.6.1",
     "babel-cli": "^6.9.0",
@@ -63,6 +64,7 @@
     "react-transform-hmr": "^1.0.4",
     "redbox-react": "^1.2.5",
     "redux-actions": "^2.2.1",
+    "redux-promise-middleware": "^4.4.1",
     "rimraf": "^2.5.2",
     "rupture": "^0.6.1",
     "sass-loader": "^4.1.1",
@@ -78,6 +80,7 @@
     "webpack-hot-middleware": "^2.10.0"
   },
   "devDependencies": {
+    "babel-polyfill": "^6.26.0",
     "redux-logger": "^3.0.6"
   }
 }

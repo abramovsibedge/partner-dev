@@ -28,7 +28,7 @@ interface State {
 
 interface Props {
     authmodel: model.AuthModel;
-    changeStatusSignIn: (authmodel:string)=>void;
+    actionSignIn: (email: string, password: string)=>void;
 }
 
 
@@ -43,9 +43,17 @@ class Signin extends React.Component<Props, State> {
 			message: ''
 		}
 	}
-    componentDidMount() {
-		this.props.changeStatusSignIn('ololo');
-    }
+
+    componentWillReceiveProps(nextProps:any) {
+		if (!nextProps.authmodel.statusAuth) {
+            this.setState(update(this.state, {
+				message: {$set: nextProps.authmodel.errorMessages}
+			}));
+		}
+		else {
+            window.location.replace("/projects");
+		}
+	}
 
 
 	private submitHandler() {
@@ -67,19 +75,7 @@ class Signin extends React.Component<Props, State> {
 
 		if (!state && message) return false;
 
-		signIn($state.login, $state.password)
-			.then((response) => {
-				if (response && response.type === 'error') {
-					throw {message: response.error}
-				} else {
-					window.location.replace("/projects");
-				}
-			})
-			.catch((error) => {
-				$t.setState(update($state, {
-					message: {$set: error.message}
-				}));
-			})
+		this.props.actionSignIn($state.login, $state.password);
 	}
 
 	private changeHandler(value: string, stateItem: string) {
@@ -89,11 +85,6 @@ class Signin extends React.Component<Props, State> {
 	}
 
 	render() {
-
-        const {authmodel} = this.props;
-        console.log('mainmodel', authmodel);
-
-
 		const {
 			login,
 			password,
@@ -154,6 +145,6 @@ export default connect(
         authmodel: state.auth
     }),
     ({
-        changeStatusSignIn: actions.changeStatusSignIn
+        actionSignIn: actions.actionSignIn
     })
 )(Signin);
