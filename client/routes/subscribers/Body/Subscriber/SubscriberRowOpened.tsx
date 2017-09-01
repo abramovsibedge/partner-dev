@@ -4,7 +4,8 @@ import Spinner from '../../../../components/spinner';
 
 import {
 	getTraffic,
-	dateString
+	dateString,
+	byteConvert
 } from '../../../../functions/subscribers';
 
 import SubscriberModify       from './SubscriberModify';
@@ -94,7 +95,7 @@ class SubscriberRowOpened extends React.Component<Parent, State> {
 
 		switch (this.state.tab) {
 			case 'sessions':
-				content =  <SubscriberSessions />;
+				content =  <SubscriberSessions subscriber={this.state.subscriber}/>;
 				break;
 			case 'devices':
 				content =  <SubscriberDevices subscriber={this.state.subscriber}/>;
@@ -189,23 +190,15 @@ class SubscriberRowOpened extends React.Component<Parent, State> {
 					<tr>
 						<td>false</td>
 						<td>{dateString(this.state.trafic.start)} </td>
-						<td>{this.countTrafic(this.state.trafic.used)}</td>
-						<td>{this.countTrafic(this.state.trafic.remaining)}</td>
-						<td>{this.countTrafic(this.state.trafic.limit)}</td>
+						<td>{byteConvert(this.state.trafic.used)}</td>
+						<td>{byteConvert(this.state.trafic.remaining)}</td>
+						<td>{byteConvert(this.state.trafic.limit)}</td>
 						<td><span className={(free ? 'table_disable' : 'table_enable')}>{(free ? 'Free' : 'Not free')}</span></td>
 					</tr>
 					</tbody>
 				</table>
 			</div>
 		);
-	}
-
-	countTrafic(size: number) {
-		if((size / (1024*1024*1024)) > 1) return ((size / (1024*1024*1024)).toFixed(2) + ' gigabytes');
-		else if((size / (1024*1024)) > 1) return ((size / (1024*1024)).toFixed(2) + ' magebytes');
-		else if((size / (1024)) > 1) return ((size / (1024)).toFixed(2) + ' kilobytes');
-
-		return (size.toString() + ' bytes');
 	}
 }
 

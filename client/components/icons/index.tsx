@@ -11,6 +11,7 @@ import { IconPen } from './pen';
 import { IconCalendar } from './calendar';
 import { IconSearch } from './search';
 import { IconClock } from './clock';
+import { IconPhone } from './phone';
 
 export {
 	IconPerson,
@@ -25,5 +26,6 @@ export {
 	IconPen,
 	IconCalendar,
 	IconSearch,
-	IconClock
+	IconClock,
+	IconPhone
 };

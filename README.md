@@ -18,7 +18,7 @@
 
 * `npm install -g firebase-tools` для установки *firebase* на рабочем ПК
 * `firebase init` для инициализации *firebase*:
-    * Are you ready to pwoceed? > Y
+    * Are you ready to proceed? > Y
     * Which Firebase CLI features do you want to setup for this folder? > Hosting
     * Убедитесь что файл `.firebaserc` в корне сайта имеет следующее содержимое:
     ```
@@ -52,7 +52,7 @@ Production окружение располагается по адресу https
 
 * `npm install -g firebase-tools` для установки *firebase* на рабочем ПК
 * `firebase init` для инициализации *firebase*:
-    * Are you ready to pwoceed? > Y
+    * Are you ready to proceed? > Y
     * Which Firebase CLI features do you want to setup for this folder? > Hosting
     * Убедитесь что файл `.firebaserc` в корне сайта имеет следующее содержимое:
     ```
@@ -78,3 +78,12 @@ Production окружение располагается по адресу https
 Если *firebase* уже уставновлен и инициализирован, достаточно выполнить команды: 
 * Перенести изменения из ветки **developer** в ветку **production**, разрешить все конфликты и убедиться в ее работоспособности запуском команды ```npm run start``` или ```npm run build```
 * `npm run deploy` для запуска процесса публикации
+
+## Откат изменений на production
+
+В случае,если есть потребность откатить изменения на production до определенной версии, тонеобходимо выполнить следующее:
+1. В консоли *firebase* открыть проект **WEB Portal for Partners**
+2. В левой панели перейти по ссылке **Hosting**
+3. В главном окне будет отображен перечень публикаций на хостинг, который выглядить как список.
+4. Необходимо выбрать определенную версию, навести на нее мышкой и в правой части элемента списка появится меню, состоящее из 3х точек.
+5. Кликнуть по меню и выбрать пункт **Rollback**
