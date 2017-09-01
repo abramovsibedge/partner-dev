@@ -11,4 +11,4 @@ class IconPhone extends React.Component {
 }
 exports.IconPhone = IconPhone;
 ;
-//# sourceMappingURL=pen.js.map
+//# sourceMappingURL=phone.js.map
