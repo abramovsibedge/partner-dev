@@ -17,9 +17,11 @@
 Если у вас нет *firebase* локально:
 
 * `npm install -g firebase-tools` для установки *firebase* на рабочем ПК
+* Удалить файлы ```firebase.json``` и ```.farebaserc``` из корня проекта
 * `firebase init` для инициализации *firebase*:
     * Are you ready to proceed? > Y
     * Which Firebase CLI features do you want to setup for this folder? > Hosting
+    * Из списка предлагаемых проектов выбрать **partner-dev**
     * Убедитесь что файл `.firebaserc` в корне сайта имеет следующее содержимое:
     ```
     {
@@ -51,9 +53,11 @@ Production окружение располагается по адресу https
 Если у вас нет *firebase* локально:
 
 * `npm install -g firebase-tools` для установки *firebase* на рабочем ПК
+* Удалить файлы ```firebase.json``` и ```.farebaserc``` из корня проекта
 * `firebase init` для инициализации *firebase*:
     * Are you ready to proceed? > Y
     * Which Firebase CLI features do you want to setup for this folder? > Hosting
+    * Из списка предлагаемых проектов выбрать **web-portal-for-partners**
     * Убедитесь что файл `.firebaserc` в корне сайта имеет следующее содержимое:
     ```
     {
