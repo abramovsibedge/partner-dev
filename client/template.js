@@ -2,7 +2,7 @@ const React = require('react');
 const T = React.PropTypes;
 
 const Html = ({
-  title = 'Rainbow Unicorns',
+  title = 'Developer AnchorFree',
 	vendor = 'vendor.js',
   bundle = 'app.js',
   body = '',
