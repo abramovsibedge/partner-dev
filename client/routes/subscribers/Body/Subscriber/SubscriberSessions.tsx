@@ -281,7 +281,7 @@ class SubscriberSessions extends React.Component<Parent, State> {
 			<div className="device" key="all" onClick={() => this.changeDevice(0)}>All Devices</div>
 		];
 		for(let k in this.state.devices) {
-			devices.push(<div className="device" onClick={() => this.changeDevice(this.state.devices[k])}>{this.state.devices[k].name}</div>);
+			devices.push(<div key={this.state.devices[k].device_id} className="device" onClick={() => this.changeDevice(this.state.devices[k])}>{this.state.devices[k].name}</div>);
 		}
 
 		return (
