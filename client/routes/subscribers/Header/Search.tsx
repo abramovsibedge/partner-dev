@@ -37,7 +37,9 @@ class SearchSubscriber extends React.Component<{}, State> {
 			value: {$set: '' },
 			showDrop: { $set: false },
 			searchType: { $set: '' }
-		}));
+		}), () => {
+			!value && Signal.dispatch('loadSubscribers', null);
+		});
 	}
 
 	searchFormOnFocus(e: any, value: boolean) {

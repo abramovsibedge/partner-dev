@@ -28,6 +28,7 @@ class SubscribersList extends React.Component<{}, State> {
 		new Signal('closeSubscriber');
 		new Signal('subscriberModified');
 		new Signal('searchSubscriber');
+		new Signal('loadSubscribers');
 	}
 
 	componentDidMount() {
@@ -44,15 +45,21 @@ class SubscribersList extends React.Component<{}, State> {
 		Signal.attach('searchSubscriber', (params: any) => {
 			this.searchSubscriber(params);
 		});
+
+		Signal.attach('loadSubscribers', () => {
+			this.getSubscribers();
+		});
 	}
 
 	searchSubscriber(params: any) {
 		this.setState({loaded: true});
 
+		console.log( params );
+
 		searchSubscriber(params).then((subscribers) => {
 			this.setState({
 				loaded: true,
-				subscribers: subscribers.result==='OK' ? subscribers.subscribers : []
+				subscribers: subscribers.result==='OK' ? subscribers.subscriber ? [subscribers.subscriber] : subscribers.subscribers : []
 			});
 		}).catch();
 	}
