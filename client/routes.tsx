@@ -24,10 +24,10 @@ export const routes = (
 		<Route path='projects' component={Projects} />
 		<Route path='subscribers' component={Subscribers} />
 
-		<Route path='docs/proxy_sdk_android.html' component={DocsProxyAndroid} />
-		<Route path='docs/vpn_sdk_android_openvpn.html' component={DocsVpnAndroid} />
-		<Route path='docs/proxy_sdk_ios.html' component={DocsProxyIos} />
-		<Route path='docs/vpn_sdk_ios_ipsec.html' component={DocsVpnIos} />
+		<Route path='docs/proxy_sdk_android' component={DocsProxyAndroid} />
+		<Route path='docs/vpn_sdk_android_openvpn' component={DocsVpnAndroid} />
+		<Route path='docs/proxy_sdk_ios' component={DocsProxyIos} />
+		<Route path='docs/vpn_sdk_ios_ipsec' component={DocsVpnIos} />
 
 		<Route path='auth' component={Auth}>
 			<Route path='reset' component={Reset}/>
