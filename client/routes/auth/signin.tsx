@@ -13,9 +13,6 @@ import {
 	IconLock
 } from '../../components/icons';
 
-// TODO delete functions
-import {signIn} from '../../functions/auth';
-
 import * as model from '../../reducers/auth/model';
 import * as actions from '../../reducers/auth/actions';
 
