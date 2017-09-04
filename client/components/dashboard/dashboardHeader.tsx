@@ -1,6 +1,9 @@
 import * as React from 'react';
 import Modal from 'react-modal';
 import * as update from 'immutability-helper';
+import {storageHelper} from '../../utils';
+
+const storage = new storageHelper;
 
 import {
 	IconClose,
@@ -11,7 +14,8 @@ import {logOut} from '../../functions/auth';
 import {Button} from '../../components/button';
 
 interface State {
-	logoutModalState: boolean
+	logoutModalState: boolean,
+    username: string
 }
 
 class DashboardHeader extends React.Component<{}, State> {
@@ -20,6 +24,7 @@ class DashboardHeader extends React.Component<{}, State> {
 
 		this.state = {
 			logoutModalState: false,
+			username: (storage.get('username')) ? storage.get('username') : 'user'
 		}
 	}
 
@@ -31,7 +36,8 @@ class DashboardHeader extends React.Component<{}, State> {
 
 	render() {
 		const {
-			logoutModalState
+			logoutModalState,
+            username
 		} = this.state;
 
 		return (
@@ -44,7 +50,7 @@ class DashboardHeader extends React.Component<{}, State> {
 							</a>
 						</div>
 						<div className="header_logout">
-							Hello test! <a href="#" className="header_logout_link" onClick={() => this.showLogout(true)}>Logout</a>
+							Hello {username}! <a href="#" className="header_logout_link" onClick={() => this.showLogout(true)}>Logout</a>
 							<Modal
 								isOpen={logoutModalState}
 								className={{base: 'modal_inner'}}
