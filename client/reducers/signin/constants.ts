@@ -1,1 +1,2 @@
 export const ACTIONS_SIGNIN = 'ACTIONS_SIGNIN';
+export const ACTIONS_SIGNUP = 'ACTIONS_SIGNUP';

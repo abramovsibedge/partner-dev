@@ -4,7 +4,7 @@ import { AuthModel, IState } from './model';
 import *  as types from './constants';
 
 const initialState: IState = <AuthModel>{
-    errorMessages: ''
+    errorMessages: '',
 };
 
 export default handleActions<IState>({

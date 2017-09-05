@@ -1,5 +1,7 @@
 import * as React from 'react';
 import * as update from 'immutability-helper';
+import { connect } from 'react-redux';
+
 
 import {
 	Form,
@@ -40,7 +42,7 @@ interface State {
 	success: boolean
 }
 
-export class Signup extends React.Component<{}, State> {
+class Signup extends React.Component<{}, State> {
 	constructor(props: any) {
 		super(props);
 
@@ -290,3 +292,11 @@ export class Signup extends React.Component<{}, State> {
 		);
 	}
 }
+
+
+export default connect(
+    state => ({
+    }),
+    ({
+    })
+)(Signup);

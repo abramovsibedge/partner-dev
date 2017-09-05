@@ -13,8 +13,8 @@ import {
 	IconLock
 } from '../../components/icons';
 
-import * as model from '../../reducers/auth/model';
-import * as actions from '../../reducers/auth/actions';
+import * as model from '../../reducers/signin/model';
+import * as actions from '../../reducers/signin/actions';
 
 interface State {
 	login: string
