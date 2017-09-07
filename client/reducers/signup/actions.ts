@@ -2,7 +2,9 @@ import * as firebase from 'firebase';
 import * as ReduxActions from "redux-actions";
 import *  as types from './constants';
 
-export const signUp = (state: any) => {
+import { SignUpModel} from './model';
+
+export const signUp = (state: SignUpModel) => {
     return firebase.auth().createUserWithEmailAndPassword(state.email, state.password)
         .then(() => {
             firebase.auth().currentUser.sendEmailVerification();
@@ -18,18 +20,18 @@ export const signUp = (state: any) => {
                 first: true
             });
 
-            return {type: 'OK'};
+            return true;
         })
         .catch((error: any) => {
-            return {type: 'error', error: error};
+            throw (error.message);
         });
 };
 
-const actionSignIn = ReduxActions.createAction<any, string, string>(
+const actionSignUp = ReduxActions.createAction<any, SignUpModel>(
     types.ACTIONS_SIGNUP,
-    (email: string, password: string) => signUp(email, password)
+    (staty: SignUpModel) => signUp(staty)
 )
 
 export {
-    actionSignIn
+    actionSignUp
 }

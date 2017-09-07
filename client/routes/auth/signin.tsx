@@ -24,7 +24,7 @@ interface State {
 }
 
 interface Props {
-    authmodel: model.AuthModel;
+    signInModel: model.SignInModel;
     actionSignIn: (email: string, password: string)=>void;
 }
 
@@ -42,9 +42,9 @@ class Signin extends React.Component<Props, State> {
 	}
 
     componentWillReceiveProps(nextProps:any) {
-		if (!nextProps.authmodel.statusAuth) {
+		if (!nextProps.signInModel.statusAuth) {
             this.setState(update(this.state, {
-				message: {$set: nextProps.authmodel.errorMessages}
+				message: {$set: nextProps.signInModel.errorMessages}
 			}));
 		}
 		else {
@@ -139,7 +139,7 @@ class Signin extends React.Component<Props, State> {
 
 export default connect(
     state => ({
-        authmodel: state.auth
+        signInModel: state.signin
     }),
     ({
         actionSignIn: actions.actionSignIn

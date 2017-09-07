@@ -1,10 +1,10 @@
 import { handleActions, Action } from 'redux-actions';
-import { AuthModel, IState } from './model';
+import { SignUpModelStatus, IState } from './model';
 
 import *  as types from './constants';
 
-const initialState: IState = <AuthModel>{
-    errorMessages: '',
+const initialState: IState = <SignUpModelStatus>{
+    errorMessages: ''
 };
 
 export default handleActions<IState>({

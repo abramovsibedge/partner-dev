@@ -18,7 +18,17 @@ import {
 } from '../../components/icons';
 import {emailValidation} from '../../utils';
 
+// for redux
+import * as model from '../../reducers/signup/model';
+import * as actions from '../../reducers/signup/actions';
+
 import {signUp} from '../../functions/auth';
+
+
+interface Props {
+    signUpModelStatus: model.SignUpModelStatus;
+    actionSignUp: (data: any)=>void;
+}
 
 interface Option {
 	value: string
@@ -42,7 +52,7 @@ interface State {
 	success: boolean
 }
 
-class Signup extends React.Component<{}, State> {
+class Signup extends React.Component<Props, State> {
 	constructor(props: any) {
 		super(props);
 
@@ -91,6 +101,20 @@ class Signup extends React.Component<{}, State> {
 		}
 	}
 
+    componentWillReceiveProps(nextProps:any) {
+		console.log(nextProps.signUpModelStatus);
+        if (!nextProps.signUpModelStatus.statusSignUp) {
+            this.setState(update(this.state, {
+                message: {$set: nextProps.signUpModelStatus.errorMessages}
+            }));
+        }
+        else {
+            this.setState(update(this.state, {
+				success: {$set: true}
+			}));
+        }
+    }
+
 	private submitHandler() {
 		const $t = this;
 		const $state = $t.state;
@@ -125,21 +149,8 @@ class Signup extends React.Component<{}, State> {
 
 		if (!state && message) return false;
 
-		signUp($state)
-			.then((response) => {
-				if (response && response.type === 'error') {
-					throw {message: response.error.message}
-				} else {
-					$t.setState(update($state, {
-						success: {$set: true}
-					}));
-				}
-			})
-			.catch((error) => {
-				$t.setState(update($state, {
-					message: {$set: error.message}
-				}));
-			})
+		this.props.actionSignUp($state);
+
 	}
 
 	private changeHandler(value: string, stateItem: string) {
@@ -165,6 +176,7 @@ class Signup extends React.Component<{}, State> {
 			message,
 			success
 		} = this.state;
+
 
 		return (
 			<div className="register_content register_signup">
@@ -296,7 +308,9 @@ class Signup extends React.Component<{}, State> {
 
 export default connect(
     state => ({
+        signUpModelStatus: state.signup
     }),
     ({
+        actionSignUp: actions.actionSignUp
     })
 )(Signup);
