@@ -1,7 +1,8 @@
 import * as React from 'react';
 
-import User from './User';
 import AddSubscriber from './AddSubscriber';
+import SearchSubscriber from './Search';
+import DashboardHeader from '../../../components/dashboard/dashboardHeader';
 
 import Signal from '../../../functions/Signal';
 
@@ -31,18 +32,13 @@ export default class Header extends React.Component <Parent, State>{
 	}
 
 	render() {
-		let content = [
-			<User key="content" />
-		];
-
-		if(this.state.loaded) content.push(<AddSubscriber key="AddSubscriber"/>)
-
 		return (
-			<header className='header'>
-				<div className="header_content">
-					{content}
-				</div>
-			</header>
+			<DashboardHeader>
+				{this.state.loaded && <div className="subscriber_filter">
+					<SearchSubscriber />
+					<AddSubscriber />
+				</div>}
+			</DashboardHeader>
 		);
 	}
 }

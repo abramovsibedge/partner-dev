@@ -1,14 +1,15 @@
 import * as React from 'react';
 import {
-	check,
 	logOut
 } from '../../functions/auth';
 import {
-	IconHTMLTag,
+	IconDocs,
 	IconQuestion
 } from '../../components/icons'
 
 import '../../static/scss/routes/main.scss';
+
+import {check} from '../../../client/functions/auth';
 
 interface State {
 	isSigned: boolean
@@ -19,7 +20,7 @@ export class Main extends React.Component<{}, State> {
 		super(props);
 
 		this.state = {
-			isSigned: check()
+			isSigned: check(),
 		}
 	}
 
@@ -39,7 +40,7 @@ export class Main extends React.Component<{}, State> {
 							<ul className="menu">
 								<li className="menu_item docslink">
 									<span className="menu_link">
-										<IconHTMLTag width="24" height="24"/>
+										<IconDocs width="24" height="24"/>
 										<span>Docs</span>
 									</span>
 									<div className="docslink_drop">

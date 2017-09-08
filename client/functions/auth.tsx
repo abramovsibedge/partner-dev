@@ -6,15 +6,17 @@ const storage = new storageHelper;
 export const check = () => {
 	let isSigned: boolean = true;
 
-	if (!JSON.parse(storage.get('tokens'))) isSigned = false;
+	if (!storage.get('tokens')) isSigned = false;
 
 	firebase.auth().onAuthStateChanged((user: any) => {
 		if (user && user.emailVerified) {
 			const data = JSON.stringify({firebaseToken: user.De});
 			storage.add('tokens', data);
+            storage.add('username', (user.displayName) ? user.displayName : user.email);
 			isSigned = true;
 		} else {
 			storage.remove('tokens');
+            storage.remove('username');
 			isSigned = false;
 		}
 	});

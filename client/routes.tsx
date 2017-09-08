@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Route, IndexRoute} from 'react-router';
+import {Route, IndexRoute, Redirect} from 'react-router';
 
 import {App} from './routes/app';
 import {Main} from './routes/main/';
@@ -10,16 +10,24 @@ import Signup from './routes/auth/signup';
 import {Projects} from './routes/projects/';
 import {Subscribers} from './routes/subscribers/';
 import {NotFound} from './routes/404/';
-
-import {check} from '../client/functions/auth';
 import {firebaseInit} from '../client/functions/firebaseInit';
 
+import {DocsProxyAndroid} from './routes/docs/DocsProxyAndroid';
+import {DocsVpnAndroid} from './routes/docs/DocsVpnAndroid';
+import {DocsProxyIos} from './routes/docs/DocsProxyIos';
+import {DocsVpnIos} from './routes/docs/DocsVpnIos';
+
 export const routes = (
-	<Route path='/' component={App} onEnter={firebaseInit}>
+	<Route path='/' component={App} onEnter={firebaseInit} >
 		<IndexRoute component={Main}/>
 
-		<Route path='projects' component={Projects} onEnter={check}/>
-		<Route path='subscribers' component={Subscribers} onEnter={check}/>
+		<Route path='projects' component={Projects} />
+		<Route path='subscribers' component={Subscribers} />
+
+		<Route path='docs/proxy_sdk_android' component={DocsProxyAndroid} />
+		<Route path='docs/vpn_sdk_android_openvpn' component={DocsVpnAndroid} />
+		<Route path='docs/proxy_sdk_ios' component={DocsProxyIos} />
+		<Route path='docs/vpn_sdk_ios_ipsec' component={DocsVpnIos} />
 
 		<Route path='auth' component={Auth}>
 			<Route path='reset' component={Reset}/>

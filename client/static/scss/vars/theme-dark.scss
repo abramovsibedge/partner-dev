@@ -15,6 +15,10 @@ body {
       &_label {
         background-color: darken($table-cell-dark, 5%);
         transition: background-color $table_transition_properties;
+        &-red {
+          background-color: lighten($palette-red, 10%);
+          transition: background-color $table_transition_properties;
+        }
       }
       &_row:hover,
       &_row_open {

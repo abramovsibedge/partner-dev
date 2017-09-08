@@ -81,3 +81,136 @@ export const getSubscribersList = () => {
 			return responseJson;
 		});
 };
+
+export const getSubscriber = (subscriberId: number) => {
+	return fetch(config.host + 'partner/subscribers/' + subscriberId + '?access_token=' + getAccessToken())
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const deleteSubscriber = (subscriberId: number) => {
+	return fetch(config.host + 'partner/subscribers/' + subscriberId + '?access_token=' + getAccessToken(), {method: 'POST'})
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const modifySubscriber = (subscriberId: number, params: any) => {
+	let request:string = config.host + 'partner/subscribers/' + subscriberId + '?access_token=' + getAccessToken();
+
+	for(let k in params) {
+		request += '&'+k+'='+params[k];
+	}
+
+	return fetch(request, {method: 'PUT'})
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const getTraffic = (subscriberId: number) => {
+	return fetch(config.host + 'partner/subscribers/' + subscriberId + '/traffic?access_token=' + getAccessToken())
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const deleteTraffic = (subscriberId: number) => {
+	return fetch(config.host + 'partner/subscribers/' + subscriberId + '/traffic?access_token=' + getAccessToken(), {method: 'DELETE'})
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const modifyTraffic = (subscriberId: number, params: any) => {
+	let request:string = config.host + 'partner/subscribers/' + subscriberId + '/traffic?access_token=' + getAccessToken();
+
+	for(let k in params) {
+		request += '&'+k+'='+params[k];
+	}
+
+	return fetch(request, {method: 'POST'})
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const getPurchases = (subscriberId: number) => {
+	return fetch(config.host + 'partner/subscribers/' + subscriberId + '/purchase?access_token=' + getAccessToken())
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const deletePurchase = (subscriberId: number, purchase_id: number) => {
+	return fetch(config.host + 'partner/subscribers/' + subscriberId + '/purchase?access_token=' + getAccessToken() + '&purchase_id='+purchase_id, {method: 'DELETE'})
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const getDevices = (subscriberId: number) => {
+	return fetch(config.host + 'partner/subscribers/' + subscriberId + '/devices?access_token=' + getAccessToken())
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const deleteDevice = (subscriberId: number, device_id: number) => {
+	return fetch(config.host + 'partner/subscribers/' + subscriberId + '/devices/' + device_id + '?access_token=' + getAccessToken(), {method: 'DELETE'})
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const dateString = (time: number) => {
+	let date = new Date(time);
+	let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+
+	return (date.getDate() + ' ' + monthNames[date.getMonth()] + ' ' + date.getFullYear() + ' ' + date.getHours() + ':' + ((date.getMinutes()>10)?date.getMinutes():('0'+date.getMinutes().toString())));
+};
+
+export const searchSubscriber = (params: any) => {
+	const filterType: string = params.type === 'userId' ? '/' : '/' + params.type + '/';
+	let request: string = config.host + 'partner/subscribers' + filterType + params.value + '?access_token=' + getAccessToken();
+
+	return fetch(request, {method: 'GET'})
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+
+export const getSessions = (subscriberId: number, params: any) => {
+	let request: string = config.host + 'partner/subscribers/' + subscriberId + '/sessions?access_token=' + getAccessToken();
+
+	for(let k in params) {
+		request += '&'+k+'='+params[k];
+	}
+
+	return fetch(request)
+		.then((response) => response.json())
+		.then((responseJson) => {
+			return responseJson;
+		});
+};
+
+export const byteConvert = (bytes: number) => {
+	if((bytes / (1024*1024*1024)) > 1) return ((bytes / (1024*1024*1024)).toFixed(2) + ' Gb');
+	else if((bytes / (1024*1024)) > 1) return ((bytes / (1024*1024)).toFixed(2) + ' Mb');
+	else if((bytes / (1024)) > 1) return ((bytes / (1024)).toFixed(2) + ' Kb');
+
+	return (bytes.toString() + ' B');
+};

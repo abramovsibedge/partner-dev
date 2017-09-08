@@ -179,72 +179,68 @@ class AddSubscriber extends React.Component<{}, State>{
 
 	render() {
 		return (
-			<div className="header_toolbar">
-				<div className="header_toolbar_content">
-					<div className="project_filter">
-						<Button type="submit" className="is-transparent" onClick={() => this.showAddSubscriber(true)}>
-							<IconPlus width="24" height="24" />
-							<span>Add subscriber</span>
-						</Button>
-						<Modal
-							isOpen={this.state.showModal}
-							className={{base: 'modal_inner'}}
-							overlayClassName={{base: 'modal_outer'}}
-							contentLabel="test">
-							<div className="modal_header">
-								<h2>Create subscriber</h2>
-							</div>
-							<Form submit={() => this.addSubscriberSubmit()} className="modal_form">
-								<div className="modal_error">{this.state.addObject['message']}</div>
-								<div className="modal_content">
-									<FormRow>
-										<Input
-											type="text"
-											label="Username"
-											value={this.state.addObject['username'].value}
-											notValid={!this.state.addObject['username'].valid}
-											onChange={(e) => this.addSubscriberHandler(e.target.value, 'username')}>
-										</Input>
-									</FormRow>
-									<FormRow>
-										<Input
-											type="text"
-											label="OAuth token"
-											value={this.state.addObject['oauth_token'].value}
-											notValid={!this.state.addObject['oauth_token'].valid}
-											onChange={(e) => this.addSubscriberHandler(e.target.value, 'oauth_token')}>
-										</Input>
-									</FormRow>
-									<FormRow>
-										<Select
-											value={this.state.addObject['licence'].value}
-											notValid={!this.state.addObject['licence'].valid}
-											options={this.state.licencesList}
-											onChange={(e) => this.addSubscriberHandler(e.target.value, 'licence')}>
-											Licence
-										</Select>
-									</FormRow>
-									<FormRow>
-										<Input
-											type="text"
-											label="Extref"
-											value={this.state.addObject['extref'].value}
-											notValid={!this.state.addObject['extref'].valid}
-											onChange={(e) => this.addSubscriberHandler(e.target.value, 'extref')}>
-										</Input>
-									</FormRow>
-								</div>
-								<div className="modal_footer">
-									<button className="modal_btn modal_btn-reset" type="button" onClick={() => this.showAddSubscriber(false)}>Cancel</button>
-									<button className="modal_btn modal_btn-submit" type="submit">Create subscriber</button>
-								</div>
-							</Form>
-							<Button type="button" className="modal_close" onClick={() => this.showAddSubscriber(false)}>
-								<IconClose width="24" height="24" />
-							</Button>
-						</Modal>
+			<div>
+				<Button type="submit" className="is-transparent" onClick={() => this.showAddSubscriber(true)}>
+					<IconPlus width="24" height="24" />
+					<span>Add subscriber</span>
+				</Button>
+				<Modal
+					isOpen={this.state.showModal}
+					className={{base: 'modal_inner'}}
+					overlayClassName={{base: 'modal_outer'}}
+					contentLabel="test">
+					<div className="modal_header">
+						<h2>Create subscriber</h2>
 					</div>
-				</div>
+					<Form submit={() => this.addSubscriberSubmit()} className="modal_form">
+						<div className="modal_error">{this.state.addObject['message']}</div>
+						<div className="modal_content">
+							<FormRow>
+								<Input
+									type="text"
+									label="Username"
+									value={this.state.addObject['username'].value}
+									notValid={!this.state.addObject['username'].valid}
+									onChange={(e) => this.addSubscriberHandler(e.target.value, 'username')}>
+								</Input>
+							</FormRow>
+							<FormRow>
+								<Input
+									type="text"
+									label="OAuth token"
+									value={this.state.addObject['oauth_token'].value}
+									notValid={!this.state.addObject['oauth_token'].valid}
+									onChange={(e) => this.addSubscriberHandler(e.target.value, 'oauth_token')}>
+								</Input>
+							</FormRow>
+							<FormRow>
+								<Select
+									value={this.state.addObject['licence'].value}
+									notValid={!this.state.addObject['licence'].valid}
+									options={this.state.licencesList}
+									onChange={(e) => this.addSubscriberHandler(e.target.value, 'licence')}>
+									Licence
+								</Select>
+							</FormRow>
+							<FormRow>
+								<Input
+									type="text"
+									label="Extref"
+									value={this.state.addObject['extref'].value}
+									notValid={!this.state.addObject['extref'].valid}
+									onChange={(e) => this.addSubscriberHandler(e.target.value, 'extref')}>
+								</Input>
+							</FormRow>
+						</div>
+						<div className="modal_footer">
+							<button className="modal_btn modal_btn-reset" type="button" onClick={() => this.showAddSubscriber(false)}>Cancel</button>
+							<button className="modal_btn modal_btn-submit" type="submit">Create subscriber</button>
+						</div>
+					</Form>
+					<Button type="button" className="modal_close" onClick={() => this.showAddSubscriber(false)}>
+						<IconClose width="24" height="24" />
+					</Button>
+				</Modal>
 			</div>
 		);
 	}

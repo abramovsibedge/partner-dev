@@ -1,22 +1,24 @@
 import * as React from 'react';
+import Signal from '../../functions/Signal';
 
-import Header from './Header';
 import Body   from './Body';
+import Header from './Header';
+
 import Loading from './Loading';
 
-import '../../static/scss/routes/subscribers.scss';
 import '../../static/scss/components/modal.scss';
 import '../../static/scss/components/table.scss';
+import '../../static/scss/routes/subscribers.scss';
 
-import Switcher from '../../components/switcher';
+import {
+	logOut
+} from '../../functions/auth'
+
+import Dashboard from '../../components/dashboard';
 
 import {
 	loadProjects
 } from '../../functions/projects';
-
-import {
-	check as checkAuth
-} from '../../functions/auth';
 
 import {
 	logIn,
@@ -24,10 +26,7 @@ import {
 	getActiveProject
 } from '../../functions/subscribers';
 
-import Signal from '../../functions/Signal';
-
 interface State {
-	isSigned: boolean,
 	projectsList: any,
 	loaded: boolean
 };
@@ -39,7 +38,6 @@ export class Subscribers extends React.Component<{}, State> {
 		super(props);
 
 		this.state = {
-			isSigned: checkAuth(),
 			projectsList: [],
 			loaded: false
 		};
@@ -65,19 +63,15 @@ export class Subscribers extends React.Component<{}, State> {
 		});
 	}
 
-	componentWillMount() {
-		!this.state.isSigned && window.location.replace("/");
-	}
-
 	componentDidMount() {
-		this.updateProjectData();
+		this.getData();
 	}
 
-	updateProjectData() {
+	getData() {
 		let state = {};
 
 		loadProjects().then((response) => {
-			state['projectsList'] = response.projects ? response.projects : []; // @todo empty projects handler
+			state['projectsList'] = response.projects;
 
 			let id = 0;
 
@@ -99,7 +93,7 @@ export class Subscribers extends React.Component<{}, State> {
 
 				this.setState(state);
 			});
-		});
+		}).catch(() => logOut());
 	}
 
 	logIn(project: object) {
@@ -107,31 +101,19 @@ export class Subscribers extends React.Component<{}, State> {
 			if(checkLogin() && getActiveProject() === project['publickey']) return resolve(project['publickey']);
 
 			logIn(project['publickey'], project['privatekey']).then((result: boolean) => {
-				if(result) return resolve(getActiveProject()); // @todo Error fallback
+				if(result) return resolve(getActiveProject());
 			});
 		});
 	}
 
 	render() {
-		let content = [];
-
-		if(!this.state.loaded) {
-			content.push(
-				<Loading key="loader" />
-			)
-		}
-		else {
-			content.push(
-				<Body	key="Body" activeProject={this.activeProject} projectsList={this.state.projectsList} />
-			)
-		}
-
 		return (
-			<div className="dashboard">
-				<Header key="Header" loaded={this.state.loaded} />,
-				{content}
-				<Switcher current="subscribers"/>
-			</div>
+			<Dashboard current="subscribers">
+				<Header loaded={this.state.loaded} />,
+				{this.state.loaded
+					?<Body projectsList={this.state.projectsList} activeProject={this.activeProject} />
+					:<Loading />}
+			</Dashboard>
 		);
 	}
 }

@@ -95,9 +95,7 @@
     width: 40%;
     display: flex;
     margin-left: auto;
-    &_content {
-      margin-left: auto;
-    }
+    justify-content: flex-end;
     button {
       font: 13px $font-regular;
     }
@@ -106,7 +104,7 @@
 
 .layout {
   width: $x-size-content_width;
-  margin: 0 auto 30px;
+  margin: 0 auto 180px;
   align-self: stretch;
   &.is-loading {
     display: flex;

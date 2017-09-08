@@ -1,9 +1,720 @@
-.layout_h1 {
+@import "../vars/vars";
 
+.layout_h1 {
   select {
     height: 25px;
     width: auto;
     margin-left: 10px;
     bottom: 3px;
+  }
+}
+
+.subscriber {
+  &_close {
+    position: absolute;
+    z-index: 100;
+    top: 24px;
+    right: 24px;
+    display: none;
+    width: 34px;
+    height: 34px;
+    padding: 4px;
+    border: 1px solid $palette-white;
+    border-radius: 100%;
+    background: $palette-brand;
+    svg {
+      display: block;
+      fill: $palette-white;
+    }
+    @at-root {
+      .table_row_open {
+        .subscriber_close { display: block; }
+      }
+    }
+  }
+  &_pane_content {
+    position: relative;
+    z-index: 2;
+    padding: 28px 26px 24px;
+    color: $x-palette-gray;
+  }
+  &_traffic {
+    padding-bottom: 24px;
+    border-bottom: 1px solid darken( $palette-white, 5% );
+    table {
+      width: 100%;
+      th {
+        padding-bottom: 4px;
+        color: $x-palette-gray_1;
+        font-size: 12px;
+        font-weight: 300;
+        letter-spacing: -0.2px;
+      }
+      td {
+        font-size: 13px;
+        letter-spacing: -0.2px;
+      }
+    }
+  }
+  &_buttons {
+    display: flex;
+    align-items: center;
+    margin-top: 24px;
+
+    .subscriber_manage {
+      .subscriber_manage-button {
+        float: left;
+      }
+    }
+  }
+  &_tabs {
+    &_item {
+      height: 36px;
+      margin-right: 26px;
+      padding: 0;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      outline: none;
+      background: none;
+      font: 13px/38px $font-regular;
+      color: $x-palette-gray_1;
+      cursor: pointer;
+      transition: color .3s ease-in-out;
+      &-active {
+        border-bottom: 2px solid $palette-brand;
+        font: 24px $font-bold;
+        color: $x-palette-gray;
+        letter-spacing: -0.5px;
+        cursor: default;
+      }
+    }
+    &_empty {
+      padding-top: 57px;
+      text-align: center;
+      font-size: 13px;
+      line-height: 21px;
+      color: $x-palette-gray_1;
+      span { color: $x-palette-gray; }
+      p:not(:last-child) { margin-bottom: 27px; }
+      a {
+        display: inline-block;
+        margin: 0 15px;
+        text-decoration: none;
+        color: $palette-brand;
+      }
+    }
+  }
+  &_manage {
+    margin-left: auto;
+    &_item {
+      padding: 12px;
+      background: none;
+      font: 13px $font-regular;
+      color: $x-palette-gray_1;
+      cursor: pointer;
+      &:hover { color: $palette-brand; }
+      &-disable svg { fill: lighten( $palette-red, 18% ); }
+    }
+  }
+  &_edit_checkbox {
+    position: relative;
+    input[type="checkbox"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      visibility: hidden;
+      &:checked + label:before {
+        background: $palette-brand url('../../media/check-white.svg') no-repeat center;
+        background-size: 95%;
+      }
+    }
+    label {
+      position: relative;
+      display: inline-block;
+      height: 19px;
+      padding-top: 20px;
+      padding-left: 18px;
+      text-decoration: none;
+      color: $x-palette-gray_1;
+      cursor: pointer;
+      transition: color ease-in-out .3s;
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 18px;
+        height: 18px;
+        border-radius: 2px;
+        background: rgba( $palette-black, 0.07);
+      }
+    }
+  }
+
+  &_edit_checkbox {
+    label {
+      padding-top: 2px;
+      padding-left: 30px;
+    }
+  }
+
+  &_body_content {
+    .session_filter {
+      height: 74px;
+      margin-top: 20px;
+      padding: 13px 10px;
+      border-radius: 4px;
+      background: #f5f4f2;
+      position: relative;
+
+      .calendar {
+        position: relative;
+        float: left;
+        margin-right: 10px;
+      }
+
+    }
+  }
+  &_filter {
+    display: flex;
+    width: 100%;
+
+    &_form {
+      @include clearfix();
+      position: relative;
+      width: 70%;
+      float: right;
+      height: 48px;
+      &_form {
+        position: relative;
+        float: right;
+        width: 170px;
+        max-width: 424px;
+        height: 100%;
+        transition: all .4s ease-in-out;
+        background: transparent;
+        border-radius: 4px;
+        .btn {
+          position: relative;
+          z-index: 10;
+          visibility: visible;
+          width: 100%;
+          padding-left: 30px;
+          transition:
+            opacity .2s ease-in-out .4s,
+            visibility .2s ease-in-out .4s,
+            color .2s ease-in-out .4s;
+        }
+      }
+      &_input {
+        position: absolute;
+        overflow: hidden;
+        top: 13px;
+        left: 45px;
+        width: 75%;
+        height: 22px;
+        opacity: 0;
+        visibility: hidden;
+        border: 0;
+        outline: none;
+        background: transparent;
+        font: 13px/22px $font-regular;
+        transition:
+          background .2s ease-in-out,
+          opacity .2s ease-in-out,
+          visibility .2s ease-in-out;
+        text-overflow: ellipsis;
+        word-break: break-all;
+        &::-webkit-input-placeholder { font: 13px/15px $font-regular; }
+        &:-ms-input-placeholder { font: 13px/15px $font-regular; }
+        &::-ms-input-placeholder { font: 13px/15px $font-regular; }
+        &::placeholder { font: 13px/15px $font-regular; }
+        &:after {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 20px;
+          height: 100%;
+        }
+        @at-root {
+          div.subscriber_filter_form_input { color: $x-palette-dark; }
+        }
+      }
+      &_reset {
+        position: absolute;
+        top: 6px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        opacity: 0;
+        background: none;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        svg { fill: $x-palette-gray_2; }
+      }
+      &_btn {
+        position: relative;
+        z-index: 10;
+        visibility: visible;
+        width: 100%;
+        padding-left: 30px;
+        transition:
+          opacity .2s ease-in-out .4s,
+          visibility .2s ease-in-out .4s,
+          color .2s ease-in-out .4s;
+      }
+      &_icon {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        fill: $palette-brand;
+        transition: all .2s ease-in-out;
+      }
+      &-showed {
+        .subscriber_filter_form_form {
+          opacity: 1;
+          width: 100%;
+          max-width: 424px;
+          transition: all .4s ease-in-out .2s;
+          .btn {
+            z-index: 10;
+            opacity: 0;
+            visibility: hidden;
+            transition:
+              opacity .2s ease-in-out,
+              visibility .2s ease-in-out,
+              color .2s ease-in-out;
+          }
+        }
+        .subscriber_filter_form_reset {
+          opacity: 1;
+          transition: all .3s ease-in-out .2s;
+        }
+        .subscriber_filter_form_input {
+          opacity: 1;
+          visibility: visible;
+          transition:
+            background .8s ease-in-out 1s,
+            opacity .8s ease-in-out 1s,
+            visibility .8s ease-in-out 1s;
+        }
+        .subscriber_filter_form_icon {
+          fill: $x-palette-gray_2;
+          transition: all .2s ease-in-out;
+        }
+      }
+    }
+    &_drop {
+      position: absolute;
+      z-index: 1000;
+      top: 56px;
+      left: 0;
+      width: 100%;
+      border-radius: 4px;
+      box-shadow:
+        0 2px 10px 0 rgba( $palette-black, 0.1 ),
+        0 2px 50px 0 rgba( $table-cell-dark, 0.1 );
+      background: $palette-white;
+      &_item {
+        height: 48px;
+        padding: 0 25px;
+        line-height: 48px;
+        transition: all .3s ease-in-out;
+        cursor: pointer;
+        &:first-child { border-radius: 4px 4px 0 0; }
+        &:last-child { border-radius: 0 0 4px 4px; }
+        b {
+          font-family: $font-bold;
+          color: $x-palette-gray;
+          transition: color .3s ease-in-out;
+        }
+        &:hover {
+          background: $palette-brand;
+          color: $palette-white;
+          b { color: $palette-white; }
+        }
+      }
+    }
+
+  }
+}
+
+.user_delete {
+  text-align: right;
+  width: 100%;
+  &_btn {
+    display: inline-flex;
+    padding: 4px;
+    width: 34px;
+    height: 34px;
+    border: 1px solid $x-palette-lightred;
+    border-radius: 100%;
+    svg {
+      display: block;
+      fill: $x-palette-lightred;
+    }
+  }
+}
+
+.country_visibility {
+  width: 100%;
+  text-align: center;
+}
+
+.session_button_container {
+  position: relative;
+
+  &.devices {
+    position: absolute;
+    left: 300px;
+    top: 13px;
+
+    span {
+      display: inline-block;
+      overflow: hidden;
+      width: 213px;
+      height: 15px;
+      line-height: 15px;
+    }
+  }
+
+  .calendar_button {
+    width: 285px;
+    height: 48px;
+    padding: 9px 12px;
+    border-radius: 4px;
+    background: #fff;
+    text-align: left;
+    font: 13px apercuregular,Arial,sans-serif;
+
+    &.small {
+      width: 220px;
+    }
+
+    &.time_button {
+      .input {
+        top: -9px;
+      }
+
+      label {
+        padding-top: 8px;
+        font-size: 10px;
+      }
+
+      svg {
+        position: relative;
+        top: -9px;
+      }
+    }
+
+    .calendar_date {
+      display: inline-block;
+      vertical-align: middle;
+      width: 70px;
+      margin: 0 12px;
+      .date {
+        margin-bottom: 2px;
+        font-size: 13px;
+        color: #242b33;
+      }
+      .time {
+        font-size: 12px;
+        color: #a7a7a7;
+      }
+    }
+    .calendar_separator {
+      display: inline-block;
+      vertical-align: middle;
+      width: 17px;
+      height: 1px;
+      background: #d8d8d8;
+      transition: background .3s ease-in-out;
+    }
+    .arrow {
+      svg {fill: #c4c3c3;}
+    }
+    &.opened {
+      background: #3f9beb;
+      color: #fff;
+      .calendar_date {
+        .date {color: #fff;}
+        .time {color: rgba(255,255,255,.4);}
+      }
+      svg {fill: #fff;}
+    }
+  }
+
+  .sessions_devices_drop {
+    position: absolute;
+    z-index: 20;
+    top: 56px;
+    left: 0;
+    display: none;
+    width: 100%;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px 0 rgba(0,0,0,.1),0 2px 50px 0 rgba(62,70,81,.1);
+    background: #fff;
+
+    &.opened {
+      display: block;
+    }
+
+    .device {
+      height: 48px;
+      padding: 0 25px;
+      line-height: 48px;
+      transition: all .3s ease-in-out;
+      cursor: pointer;
+
+      &:hover {
+        background: #3f9beb;
+        color: #fff;
+      }
+    }
+
+    .device:first-child {
+      border-radius: 4px 4px 0 0;
+    }
+
+    .device:last-child {
+      border-radius: 0 0 4px 4px;
+    }
+  }
+
+  .calendar_dropdown {
+    display: none;
+    position: absolute;
+    z-index: 1000;
+    top: 56px;
+    left: 0;
+    width: 480px;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px 0 rgba(0,0,0,.1),0 2px 50px 0 rgba(62,70,81,.1);
+    background: #f5f4f2;
+
+    &.opened {
+      display: block;
+    }
+
+    .DayPicker-wrapper {
+      width: 480px;
+      height: 293px;
+      background: #fff;
+      font: 13px apercubold,Arial,sans-serif;
+      color: #000;
+      border-radius: 4px 4px 0 0;
+
+      .DayPicker-Month {
+        width: 224px;
+        margin: 7px;
+        float: left;
+      }
+
+      .DayPicker-Caption {
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        color: #333;
+        text-transform: uppercase;
+      }
+
+      .DayPicker-WeekdaysRow {
+        height: 32px;
+        font-weight: 100;
+        text-transform: uppercase;
+        border-bottom: 1px solid rgba(0,0,0,.05);
+
+        .DayPicker-Weekday {
+          float: left;
+          width: 32px;
+          height: 32px;
+          padding: 0;
+          font: 12px apercubold,Arial,sans-serif;
+          color: #a7a7a7;
+          letter-spacing: -.2px;
+          text-align: center;
+          line-height: 32px;
+          cursor: default;
+
+          abbr {
+            text-decoration: none;
+          }
+        }
+      }
+
+      .DayPicker-Week {
+        height: 32px;
+        margin: 1px 0px;
+
+        .DayPicker-Day {
+          float: left;
+          width: 32px;
+          height: 32px;
+          color: #333;
+          cursor: pointer;
+
+
+          .custom-day {
+            width: 32px;
+            height: 32px;
+            font-size: 12px;
+            line-height: 32px;
+            letter-spacing: -.2px;
+            text-align: center;
+            position: relative;
+          }
+        }
+
+        .DayPicker-Day[aria-disabled="false"] {
+          .custom-day {
+            &.selected  {
+              &.outer {
+                background: #3f9beb;
+                color: #fff;
+                border-radius: 100%;
+
+                &.multiple {
+                  &::before {
+                    content: '';
+                    position: absolute;
+                    z-index: 5;
+                    top: 0;
+                    width: 35%;
+                    height: 100%;
+                    background: rgba(63,155,235,.2);
+                  }
+
+                  &.last::before {left: 0px;}
+                  &.first::before {right: 0px;}
+                }
+              }
+
+              &.center {
+                background: rgba(63,155,235,.2);
+                &.first {
+                  border-radius: 100% 0 0 100%;
+                }
+                &.last {
+                  border-radius: 0 100% 100% 0;
+                }
+              }
+            }
+          }
+        }
+
+        .DayPicker-Day[aria-disabled="true"] {
+          color: rgba(0,0,0,.3);
+          cursor: default;
+        }
+      }
+    }
+
+    .DayPicker-delimiter {
+      position: absolute;
+      height: 293px;
+      background: rgba(0,0,0,.05);
+      width: 1px;
+      position: absolute;
+      left: 239px;
+      top: 0px;
+    }
+
+    &_options {
+      padding: 19px 19px 0px 19px;
+
+      .calendar_dropdown_row{
+        margin-bottom: 19px;
+
+        .not_allowed {
+          cursor: not-allowed;
+          div {
+            cursor: not-allowed;
+            input {cursor: not-allowed;}
+            label {cursor: not-allowed;}
+          }
+        }
+
+        .calendar_dropdown_item {
+          position: relative;
+          display: inline-block;
+          vertical-align: top;
+
+          span {
+            color: #a7a7a7;
+            font-size: 12px;
+            line-height: 19px;
+            letter-spacing: -.2px;
+            cursor: pointer;
+
+            &:hover {
+              color: #3f9beb;
+            }
+          }
+
+          label {
+            letter-spacing: -.2px;
+            font-size: 12px;
+          }
+
+          &.item1 {width: 170px;}
+          &.item2 {width: 90px;}
+          &.item3 {width: 80px;}
+          &.item4 {width: 100px;}
+        }
+      }
+    }
+
+    .calendar_dropdown_custom_time {
+      margin: 0 16px 19px 16px;
+      position: relative;
+      height: 50px;
+      display: none;
+
+      &.opened {
+        display: block;
+      }
+
+      button:first-child {
+        position: absolute;
+        left: 0;
+      }
+
+      button:last-child {
+        position: absolute;
+        right: 0;
+      }
+    }
+  }
+
+  .update_search {
+    background: #3f9beb;
+    color: #fff;
+  }
+}
+
+.js-sessions-traffic {
+  position: absolute;
+  right: 0;
+  top: 10px;
+
+  .sessions_traffic_item {
+    float: left;
+    min-width: 80px;
+    margin-top: 8px;
+
+    .sessions_traffic_label {
+      margin-bottom: 4px;
+      font-size: 12px;
+      color: #a7a7a7;
+    }
+
+    .sessions_traffic_value {
+      font-size: 13px;
+      font-family: apercubold,Arial,sans-serif;
+      color: #242b33;
+    }
   }
 }

@@ -15,9 +15,9 @@ class Checkbox extends React.Component {
         this.setState({ id: id });
     }
     render() {
-        const { checked, onChange, children, notValid } = this.props;
+        const { checked, onChange, children, className, notValid } = this.props;
         const { id } = this.state;
-        return (React.createElement("div", { className: classNames('checkbox', (notValid && 'checkbox_error')) },
+        return (React.createElement("div", { className: classNames('checkbox', className, (notValid && 'checkbox_error')) },
             React.createElement("input", { id: id, className: "checkbox_input", type: "checkbox", checked: (checked), onChange: (e) => onChange(e) }),
             React.createElement("label", { htmlFor: id, className: "checkbox_label" }, children)));
     }

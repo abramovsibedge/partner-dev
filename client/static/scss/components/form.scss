@@ -43,6 +43,20 @@
     }
   }
 
+  //input:focus {
+  //  & + label {
+  //    padding-top: 8px;
+  //    font-size: 10px;
+  //  }
+  //}
+  //
+  //input.is-filled {
+  //  & + label {
+  //    padding-top: 8px;
+  //    font-size: 10px;
+  //  }
+  //}
+
   &_input {
     position: relative;
     z-index: 20;
@@ -54,7 +68,12 @@
     color: $x-palette-dark;
     font: 13px $font-regular;
     &:focus,
-    &.is-filled,
+    &.is-filled {
+      & + #{$input}_label {
+        padding-top: 8px;
+        font-size: 10px;
+      }
+    }
     &:-webkit-autofill {
       & + #{$input}_label {
         padding-top: 8px;
