@@ -102,7 +102,6 @@ class Signup extends React.Component<Props, State> {
 	}
 
     componentWillReceiveProps(nextProps:any) {
-		console.log(nextProps.signUpModelStatus);
         if (!nextProps.signUpModelStatus.statusSignUp) {
             this.setState(update(this.state, {
                 message: {$set: nextProps.signUpModelStatus.errorMessages}

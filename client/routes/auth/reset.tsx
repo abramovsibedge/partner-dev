@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as update from 'immutability-helper';
+import { connect } from 'react-redux';
 
 import {
 	Form,
@@ -10,6 +11,9 @@ import {Button} from '../../components/button';
 import {IconPerson} from '../../components/icons';
 import {emailValidation} from '../../utils';
 
+import * as model from '../../reducers/reset/model';
+import * as actions from '../../reducers/reset/actions';
+
 import {reset} from '../../functions/auth';
 
 interface State {
@@ -19,7 +23,13 @@ interface State {
 	success: boolean
 }
 
-export class Reset extends React.Component<{}, State> {
+
+interface Props {
+    resetModelStatus: model.resetModelStatus;
+    actionReset: (email: string)=>void;
+}
+
+class Reset extends React.Component<Props, State> {
 	constructor(props: any) {
 		super(props);
 
@@ -30,6 +40,21 @@ export class Reset extends React.Component<{}, State> {
 			success: false
 		}
 	}
+
+    componentWillReceiveProps(nextProps:any) {
+        if (!nextProps.resetModelStatus.statusReset) {
+
+            this.setState(update(this.state, {
+                message: {$set: nextProps.resetModelStatus.errorMessages}
+            }));
+
+        }
+        else {
+            this.setState(update(this.state, {
+                success: {$set: true}
+            }));
+        }
+    }
 
 	private submitHandler() {
 		const $t = this;
@@ -51,21 +76,8 @@ export class Reset extends React.Component<{}, State> {
 
 		if (!state && message) return false;
 
-		reset($email)
-			.then((response) => {
-				if (response && response.type === 'error') {
-					throw {message: response.error.message}
-				} else {
-					$t.setState(update($state, {
-						success: {$set: true}
-					}));
-				}
-			})
-			.catch((error) => {
-				$t.setState(update($state, {
-					message: {$set: error.message}
-				}));
-			})
+		this.props.actionReset($email);
+
 	}
 
 	private changeHandler(value: string, stateItem: string) {
@@ -81,6 +93,7 @@ export class Reset extends React.Component<{}, State> {
 			message,
 			success
 		} = this.state;
+
 
 		return (
 			<div className="register_content register_signip">
@@ -122,3 +135,12 @@ export class Reset extends React.Component<{}, State> {
 		);
 	}
 }
+
+export default connect(
+    state => ({
+        resetModelStatus: state.reset
+    }),
+    ({
+        actionReset: actions.actionReset
+    })
+)(Reset);
