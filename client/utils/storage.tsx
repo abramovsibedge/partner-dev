@@ -30,7 +30,6 @@ export const saveState = (state:any) => {
     const storage = new storageHelper;
 	try {
         const serializedState = JSON.stringify(state);
-        console.log('state', serializedState);
         storage.add('state', serializedState);
 	}
     catch (e) {
