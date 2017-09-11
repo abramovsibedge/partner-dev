@@ -6,6 +6,7 @@ import promiseMiddleware from 'redux-promise-middleware';
 import { render } from 'react-dom';
 import { Router, browserHistory } from 'react-router';
 import { routes } from './routes';
+import { loadState, saveState } from './utils/storage';
 
 
 // redux
@@ -15,12 +16,13 @@ import {createLogger} from 'redux-logger';
 
 import rootReducer from './reducers'
 const logger = createLogger({duration: true});
-const initialState = {};
 
+
+const persistedstate = loadState();
 
 const store: Store<any> = createStore(
 	rootReducer,
-	initialState,
+    persistedstate,
 	applyMiddleware(promiseMiddleware(
         {
             promiseTypeSuffixes: ['LOADING', 'SUCCESS', 'ERROR']
@@ -28,8 +30,15 @@ const store: Store<any> = createStore(
 	))
 );
 
+store.subscribe(()=>{
+	saveState(store.getState());
+});
+
+
 render((
 	<Provider store={store}>
 		<Router routes={routes} history={browserHistory} />
 	</Provider>
 ), document.getElementById('root'));
+
+
