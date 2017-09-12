@@ -85,15 +85,29 @@ export class Subscribers extends React.Component<{}, State> {
 				}
 			}
 
-			this.logIn(state['projectsList'][id]).then((activeProject: string) => {
-				state['loaded']    = true;
-				this.activeProject = activeProject;
+			if (state['projectsList'].length >0) {
+                this.logIn(state['projectsList'][id]).then((activeProject: string) => {
+                    state['loaded']    = true;
+                    this.activeProject = activeProject;
 
-				Signal.dispatch('loaded', true);
+                    Signal.dispatch('loaded', true);
 
-				this.setState(state);
-			});
-		}).catch(() => logOut());
+                    this.setState(state);
+                });
+			}
+			else {
+                state['loaded'] = true;
+                Signal.dispatch('loaded', true);
+                this.setState(state);
+			}
+
+		}).catch(
+			(error) =>
+			{
+                console.log( 'error!', error );
+			}
+
+		);
 	}
 
 	logIn(project: object) {
@@ -109,10 +123,11 @@ export class Subscribers extends React.Component<{}, State> {
 	render() {
 		return (
 			<Dashboard current="subscribers">
-				<Header loaded={this.state.loaded} />,
-				{this.state.loaded
-					?<Body projectsList={this.state.projectsList} activeProject={this.activeProject} />
-					:<Loading />}
+				<Header loaded={this.state.loaded} />
+				{this.state.loaded  ?
+					<Body projectsList={this.state.projectsList} activeProject={this.activeProject} />
+					:<Loading />
+				}
 			</Dashboard>
 		);
 	}
