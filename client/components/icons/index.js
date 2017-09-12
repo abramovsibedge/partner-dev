@@ -26,4 +26,6 @@ const search_1 = require("./search");
 exports.IconSearch = search_1.IconSearch;
 const clock_1 = require("./clock");
 exports.IconClock = clock_1.IconClock;
+const phone_1 = require("./phone");
+exports.IconPhone = phone_1.IconPhone;
 //# sourceMappingURL=index.js.map

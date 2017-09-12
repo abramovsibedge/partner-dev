@@ -66,7 +66,7 @@ class SubscriberRowOpened extends React.Component {
         let content;
         switch (this.state.tab) {
             case 'sessions':
-                content = React.createElement(SubscriberSessions_1.default, null);
+                content = React.createElement(SubscriberSessions_1.default, { subscriber: this.state.subscriber });
                 break;
             case 'devices':
                 content = React.createElement(SubscriberDevices_1.default, { subscriber: this.state.subscriber });
@@ -128,20 +128,11 @@ class SubscriberRowOpened extends React.Component {
                         React.createElement("td", null,
                             subscribers_1.dateString(this.state.trafic.start),
                             " "),
-                        React.createElement("td", null, this.countTrafic(this.state.trafic.used)),
-                        React.createElement("td", null, this.countTrafic(this.state.trafic.remaining)),
-                        React.createElement("td", null, this.countTrafic(this.state.trafic.limit)),
+                        React.createElement("td", null, subscribers_1.byteConvert(this.state.trafic.used)),
+                        React.createElement("td", null, subscribers_1.byteConvert(this.state.trafic.remaining)),
+                        React.createElement("td", null, subscribers_1.byteConvert(this.state.trafic.limit)),
                         React.createElement("td", null,
                             React.createElement("span", { className: (free ? 'table_disable' : 'table_enable') }, (free ? 'Free' : 'Not free'))))))));
-    }
-    countTrafic(size) {
-        if ((size / (1024 * 1024 * 1024)) > 1)
-            return ((size / (1024 * 1024 * 1024)).toFixed(2) + ' gigabytes');
-        else if ((size / (1024 * 1024)) > 1)
-            return ((size / (1024 * 1024)).toFixed(2) + ' magebytes');
-        else if ((size / (1024)) > 1)
-            return ((size / (1024)).toFixed(2) + ' kilobytes');
-        return (size.toString() + ' bytes');
     }
 }
 exports.default = SubscriberRowOpened;

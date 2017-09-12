@@ -54,12 +54,21 @@ class Subscribers extends React.Component {
                     }
                 }
             }
-            this.logIn(state['projectsList'][id]).then((activeProject) => {
+            if (state['projectsList'].length > 0) {
+                this.logIn(state['projectsList'][id]).then((activeProject) => {
+                    state['loaded'] = true;
+                    this.activeProject = activeProject;
+                    Signal_1.default.dispatch('loaded', true);
+                    this.setState(state);
+                });
+            }
+            else {
                 state['loaded'] = true;
-                this.activeProject = activeProject;
                 Signal_1.default.dispatch('loaded', true);
                 this.setState(state);
-            });
+            }
+        }).catch((error) => {
+            console.log('error!', error);
         });
     }
     logIn(project) {
@@ -75,9 +84,8 @@ class Subscribers extends React.Component {
     render() {
         return (React.createElement(dashboard_1.default, { current: "subscribers" },
             React.createElement(Header_1.default, { loaded: this.state.loaded }),
-            ",",
-            this.state.loaded
-                ? React.createElement(Body_1.default, { projectsList: this.state.projectsList, activeProject: this.activeProject })
+            this.state.loaded ?
+                React.createElement(Body_1.default, { projectsList: this.state.projectsList, activeProject: this.activeProject })
                 : React.createElement(Loading_1.default, null)));
     }
 }

@@ -4,6 +4,7 @@ import {Route, IndexRoute, Redirect} from 'react-router';
 import {App} from './routes/app';
 import {Main} from './routes/main/';
 import {Auth} from './routes/auth/';
+import {Veryfy} from './routes/veryfy/';
 import {Reset} from './routes/auth/reset';
 import {Signin} from './routes/auth/signin';
 import {Signup} from './routes/auth/signup';
@@ -34,6 +35,9 @@ export const routes = (
 			<Route path='signin' component={Signin}/>
 			<Route path='signup' component={Signup}/>
 		</Route>
+
+		<Route path='pages/:action' component={Veryfy}></Route>
+
 		<Route path='*' component={NotFound}/>
 	</Route>
 );
