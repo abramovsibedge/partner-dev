@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {Link} from 'react-router';
 import {
 	logOut
 } from '../../functions/auth';
@@ -46,16 +47,16 @@ export class Main extends React.Component<{}, State> {
 									<div className="docslink_drop">
 										<ul className="docslink_list">
 											<li className="docslink_item">
-												<a className="docslink_link" href="/docs/proxy_sdk_android.html"target="_blank">Proxy SDK for Android</a>
+												<Link className="docslink_link" to="docs/proxy_sdk_android">Proxy SDK for Android</Link>
 											</li>
 											<li className="docslink_item">
-												<a className="docslink_link" href="/docs/proxy_sdk_ios.html" target="_blank">Proxy SDK for iOS</a>
+												<Link className="docslink_link" to="docs/proxy_sdk_ios">Proxy SDK for iOS</Link>
 											</li>
 											<li className="docslink_item">
-												<a className="docslink_link" href="/docs/vpn_sdk_android_openvpn.html" target="_blank">VPN SDK for Android (OpenVPN)</a>
+												<Link className="docslink_link" to="docs/vpn_sdk_android_openvpn">VPN SDK for Android (OpenVPN)</Link>
 											</li>
 											<li className="docslink_item">
-												<a className="docslink_link" href="/docs/vpn_sdk_ios_ipsec.html" target="_blank">VPN SDK for iOS (IPsec)</a>
+												<Link className="docslink_link" to="docs/vpn_sdk_ios_ipsec" target="_blank">VPN SDK for iOS (IPsec)</Link>
 											</li>
 											<li className="docslink_item">
 												<a className="docslink_link" href="http://backend.northghost.com/doc/partner/index.html" target="_blank">Partner API</a>
@@ -74,12 +75,20 @@ export class Main extends React.Component<{}, State> {
 								</li>
 							</ul>
 							{!isSigned && <ul className="auth">
-								<li className="auth_item"><a className="auth_link auth_link-active" href="/auth/signup">Sign up</a></li>
-								<li className="auth_item"><a className="auth_link" href="/auth/signin">Sign in</a></li>
+								<li className="auth_item">
+									<Link className="auth_link auth_link-active" to="auth/signup">Sign up</Link>
+								</li>
+								<li className="auth_item">
+									<Link className="auth_link" to="auth/signin">Sign in</Link>
+								</li>
 							</ul>}
 							{isSigned && <ul className="auth">
-								<li className="auth_item"><a className="auth_link auth_link-active" href="/projects">Dashboard</a></li>
-								<li className="auth_item"><a className="auth_link" href="#" onClick={logOut}>Logout</a></li>
+								<li className="auth_item">
+									<Link className="auth_link auth_link-active" to="projects">Dashboard</Link>
+								</li>
+								<li className="auth_item">
+									<Link className="auth_link" to="#" onClick={logOut}>Logout</Link>
+								</li>
 							</ul>}
 						</div>
 						<div className="front_header_middle">
@@ -87,7 +96,7 @@ export class Main extends React.Component<{}, State> {
 							<p>Build secure apps that can't be<br/>throttled or restricted</p>
 							<ul className="selllinks">
 								<li className="selllinks_item">
-									<a className="selllinks_item_link selllinks_item_link-custom" href="/auth/signup">Get a FREE API key</a>
+									<Link className="selllinks_item_link selllinks_item_link-custom" to="auth/signup">Get a FREE API key</Link>
 								</li>
 								<li className="selllinks_item">
 									<a className="selllinks_item_link selllinks_item_link-simple" href="mailto:platformpartners@anchorfree.com">Learn more</a>

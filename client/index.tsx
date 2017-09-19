@@ -4,10 +4,9 @@ require("babel-polyfill");
 import * as React from 'react';
 import promiseMiddleware from 'redux-promise-middleware';
 import { render } from 'react-dom';
-import { Router, browserHistory } from 'react-router';
+import { Router, browserHistory, hashHistory } from 'react-router';
 import { routes } from './routes';
 import { loadState, saveState } from './utils/storage';
-
 
 // redux
 import { Store, createStore, applyMiddleware } from 'redux';
@@ -37,8 +36,6 @@ store.subscribe(()=>{
 
 render((
 	<Provider store={store}>
-		<Router routes={routes} history={browserHistory} />
+		<Router routes={routes} history={hashHistory} />
 	</Provider>
 ), document.getElementById('root'));
-
-

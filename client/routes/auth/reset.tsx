@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as update from 'immutability-helper';
 import { connect } from 'react-redux';
+import {Link} from 'react-router';
 
 import {
 	Form,
@@ -113,7 +114,7 @@ class Reset extends React.Component<Props, State> {
 					<div className="register_error-message">{message}</div>
 
 					<div className="register_header">
-						<a className="register_header_link" href="/auth/signup">I don`t have an account</a>
+						<Link className="register_header_link" to="auth/signup">I don`t have an account</Link>
 					</div>
 
 					<FormRow>
