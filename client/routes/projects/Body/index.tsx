@@ -85,8 +85,9 @@ class Body extends React.Component<Props, State> {
 							<table>
 								<tbody>
 								<tr>
-									<td style={{width: '30%'}}>Public Key</td>
-									<td style={{width: '50%'}}>Description</td>
+									<td style={{width: '25%'}}>Public Key</td>
+									<td style={{width: '20%'}}>Project type</td>
+									<td style={{width: '35%'}}>Description</td>
 									<td style={{width: '20%'}}>&nbsp;</td>
 								</tr>
 								</tbody>
