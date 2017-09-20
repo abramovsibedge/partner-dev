@@ -221,10 +221,13 @@ class ProjectItem extends React.Component<Props, State> {
 		return (
 			<div className={classNames("table_row", selectedProjectId === project.publickey && "table_row_open")}>
 				<div className="table_row_wrapper" onClick={() => !project.deleteTaskCode && this.openProject(project.publickey)}>
-					<div className="table_cell" style={{width: '30%'}}>
+					<div className="table_cell" style={{width: '25%'}}>
 						<div className="table_cell_content">{project.publickey}</div>
 					</div>
-					<div className="table_cell" style={{width: '50%'}}>
+					<div className="table_cell" style={{width: '20%'}}>
+						<div className="table_cell_content">{project.project_type}</div>
+					</div>
+					<div className="table_cell" style={{width: '35%'}}>
 						<div className="table_cell_content">{project.description}</div>
 					</div>
 					<div className="table_cell" style={{width: '20%'}}>
@@ -338,7 +341,7 @@ class ProjectItem extends React.Component<Props, State> {
 														<div className="table_cell_content">{country.country}</div>
 													</div>
 													<div className="table_cell" style={{width: '65%'}}>
-														<div className="table_cell_content">{country.protocols}</div>
+														<div className="table_cell_content">{country.protocols.join(', ')}</div>
 													</div>
 													<div className="table_cell" style={{width: '10%'}}>
 														<div className="table_cell_content country_visibility">
