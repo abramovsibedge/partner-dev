@@ -90,7 +90,6 @@ class ProjectItem extends React.Component<Props, State> {
 		}));
 
 		loadProjectItem(id).then(result => {
-			console.log(result)
 			this.setState(update(this.state, {
 				selectedProjectId: {$set: id},
 				selectedProject: {$set: result}

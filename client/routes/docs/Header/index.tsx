@@ -42,8 +42,6 @@ class Header extends React.Component<Parent, State> {
 	}
 
 	render() {
-		console.log(this.state.filters)
-
 		return (
 			<div id="header">
 				<div className="front_header_top">
