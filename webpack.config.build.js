@@ -31,7 +31,6 @@ module.exports = {
             async: true,
         }),
         new webpack.optimize.OccurrenceOrderPlugin(),
-        new webpack.optimize.DedupePlugin(),
         new webpack.optimize.UglifyJsPlugin({
             beautify: false,
             comments: false,

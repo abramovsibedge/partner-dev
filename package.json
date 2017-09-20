@@ -3,12 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "clean": "rimraf build",
-    "start:dev": "babel-node ./server.js",
-    "start": "npm run start:dev",
-    "build:static": "cross-env NODE_ENV=production webpack --config webpack.config.prod.js",
-    "build": "npm run clean && npm run build:static",
-    "deploy": "npm run clean && npm run build:static && firebase deploy",
-    "build-webpack": "npm run clean && webpack --config webpack.config.build.js"
+    "start": "webpack-dev-server --config webpack.config.dev.js --debug --devtool eval --colors --inline --content-base public --port 3000",
+    "build": "npm run clean && webpack --config webpack.config.build.js"
   },
   "dependencies": {
     "@types/classnames": "^2.2.2",
