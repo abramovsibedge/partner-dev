@@ -10,6 +10,7 @@ const subscribers_2 = require("../../../../functions/subscribers");
 class SubscriberRow extends React.Component {
     constructor(props) {
         super(props);
+        this.signals = {};
         this.openSubscriber = props.openSubscriber;
         this.closeSubscriber = props.closeSubscriber;
         this.state = {
@@ -18,7 +19,7 @@ class SubscriberRow extends React.Component {
         };
     }
     componentDidMount() {
-        Signal_1.default.attach('openSubscriber', (subscriberId) => {
+        this.signals['openSubscriber'] = Signal_1.default.attach('openSubscriber', (subscriberId) => {
             if (subscriberId === this.state.subscriber.id && this.state.isOpened)
                 return;
             if (this.state.subscriber.id === subscriberId && !this.state.isOpened) {
@@ -28,16 +29,21 @@ class SubscriberRow extends React.Component {
                 this.setState({ isOpened: false });
             }
         });
-        Signal_1.default.attach('closeSubscriber', (subscriberId) => {
+        this.signals['closeSubscriber'] = Signal_1.default.attach('closeSubscriber', (subscriberId) => {
             if (this.state.subscriber.id === subscriberId && this.state.isOpened) {
                 this.setState({ isOpened: false });
             }
         });
-        Signal_1.default.attach('subscriberModified', (info) => {
+        this.signals['subscriberModified'] = Signal_1.default.attach('subscriberModified', (info) => {
             if (info.id != this.state.subscriber.id)
                 return;
             this.getSubscriber();
         });
+    }
+    componentWillUnmount() {
+        for (let k in this.signals) {
+            Signal_1.default.detach(k, this.signals[k]);
+        }
     }
     getSubscriber() {
         subscribers_2.getSubscriber(this.state.subscriber.id).then((response) => {

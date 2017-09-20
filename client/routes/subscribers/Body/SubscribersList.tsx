@@ -54,8 +54,6 @@ class SubscribersList extends React.Component<{}, State> {
 	searchSubscriber(params: any) {
 		this.setState({loaded: true});
 
-		console.log( params );
-
 		searchSubscriber(params).then((subscribers) => {
 			this.setState({
 				loaded: true,
@@ -117,10 +115,10 @@ class SubscribersList extends React.Component<{}, State> {
 		for(let k in this.state.subscribers) {
 			content.push(
 				<SubscriberRow
-					key={k}
+					key={this.state.subscribers[k].id}
 					subscriber={this.state.subscribers[k]}
-					openSubscriber ={() => {this.openSubscriber(this.state.subscribers[k].id)}}
-					closeSubscriber={() => {this.closeSubscriber(this.state.subscribers[k].id)}}
+					openSubscriber ={this.openSubscriber.bind(this, this.state.subscribers[k].id)}
+					closeSubscriber={this.closeSubscriber.bind(this, this.state.subscribers[k].id)}
 				/>
 			)
 		}

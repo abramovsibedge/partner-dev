@@ -10,6 +10,9 @@ import '../../static/scss/components/modal.scss';
 import '../../static/scss/components/table.scss';
 import '../../static/scss/routes/subscribers.scss';
 
+import {storageHelper} from '../../utils';
+const storage = new storageHelper;
+
 import {
 	logOut
 } from '../../functions/auth'
@@ -71,6 +74,11 @@ export class Subscribers extends React.Component<{}, State> {
 		let state = {};
 
 		loadProjects().then((response) => {
+			if (response.type === "error") {
+				storage.remove('tokens');
+				window.location.replace("/auth/signin");
+			}
+
 			state['projectsList'] = response.projects;
 
 			let id = 0;
@@ -85,15 +93,29 @@ export class Subscribers extends React.Component<{}, State> {
 				}
 			}
 
-			this.logIn(state['projectsList'][id]).then((activeProject: string) => {
-				state['loaded']    = true;
-				this.activeProject = activeProject;
+			if (state['projectsList'].length >0) {
+                this.logIn(state['projectsList'][id]).then((activeProject: string) => {
+                    state['loaded']    = true;
+                    this.activeProject = activeProject;
 
-				Signal.dispatch('loaded', true);
+                    Signal.dispatch('loaded', true);
 
-				this.setState(state);
-			});
-		}).catch(() => logOut());
+                    this.setState(state);
+                });
+			}
+			else {
+                state['loaded'] = true;
+                Signal.dispatch('loaded', true);
+                this.setState(state);
+			}
+
+		}).catch(
+			(error) =>
+			{
+                console.log( 'error!', error );
+			}
+
+		);
 	}
 
 	logIn(project: object) {
@@ -109,10 +131,11 @@ export class Subscribers extends React.Component<{}, State> {
 	render() {
 		return (
 			<Dashboard current="subscribers">
-				<Header loaded={this.state.loaded} />,
-				{this.state.loaded
-					?<Body projectsList={this.state.projectsList} activeProject={this.activeProject} />
-					:<Loading />}
+				<Header loaded={this.state.loaded} />
+				{this.state.loaded  ?
+					<Body projectsList={this.state.projectsList} activeProject={this.activeProject} />
+					:<Loading />
+				}
 			</Dashboard>
 		);
 	}

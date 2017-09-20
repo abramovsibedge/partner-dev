@@ -30,6 +30,9 @@ import {
 import {Button} from '../../../components/button';
 import {emailValidation} from '../../../utils';
 
+import UsersAuthentication from './UsersAuthentication';
+import Payments from './Payments';
+
 interface Props {
 	onUpdate: () => void
 	project: any
@@ -87,6 +90,7 @@ class ProjectItem extends React.Component<Props, State> {
 		}));
 
 		loadProjectItem(id).then(result => {
+			console.log(result)
 			this.setState(update(this.state, {
 				selectedProjectId: {$set: id},
 				selectedProject: {$set: result}
@@ -191,6 +195,14 @@ class ProjectItem extends React.Component<Props, State> {
 		});
 	}
 
+	refreshPage() {
+		loadProjectItem(this.state.selectedProjectId).then((response) => {
+			this.setState({
+				selectedProject: response
+			});
+		});
+	}
+
 
 	render() {
 		const {
@@ -255,6 +267,14 @@ class ProjectItem extends React.Component<Props, State> {
 									className={classNames("project_tabs_item", selectedProjectTab === "access" && "project_tabs_item-active")}
 									onClick={() => this.tabSwitcher("access")} type="button">Access
 								</button>
+								<button
+									className={classNames("project_tabs_item", selectedProjectTab === "users-authentication" && "project_tabs_item-active")}
+									onClick={() => this.tabSwitcher("users-authentication")} type="button">Users authentication
+								</button>
+								<button
+									className={classNames("project_tabs_item", selectedProjectTab === "payments-settings" && "project_tabs_item-active")}
+									onClick={() => this.tabSwitcher("payments-settings")} type="button">Payments settings
+								</button>
 							</div>
 							<div className="project_manage">
 								<Button type="button" className="project_manage_item project_manage_item-disable"
@@ -287,6 +307,12 @@ class ProjectItem extends React.Component<Props, State> {
 							</div>
 						</div>
 						<div className="project_content">
+							{selectedProjectTab === "users-authentication" &&
+								<UsersAuthentication refreshPage={this.refreshPage.bind(this)} projectId={selectedProjectId} authentications={this.state.selectedProject['authentifications'].all_auth_settings} />}
+
+							{selectedProjectTab === "payments-settings" &&
+								<Payments refreshPage={this.refreshPage.bind(this)} projectId={selectedProjectId} payments={this.state.selectedProject['payments'].all_purchase_settings} />}
+
 							{selectedProjectTab === "vpn-servers" && <div>
 								{selectedProject['countries'].countries.length === 0 &&
 								<div className="project_tabs_empty">

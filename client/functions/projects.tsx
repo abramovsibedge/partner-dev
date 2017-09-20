@@ -6,7 +6,9 @@ export const loadProjects = () => {
 
 	return axios(request)
 		.then(response => response.data)
-		.catch(error => error);
+		.catch((error: any) => {
+			return {type: 'error', error: error};
+		});
 };
 
 export const loadProjectItem = (id: string) => {
@@ -16,11 +18,19 @@ export const loadProjectItem = (id: string) => {
 	const emailsRequest = config.host + 'portal/project/access?access_token=' + config.firebaseToken + '&publickey=' + id;
 	const emails = axios(emailsRequest).then(response => response.data);
 
-	const combinedData = {"countries":{},"emails":{}};
+	const authentificationsRequest = config.host + 'portal/project/authentifications_setting?access_token=' + config.firebaseToken+ '&publickey=' + id;
+	const authentifications = axios(authentificationsRequest, { method: 'GET' }).then(response => response.data);
 
-	return Promise.all([countries, emails]).then(result => {
+	const paymentsRequest = config.host + 'portal/project/payments_settings?access_token=' + config.firebaseToken+ '&publickey=' + id;
+	const payments = axios(paymentsRequest, { method: 'GET' }).then(response => response.data).catch(response => response.data);
+
+	const combinedData = {"countries":{},"emails":{}, "authentifications": {}};
+
+	return Promise.all([countries, emails, authentifications, payments]).then(result => {
 		combinedData["countries"] = result[0];
 		combinedData["emails"] = result[1];
+		combinedData["authentifications"] = result[2];
+		combinedData["payments"] = result[3]?result[3]:{all_purchase_settings:[]};
 		return combinedData;
 	});
 };
@@ -66,4 +76,62 @@ export const setVisibility = (project: string, country: string, visibility: bool
 	request += '&visibility=' + visibility;
 
 	return axios(request, { method: 'PUT' }).then(response => response.data)
+};
+
+export const addAuthentificationsSetting = (id:string, auth_method: string, auth_settings: string) => {
+	let request:string = config.host + 'portal/project/authentifications_setting?access_token=' + config.firebaseToken;
+
+	request += '&publickey=' + id;
+	request += '&auth_method=' + auth_method;
+	if(auth_settings) request += '&auth_settings=' + auth_settings;
+
+	return axios(request, { method: 'POST' }).then(response => response.data)
+};
+
+export const updateAuthentificationsSetting = (id:string, auth_method: string, auth_settings: string) => {
+	let request:string = config.host + 'portal/project/authentifications_setting?access_token=' + config.firebaseToken;
+
+	request += '&publickey=' + id;
+	request += '&auth_method=' + auth_method;
+	if(auth_settings) request += '&auth_settings=' + auth_settings;
+
+	return axios(request, { method: 'PUT' }).then(response => response.data)
+};
+
+export const deleteAuthentificationsSetting = (id:string, auth_method: string) => {
+	let request:string = config.host + 'portal/project/authentifications_setting?access_token=' + config.firebaseToken;
+
+	request += '&publickey=' + id;
+	request += '&auth_method=' + auth_method;
+
+	return axios(request, { method: 'DELETE' }).then(response => response.data)
+};
+
+export const addPaymentsSettings = (id:string, purchase_type: string, purchase_settings: string) => {
+	let request:string = config.host + 'portal/project/payments_settings?access_token=' + config.firebaseToken;
+
+	request += '&publickey=' + id;
+	request += '&purchase_type=' + purchase_type;
+	if(purchase_settings) request += '&purchase_settings=' + purchase_settings;
+
+	return axios(request, { method: 'POST' }).then(response => response.data)
+};
+
+export const updatePaymentsSettings = (id:string, purchase_type: string, purchase_settings: string) => {
+	let request:string = config.host + 'portal/project/payments_settings?access_token=' + config.firebaseToken;
+
+	request += '&publickey=' + id;
+	request += '&purchase_type=' + purchase_type;
+	if(purchase_settings) request += '&purchase_settings=' + purchase_settings;
+
+	return axios(request, { method: 'PUT' }).then(response => response.data)
+};
+
+export const deletePaymentsSettings = (id:string, purchase_type: string) => {
+	let request:string = config.host + 'portal/project/payments_settings?access_token=' + config.firebaseToken;
+
+	request += '&publickey=' + id;
+	request += '&purchase_type=' + purchase_type;
+
+	return axios(request, { method: 'DELETE' }).then(response => response.data)
 };

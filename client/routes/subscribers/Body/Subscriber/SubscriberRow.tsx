@@ -30,6 +30,7 @@ interface State {
 export default class SubscriberRow extends React.Component <Parent, State> {
 	openSubscriber: () => void;
 	closeSubscriber: () => void;
+	signals:any = {}
 
 	constructor(props: any) {
 		super(props);
@@ -44,7 +45,7 @@ export default class SubscriberRow extends React.Component <Parent, State> {
 	}
 
 	componentDidMount() {
-		Signal.attach('openSubscriber', (subscriberId:number) => {
+		this.signals['openSubscriber'] = Signal.attach('openSubscriber', (subscriberId:number) => {
 			if(subscriberId === this.state.subscriber.id && this.state.isOpened) return;
 
 			if(this.state.subscriber.id === subscriberId && !this.state.isOpened) {
@@ -55,16 +56,22 @@ export default class SubscriberRow extends React.Component <Parent, State> {
 			}
 		});
 
-		Signal.attach('closeSubscriber', (subscriberId:number) => {
+		this.signals['closeSubscriber'] = Signal.attach('closeSubscriber', (subscriberId:number) => {
 			if(this.state.subscriber.id === subscriberId && this.state.isOpened) {
 				this.setState({isOpened: false});
 			}
 		});
 
-		Signal.attach('subscriberModified', (info:any) => {
+		this.signals['subscriberModified'] = Signal.attach('subscriberModified', (info:any) => {
 			if(info.id != this.state.subscriber.id) return;
 			this.getSubscriber();
 		});
+	}
+
+	componentWillUnmount() {
+		for(let k in this.signals) {
+			Signal.detach(k, this.signals[k]);
+		}
 	}
 
 	getSubscriber() {

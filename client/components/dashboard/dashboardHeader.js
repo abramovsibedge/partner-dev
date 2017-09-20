@@ -3,6 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 const react_modal_1 = require("react-modal");
 const update = require("immutability-helper");
+const utils_1 = require("../../utils");
+const storage = new utils_1.storageHelper;
 const icons_1 = require("../../components/icons");
 const auth_1 = require("../../functions/auth");
 const button_1 = require("../../components/button");
@@ -11,6 +13,7 @@ class DashboardHeader extends React.Component {
         super(props);
         this.state = {
             logoutModalState: false,
+            username: (storage.get('username')) ? storage.get('username') : 'user'
         };
     }
     showLogout(value) {
@@ -19,7 +22,7 @@ class DashboardHeader extends React.Component {
         }));
     }
     render() {
-        const { logoutModalState } = this.state;
+        const { logoutModalState, username } = this.state;
         return (React.createElement("header", { className: 'header' },
             React.createElement("div", { className: "header_content" },
                 React.createElement("div", { className: "header_user" },
@@ -27,7 +30,9 @@ class DashboardHeader extends React.Component {
                         React.createElement("a", { href: "/" },
                             React.createElement("img", { className: "header_logo_img", src: require('../../static/media/poweredbyhss_light.svg'), alt: "Partners Portal Logo", width: "auto", height: "24" }))),
                     React.createElement("div", { className: "header_logout" },
-                        "Hello test! ",
+                        "Hello ",
+                        username,
+                        "! ",
                         React.createElement("a", { href: "#", className: "header_logout_link", onClick: () => this.showLogout(true) }, "Logout"),
                         React.createElement(react_modal_1.default, { isOpen: logoutModalState, className: { base: 'modal_inner' }, overlayClassName: { base: 'modal_outer' }, contentLabel: "test" },
                             React.createElement("div", { className: "modal_header" },
