@@ -32,7 +32,7 @@ export const routes = (
 			<Route path='signup' component={Signup}/>
 		</Route>
 
-		<Route path='pages/:action' component={Veryfy}></Route>
+		{/*<Route path='pages/:action' component={Veryfy}></Route>*/}
 
 		<Route path='*' component={NotFound}/>
 	</Route>
