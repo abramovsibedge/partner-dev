@@ -34,11 +34,9 @@ export class Projects extends React.Component<{}, State> {
 	componentDidMount() {
 		loadProjects()
 			.then((result) => {
-				if (result.result !== "OK") {
-					if (result.result === "NOT_AUTHORIZED") {
-						console.log( 123 );
-						storage.remove('tokens');
-					}
+				if (result.type === "error") {
+					storage.remove('tokens');
+					window.location.replace("/auth/signin");
 				}
 
 				this.setState(update(this.state, {

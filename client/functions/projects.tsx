@@ -6,7 +6,9 @@ export const loadProjects = () => {
 
 	return axios(request)
 		.then(response => response.data)
-		.catch(error => error);
+		.catch((error: any) => {
+			return {type: 'error', error: error};
+		});
 };
 
 export const loadProjectItem = (id: string) => {
