@@ -47,7 +47,7 @@ export class Projects extends React.Component<{}, State> {
 				}));
 			})
 			.catch((error) => {
-				console.log( error );
+				console.log( 'error!', error );
 			})
 	}
 

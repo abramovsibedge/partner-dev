@@ -17,6 +17,7 @@ class SubscribersList extends React.Component {
         new Signal_1.default('closeSubscriber');
         new Signal_1.default('subscriberModified');
         new Signal_1.default('searchSubscriber');
+        new Signal_1.default('loadSubscribers');
     }
     componentDidMount() {
         this.getSubscribers();
@@ -29,13 +30,16 @@ class SubscribersList extends React.Component {
         Signal_1.default.attach('searchSubscriber', (params) => {
             this.searchSubscriber(params);
         });
+        Signal_1.default.attach('loadSubscribers', () => {
+            this.getSubscribers();
+        });
     }
     searchSubscriber(params) {
         this.setState({ loaded: true });
         subscribers_1.searchSubscriber(params).then((subscribers) => {
             this.setState({
                 loaded: true,
-                subscribers: subscribers.result === 'OK' ? subscribers.subscribers : []
+                subscribers: subscribers.result === 'OK' ? subscribers.subscriber ? [subscribers.subscriber] : subscribers.subscribers : []
             });
         }).catch();
     }
@@ -77,7 +81,7 @@ class SubscribersList extends React.Component {
     tableBody() {
         let content = [];
         for (let k in this.state.subscribers) {
-            content.push(React.createElement(SubscriberRow_1.default, { key: k, subscriber: this.state.subscribers[k], openSubscriber: () => { this.openSubscriber(this.state.subscribers[k].id); }, closeSubscriber: () => { this.closeSubscriber(this.state.subscribers[k].id); } }));
+            content.push(React.createElement(SubscriberRow_1.default, { key: this.state.subscribers[k].id, subscriber: this.state.subscribers[k], openSubscriber: this.openSubscriber.bind(this, this.state.subscribers[k].id), closeSubscriber: this.closeSubscriber.bind(this, this.state.subscribers[k].id) }));
         }
         return (React.createElement("div", { className: "table_body" },
             content,
