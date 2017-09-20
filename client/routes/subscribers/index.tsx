@@ -10,6 +10,9 @@ import '../../static/scss/components/modal.scss';
 import '../../static/scss/components/table.scss';
 import '../../static/scss/routes/subscribers.scss';
 
+import {storageHelper} from '../../utils';
+const storage = new storageHelper;
+
 import {
 	logOut
 } from '../../functions/auth'
@@ -71,6 +74,11 @@ export class Subscribers extends React.Component<{}, State> {
 		let state = {};
 
 		loadProjects().then((response) => {
+			if (response.type === "error") {
+				storage.remove('tokens');
+				window.location.replace("/auth/signin");
+			}
+
 			state['projectsList'] = response.projects;
 
 			let id = 0;
