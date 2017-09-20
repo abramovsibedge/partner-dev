@@ -6,7 +6,7 @@ import promiseMiddleware from 'redux-promise-middleware';
 import { render } from 'react-dom';
 import { Router, browserHistory, hashHistory } from 'react-router';
 import { routes } from './routes';
-import { loadState, saveState } from './utils/storage';
+import { loadState } from './utils/storage';
 
 // redux
 import { Store, createStore, applyMiddleware } from 'redux';
@@ -28,10 +28,6 @@ const store: Store<any> = createStore(
         }
 	))
 );
-
-store.subscribe(()=>{
-	saveState(store.getState());
-});
 
 
 render((

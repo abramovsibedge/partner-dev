@@ -14,6 +14,7 @@ export class SignUpModel {
     tos: boolean;
     valid: boolean;
 };
+
 export type SignUpModelStatus = {
     statusSignUp: boolean,
     errorMessages: string,

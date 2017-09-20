@@ -2,6 +2,8 @@ import * as React from 'react';
 import Modal from 'react-modal';
 import * as update from 'immutability-helper';
 import {storageHelper} from '../../utils';
+import {Link} from 'react-router';
+
 
 const storage = new storageHelper;
 
@@ -82,16 +84,16 @@ class DashboardHeader extends React.Component<{}, State> {
 								<div className="header_links_drop">
 									<ul className="header_links_list">
 										<li>
-											<a className="header_links_list_link" href="/docs/proxy_sdk_android.html" target="_blank">Proxy
-												SDK for Android</a></li>
+											<Link className="header_links_list_link" to="/docs/proxy_sdk_android">Proxy
+												SDK for Android</Link></li>
 										<li>
-											<a className="header_links_list_link" href="/docs/proxy_sdk_ios.html" target="_blank">Proxy
-												SDK for iOS</a></li>
+											<Link className="header_links_list_link" to="/docs/proxy_sdk_ios">Proxy
+												SDK for iOS</Link></li>
 										<li>
-											<a className="header_links_list_link" href="/docs/vpn_sdk_android_openvpn.html" target="_blank">VPN SDK for Android (OpenVPN)</a></li>
+											<Link className="header_links_list_link" to="/docs/vpn_sdk_android_openvpn">VPN SDK for Android (OpenVPN)</Link></li>
 										<li>
-											<a className="header_links_list_link" href="/docs/vpn_sdk_ios_ipsec.html" target="_blank">VPN
-												SDK for iOS (IPsec)</a></li>
+											<Link className="header_links_list_link" to="/docs/vpn_sdk_ios_ipsec">VPN
+												SDK for iOS (IPsec)</Link></li>
 										<li>
 											<a className="header_links_list_link" href="http://backend.northghost.com/doc/partner/index.html" target="_blank">Partner API</a></li>
 										<li>

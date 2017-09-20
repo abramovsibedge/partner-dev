@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as update from 'immutability-helper';
 import { connect } from 'react-redux';
-
+import {Link} from 'react-router';
 
 import {
 	Form,
@@ -196,7 +196,7 @@ class Signup extends React.Component<Props, State> {
 
 					<div className="register_header">
 						<h1 className="register_header_name">Sign Up</h1>
-						<a className="register_header_link" href="/auth/signin">I have an account</a>
+						<Link className="register_header_link" to="/auth/signin">I have an account</Link>
 					</div>
 
 					<FormGroup>
