@@ -13,10 +13,8 @@ import {Subscribers} from './routes/subscribers/';
 import {NotFound} from './routes/404/';
 import {firebaseInit} from '../client/functions/firebaseInit';
 
-import {DocsProxyAndroid} from './routes/docs/DocsProxyAndroid';
-import {DocsVpnAndroid} from './routes/docs/DocsVpnAndroid';
-import {DocsProxyIos} from './routes/docs/DocsProxyIos';
-import {DocsVpnIos} from './routes/docs/DocsVpnIos';
+import {List} from './routes/docs/List';
+import {Article} from './routes/docs/Article';
 
 export const routes = (
 	<Route path='/' component={App} onEnter={firebaseInit} >
@@ -25,10 +23,8 @@ export const routes = (
 		<Route path='projects' component={Projects} />
 		<Route path='subscribers' component={Subscribers} />
 
-		<Route path='docs/proxy_sdk_android' component={DocsProxyAndroid} />
-		<Route path='docs/vpn_sdk_android_openvpn' component={DocsVpnAndroid} />
-		<Route path='docs/proxy_sdk_ios' component={DocsProxyIos} />
-		<Route path='docs/vpn_sdk_ios_ipsec' component={DocsVpnIos} />
+		<Route path='docs'   component={List} />
+		<Route path='docs/*' component={Article} />
 
 		<Route path='auth' component={Auth}>
 			<Route path='reset' component={Reset}/>

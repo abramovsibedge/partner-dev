@@ -19,17 +19,21 @@ export const loadProjectItem = (id: string) => {
 	const emails = axios(emailsRequest).then(response => response.data);
 
 	const authentificationsRequest = config.host + 'portal/project/authentifications_setting?access_token=' + config.firebaseToken+ '&publickey=' + id;
-	const authentifications = axios(authentificationsRequest, { method: 'GET' }).then(response => response.data);
+	const authentifications = axios(authentificationsRequest, { method: 'GET' })
+		.then(response => response.data)
+		.catch(response => response.data);
 
 	const paymentsRequest = config.host + 'portal/project/payments_settings?access_token=' + config.firebaseToken+ '&publickey=' + id;
-	const payments = axios(paymentsRequest, { method: 'GET' }).then(response => response.data).catch(response => response.data);
+	const payments = axios(paymentsRequest, { method: 'GET' })
+		.then(response => response.data)
+		.catch(response => response.data);
 
 	const combinedData = {"countries":{},"emails":{}, "authentifications": {}};
 
 	return Promise.all([countries, emails, authentifications, payments]).then(result => {
 		combinedData["countries"] = result[0];
 		combinedData["emails"] = result[1];
-		combinedData["authentifications"] = result[2];
+		combinedData["authentifications"] = result[2]?result[2]:{all_auth_settings:[]};
 		combinedData["payments"] = result[3]?result[3]:{all_purchase_settings:[]};
 		return combinedData;
 	});

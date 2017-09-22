@@ -1,77 +1,176 @@
-import * as React from 'react';
+export const getDocsList = () => {
+	return new Promise(resolve => {
+		resolve(
+			JSON.parse(
+				`[
+  {
+    "title":"SDK Android",
+    "description":"bla-bla-bla",
+    "url":"https://firebasestorage.googleapis.com/v0/b/web-portal-for-partners.appspot.com/o/md%2Fproxy_sdk_android.md?alt=media&token=3bc5c2be-beb3-4d5e-8efb-607edd9bd8ae",
+    "product":[
+      "VPN",
+      "Proxy"
+    ],
+    "platform":[
+      "Android"
+    ],
+    "protocol":[
+      "IPSec",
+      "Hydra"
+    ],
+    "type": [
+    	"quickstart"
+    ]
+  },
+  {
+    "title":"SDK IOS",
+    "description":"bla-bla-bla",
+    "url":"https://firebasestorage.googleapis.com/v0/b/web-portal-for-partners.appspot.com/o/md%2Fproxy_sdk_android.md?alt=media&token=3bc5c2be-beb3-4d5e-8efb-607edd9bd8ae",
+    "product":[
+      "VPN",
+      "Proxy"
+    ],
+    "platform":[
+      "IOS"
+    ],
+    "protocol":[
+      "IPSec"
+    ],
+    "type": [
+    	"quickstart",
+    	"sdk"
+    ]
+  },
+  {
+    "title":"SDK Windows",
+    "description":"bla-bla-bla",
+    "url":"https://firebasestorage.googleapis.com/v0/b/web-portal-for-partners.appspot.com/o/md%2Fproxy_sdk_android.md?alt=media&token=3bc5c2be-beb3-4d5e-8efb-607edd9bd8ae",
+    "product":[
+      "VPN"
+    ],
+    "platform":[
+      "Windows"
+    ],
+    "protocol":[
+      "openVPN",
+      "Hydra"
+    ],
+    "type": [
+    	"quickstart",
+    	"api"
+    ]
+  },
+  {
+    "title":"SDK Mac",
+    "description":"bla-bla-bla",
+    "url":"https://firebasestorage.googleapis.com/v0/b/web-portal-for-partners.appspot.com/o/md%2Fproxy_sdk_android.md?alt=media&token=3bc5c2be-beb3-4d5e-8efb-607edd9bd8ae",
+    "product":[
+      "VPN",
+      "VPN for Business"
+    ],
+    "platform":[
+      "OSX"
+    ],
+    "protocol":[
+      "openVPN"
+    ],
+    "type": [
+    	"quickstart"
+    ]
+  }
+]`
+			)
+		);
+	});
+};
 
-import '../../static/scss/routes/docs.scss';
+export const getArticle = (url: string) => {
+	/* load article via url */
 
-export class DocsVpnAndroid extends React.Component<{}, {}> {
+	return new Promise(resolve => {
+		resolve(
+			`# Get API Key
 
-	constructor(props: any) {
-		super(props);
-	}
+In order to be able to use the SDK the following steps have to be done:
 
-	render() {
-		return (
-<div className="docsDiv">
-	<h1 id="get-api-key">Get API Key</h1>
-	<p>In order to be able to use the SDK the following steps have to be done:</p>
-	<ol>
-		<li>Register an account at <a href="https://developer.anchorfree.com">developer.anchorfree.com</a></li>
-		<li>Create a project and use a name for your project as a <em>Public Key</em>. <em>Private key</em> is optional.</li>
-		<li>Use SDK with a <strong>carrier_id</strong> equals to the given <em>PublicKey</em>.</li>
-	</ol>
-	<h1 id="prerequisites">Prerequisites</h1>
-	<p>Android 4+ (API 14+, starting with Ice Cream Sandwich).</p>
-	<ol>
-		<li>Add following permissions to your manifest:</li>
-	</ol>
-	<pre><code className="lang-xml">{`<uses-permission android:name="android.permission.INTERNET" />
+1. Register an account at [developer.anchorfree.com](https://developer.anchorfree.com)
+2. Create a project
+3. Use SDK with a **carrier_id** equals to the given *PublicKey*.
+
+# Prerequisites
+
+Android 4+ (API 14+, starting with Ice Cream Sandwich).
+
+1. Add following permissions to your manifest:
+
+\`\`\`xml
+<uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-`}</code></pre>
-	<h1 id="installing">Installing</h1>
-	<h2 id="gradle">Gradle</h2>
-	<ol>
-		<li>Add jitpack repo to root <strong>build.gradle</strong>:</li>
-	</ol>
-	<pre><code className="lang-groovy">{`repositories {
+\`\`\`
+
+# Installing
+
+## Gradle
+
+1. Add jitpack repo to root **build.gradle**:
+
+\`\`\`groovy
+repositories {
     maven {
         url "https://jitpack.io"        
     }
 }
-`}</code></pre>
-	<ol>
-		<li>Add sdk dependency to project <strong>build.gradle</strong></li>
-	</ol>
-	<pre><code className="lang-groovy">{`    compile 'com.github.AnchorFreePartner:cake-tube-sdk-android:1.2.1'
-`}</code></pre>
-	<p>Setup Android Advertising ID by including the Google Play Services 4.0+ into your project and add the following line to your project's AndroidManifest.xml as a child of the "application" tag:</p>
-	<pre><code className="lang-xml">{`<application>
+\`\`\`
+
+2. Add sdk dependency to project **build.gradle**
+
+\`\`\`groovy
+    compile 'com.github.AnchorFreePartner:cake-tube-sdk-android:1.2.1'
+\`\`\`
+
+Setup Android Advertising ID by including the Google Play Services 4.0+ into your project and add the following line to your project's AndroidManifest.xml as a child of the <application> tag:
+
+\`\`\`xml
+<application>
     <meta-data
         android:name="com.google.android.gms.version"
         android:value="@integer/google_play_services_version" />
 </application>
-`}</code></pre>
-	<p>Then your project is ready to use SDK.</p>
-	<h1 id="android-library-api">Android library API</h1>
-	<p>There are two main services intended to manage user and VPN connections. </p>
-	<ul>
-		<li>AFClientService</li>
-		<li>AFConnectionService</li>
-	</ul>
-	<h2 id="authentication">Authentication</h2>
-	<p>Anchorfree Partner VPN Backend supports OAuth authentication with a partners OAuth server, this is a primary authentication method. </p>
-	<p>Steps to implement OAuth:</p>
-	<ul>
-		<li>Deploy and configure OAuth service. Service should be publicly available in Internet.</li>
-		<li>Configure Partner Backend to use OAuth service.</li>
-		<li>Implement client OAuth for your application</li>
-		<li>Retrieve access token in client app, this token will be used to initialize and sign in Android Partner SDK</li>
-	</ul>
-	<h2 id="afclientservice-api">AFClientService API</h2>
-	<p>Manages client user: authentication, vpn credentials retrieval, user licensing info, session management. Session will be saved after first successful sign in and destroyed and cleaned up after logout.</p>
-	<p>Required place to create this service is an Application singleton class.</p>
-	<h2 id="afclientservice-builder">AFClientService.Builder</h2>
-	<pre><code className="lang-java">{`/*
+\`\`\`
+
+Then your project is ready to use SDK.
+
+
+# Android library API
+
+There are two main services intended to manage user and VPN connections. 
+
+- AFClientService
+- AFConnectionService
+
+## Authentication
+
+Anchorfree Partner VPN Backend supports OAuth authentication with a partners OAuth server, this is a primary authentication method. 
+
+Steps to implement OAuth:
+
+- Deploy and configure OAuth service. Service should be publicly available in Internet.
+- Configure Partner Backend to use OAuth service.
+- Implement client OAuth for your application
+- Retrieve access token in client app, this token will be used to initialize and sign in Android Partner SDK
+
+## AFClientService API
+
+Manages client user: authentication, vpn credentials retrieval, user licensing info, session management. Session will be saved after first successful sign in and destroyed and cleaned up after logout.
+
+Required place to create this service is an Application singleton class.
+
+## AFClientService.Builder
+
+\`\`\`java
+/*
 
 Client service configurator.
 
@@ -94,14 +193,18 @@ public Builder setConnectionRetries(int count
 
 //Creates AFClientService instance from current configurator.
 public AFClientService build()
-`}</code></pre>
-	<h2 id="afconnectionservice">AFConnectionService</h2>
-	<pre><code className="lang-java">{`/*
+
+\`\`\`
+
+## AFConnectionService
+
+\`\`\`java
+/*
 Manages device's VPN connection. To establish VPN connection user should manually add client 
 certificate to their device: will be asked once with service configuration.
 
 This service wraps ServiceConnection which is used to communicate with VPN client service and 
-manage connection. You should call onStart and onStop servicesâ€™ methods in activity. To embed 
+manage connection. You should call onStart and onStop services’ methods in activity. To embed 
 Android VPN confirmation dialog you should also call onActivityResult method in your activity. 
 Service configured with a builder (See AFConnectionService.Builder).
 NOTE: to handle VPN connection state you must implement proper notification handling. 
@@ -142,10 +245,14 @@ public void disconnect();
 
 //Receives VPN traffic stats object. If connection is inactive, traffic data will be zeroes. 
 // See class TrafficStats.
-public TrafficStats getTrafficStats();
-`}</code></pre>
-	<h2 id="trafficstats">TrafficStats</h2>
-	<pre><code className="lang-java">{`
+public TrafficStats getTrafficStats(); 
+
+\`\`\`
+
+## TrafficStats
+
+\`\`\`java
+
 /*
 Returns in and out bytes for current session (for the last hour). Will be zero, 
 if connection is not active.
@@ -155,16 +262,23 @@ public long getBytesOut();
 
 //Returns VPN start time (UNIX) in milliseconds.
 public long getStartTime();
-`}</code></pre>
-	<h2 id="vpnconnectionstate">VPNConnectionState</h2>
-	<pre><code className="lang-java">{`/*
+
+\`\`\`
+
+## VPNConnectionState
+
+\`\`\`java
+/*
 Enum containing basic VPN connection states. To receive and handle notification you should be 
 subscribed to service connection callbacks (see ServiceConnectionCallbacks).
  */
 public enum VPNConnectionState {NOT_CONNECTED, CONNECTING, CONNECTED}
-`}</code></pre>
-	<h2 id="afconnectionservice-builder">AFConnectionService.Builder</h2>
-	<pre><code className="lang-java">{`/*
+\`\`\`
+
+## AFConnectionService.Builder
+
+\`\`\`java
+/*
 Configures and connects remote VPN service to your application.
  */
 
@@ -172,7 +286,7 @@ Configures and connects remote VPN service to your application.
 // or disconnected to your activity.
 public Builder addConnectionCallbacksListener(ServiceConnectionCallbacks listener)
 
-//Sets Androidâ€™s status bar notification icon.
+//Sets Android’s status bar notification icon.
 public Builder setNotificationIcon(int resId)
 
 //Sets VPN connection name in status bar notifications.
@@ -184,15 +298,18 @@ public Builder addVPNConnectionStateListener(VPNConnectionStateListener listener
 
 //Creates AFConnectionService instance based on your parameters.
 public AFConnectionService build()
-`}</code></pre>
-	<h2 id="clientserviceapi-methods">ClientServiceAPI methods</h2>
-	<pre><code className="lang-java">{`//Creates AFClientService.Builder configurator instance to setup AFClientService.
+
+\`\`\`
+## ClientServiceAPI methods
+
+\`\`\`java
+//Creates AFClientService.Builder configurator instance to setup AFClientService.
 public static Builder newBuilder(Application application);
 
 //User sign in with OAuth access token.
 public void login(final String oauthAccessToken, final Action1<LoginResponse> onLoginSuceess, final Action1<Throwable> onLogoutError)
 
-//Returns authentication status. True if logged in, false otherwise. If user is authenticated itâ€™s OK to use rest of the functions.
+//Returns authentication status. True if logged in, false otherwise. If user is authenticated it’s OK to use rest of the functions.
 public boolean isLoggedIn();
 
 //Sets the SDK to pause VPN connection when device screen is off.
@@ -212,18 +329,27 @@ public Observable<SubscriberResponse> getSubscriber(final Action1<SubscriberResp
 
 //Log out and destroy session information. User will be deauthorized and session will be destroyed after invocation.
 public Observable<LogoutResponse> logout(final Action1<LogoutResponse> onLogoutSuccess, final Action1<Throwable> onLogoutError)
-`}</code></pre>
-	<h2 id="serviceconnectioncallbacks">ServiceConnectionCallbacks</h2>
-	<pre><code className="lang-java">{`//Called when AFConnectionService is connected to activity. After this callback service 
+
+
+\`\`\`
+
+## ServiceConnectionCallbacks
+
+\`\`\`java
+//Called when AFConnectionService is connected to activity. After this callback service 
 //is ready to manage VPN connection.
 public void onConnected()
 
 //Called when AFConnectionService is disconnected from activity. cause - is a code identifying 
 //reason service is disconnected.
 public void onConnectionSuspended(int cause)
-`}</code></pre>
-	<h2 id="vpnconnectionstatelistener">VPNConnectionStateListener</h2>
-	<pre><code className="lang-java">{`/*
+
+\`\`\`
+
+## VPNConnectionStateListener
+
+\`\`\`java
+/*
 Called when AFConnectionService VPN connection state changes. state - is a new VPN 
 connection state.
  */
@@ -238,21 +364,21 @@ void onVPNPermissionRequested();
 Called when SDK received permission or deny from user.
  */
 void onVPNPermissionGranted(boolean granted);
-`}</code></pre>
-	<h1 id="handling-errors">Handling errors</h1>
-	<p>All methods have two callback functions: onSuccess, onFailure. Failure callback comes with
-		Throwable object which is a good start to check what went wrong. There are several types of
-		exceptions which may be generated during API methods request.</p>
-	<ul>
-		<li><strong>InternalErrorException</strong> - Something went wrong on the server side. General error.</li>
-		<li><strong>NetworkRelatedException</strong> - There was a network error during request: timeout, no connection, etc.</li>
-		<li><strong>ServerUnavailableException</strong> - Happens when client requested credentials from VPN node which is
-			offline or unavailable.</li>
-		<li><strong>TrafficExceedException</strong> - Userâ€™s traffic limit is exceeded.</li>
-		<li><strong>SessionsExceedException</strong> - Too many sessions from one client.</li>
-		<li><strong>UnauthorizedException</strong> - User is unauthorized for that request or not logged in.</li>
-	</ul>	
-</div>
-		);
-	}
+\`\`\`
+
+# Handling errors
+
+All methods have two callback functions: onSuccess, onFailure. Failure callback comes with 
+Throwable object which is a good start to check what went wrong. There are several types of 
+exceptions which may be generated during API methods request.
+
+- **InternalErrorException** - Something went wrong on the server side. General error.
+- **NetworkRelatedException** - There was a network error during request: timeout, no connection, etc.
+- **ServerUnavailableException** - Happens when client requested credentials from VPN node which is 
+offline or unavailable.
+- **TrafficExceedException** - User’s traffic limit is exceeded.
+- **SessionsExceedException** - Too many sessions from one client.
+- **UnauthorizedException** - User is unauthorized for that request or not logged in.`
+		)
+	})
 }
