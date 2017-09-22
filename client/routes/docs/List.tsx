@@ -84,8 +84,12 @@ export class List extends React.Component<{}, State> {
 		return result;
 	}
 
-	openArticle(title: string) {
-		title = title.replace(/[^A-Za-z0-9_-]/g, '').toLocaleLowerCase();
+	openArticle(article: any) {
+		if(article.href && article.href === "true") {
+			return window.open(article.url);
+		}
+
+		let title = article.title.replace(/[^A-Za-z0-9_-]/g, '').toLocaleLowerCase();
 
 		window.location.href = '/docs/'+title;
 	}
@@ -124,7 +128,7 @@ export class List extends React.Component<{}, State> {
 			}
 
 			articles.push(
-				<div className="article" key={k} onClick={() => this.openArticle(article.title)}>
+				<div className="article" key={k} onClick={() => this.openArticle(article)}>
 					<div className="articleTitle">{article.title}</div>
 					<div className="articleDescription">{article.description}</div>
 					<div className="articleProtocol">{protocols}</div>

@@ -6,8 +6,6 @@ import Header from './Header';
 import Footer from './Footer';
 import Loading from "./Loading";
 
-import Signal from '../../functions/Signal';
-
 import {
 	getDocsList,
 	getArticle
