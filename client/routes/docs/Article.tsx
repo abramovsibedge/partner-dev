@@ -6,6 +6,8 @@ import Header from './Header';
 import Footer from './Footer';
 import Loading from "./Loading";
 
+import * as marked from 'marked';
+
 import {
 	getDocsList,
 	getArticle
@@ -56,77 +58,46 @@ export class Article extends React.Component<{}, State> {
 		});
 	}
 
+	/*
+	heading: (test, level, callback):string => {
+				let result:string = 'test';
+				return result;
+			},
+	 */
+
 	parseContent(content: string) {
-		let parseRow = (row:string) => {
-			return (
-				row
+		marked.setOptions({
+			highlight: (code) => {
+				code = code
 					.replace(/</g, '&#60;')
-					.replace(/>/g, '&#62;')
-					.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
-					.replace(/\*\*([^*]+)\*\*/g, '<span class="bold">$1</span>')
-					.replace(/\*([^*]+)\*/g, '<span class="italic">$1</span>')
-					.replace(/`([^`]+)`/g, '<span class="highlight">$1</span>')
-			);
-		}
+					.replace(/>/g, '&#62;');
 
-		let split = content.split("\n")
+				let split  = code.split("\n"),
+					result = '',
+					tab    = split[0].match(/^ +/)?split[0].match(/^ +/)[0]:'';
 
-		let page       = '';
+				let reg = new RegExp('^'+tab);
+
+				for(let k in split) {
+					result += split[k].replace(reg, '') + "\n";
+				}
+
+				return result;
+			}
+		});
+
+		content = marked(content);
 		let navigation = '';
 
-		let code        = false;
-		let codeTab     = '';
-		let codeRow     = 0;
-		let codeNumbers = '';
-
+		let split = content.split("\n");
 		for(let k in split) {
-			let row = parseRow(split[k].replace(/\s/g, ' '));
+			if(!split[k].match(/<h1[^>]*>([^<]+)<\/h1>/)) continue;
 
-			if(row.match(/^###/)) {
-				page += '<h3>' + row.replace(/^###[ ]+/, '') + '</h3>\n';
-			}
-			else if(row.match(/^##/)) {
-				page += '<h2>' + row.replace(/^##[ ]+/, '') + '</h2>\n';
-			}
-			else if(row.match(/^#/)) {
-				let text = row.replace(/^#[ ]+/, '');
-				let anchor = text.replace(/[^A-Za-z]/g, '');
-				page += '<h1 id="'+anchor+'">' + text + '</h1>\n';
-				navigation += '<a href="#'+anchor+'">' + text + '</div>'
-			}
-			else if(row.match(/^```/) && !code) {
-				code        = true;
-				codeTab     = '';
-				codeRow     = 0;
-				page       += '<div class="code"><pre>\n';
-				codeNumbers = '<div class="numbers">';
-			}
-			else if(row.match(/^```/) && code) {
-				code         = false;
-				codeNumbers += '</div>';
-				page        += '</pre>'+codeNumbers+'</div>\n';
-			}
-			else if(code) {
-				codeRow ++;
-				if(codeRow === 1) {
-					codeTab = row.match(/([ ]+)/g)?row.match(/([ ]+)/g)[0]:'';
-				}
-				let reg = new RegExp('^'+codeTab);
-				page += row.replace(reg, '') + '\n';
-				codeNumbers += '<div>' + codeRow + '</div>';
-			}
-			else if(row.match(/^-[ ]+/)) {
-				page += '<div class="dot"><span>&#8226;</span>'+row.replace(/^-[ ]+/, '') + '</div>\n';
-			}
-			else if(row.match(/^[ ]*$/)) {
-				page += '<div class="br"></div>\n';
-			}
-			else {
-				page += '<div>' + row + '</div>\n';
-			}
+			let parsed = split[k].match(/<h1 id="([^"]+)">([^<]+)<\/h1>/);
+			navigation += '<a href="#'+parsed[1]+'">' + parsed[2] + '</div>'
 		}
 
-		return [page, navigation];
+		return [content, navigation];
 	}
 
 	render() {
