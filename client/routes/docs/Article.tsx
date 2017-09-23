@@ -77,9 +77,10 @@ export class Article extends React.Component<{}, State> {
 					tab    = split[0].match(/^ +/)?split[0].match(/^ +/)[0]:'';
 
 				let reg = new RegExp('^'+tab);
+				let count = split.length-1;
 
 				for(let k in split) {
-					result += split[k].replace(reg, '') + "\n";
+					result += split[k].replace(reg, '') + (count===Number(k)?"":"\n");
 				}
 
 				return result;
