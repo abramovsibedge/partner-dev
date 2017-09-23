@@ -16,10 +16,16 @@
         margin-left: 50px;
         margin-top: 30px;
 
+        span {
+          padding: 0 10px;
+          font-size: 20px;
+        }
+
         a {
           font-size: 18px;
           color: #fff;
           text-decoration: none;
+          text-transform: capitalize;
         }
       }
 
@@ -260,10 +266,10 @@
           }
         }
 
-        .code {
+        pre {
           background: #f8f8fd;
           box-shadow: 0 2px 4px 0 rgba(119, 130, 158, 0.22);
-          padding: 25px 25px 25px 50px;
+          padding: 25px;
           position: relative;
           margin-bottom: 20px;
           margin-top: 10px;
@@ -281,6 +287,29 @@
               height: 22px;
               line-height: 22px;
             }
+          }
+        }
+
+        table {
+          width: 100%;
+          margin: 10px 0;
+
+          tr {
+            td {
+              padding: 5px;
+              border: 1px solid #000;
+              text-align: left;
+            }
+          }
+        }
+
+        ol {
+          padding-left: 15px;
+        }
+
+        ul {
+          li {
+            padding: 3px 0;
           }
         }
       }
