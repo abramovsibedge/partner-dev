@@ -26,8 +26,8 @@ import {signUp} from '../../functions/auth';
 
 
 interface Props {
-    signUpModelStatus: model.SignUpModelStatus;
-    actionSignUp: (data: any)=>void;
+	signUpModelStatus: model.SignUpModelStatus;
+	actionSignUp: (data: any)=>void;
 }
 
 interface Option {
@@ -303,7 +303,6 @@ class Signup extends React.Component<Props, State> {
 		);
 	}
 }
-
 
 export default connect(
     state => ({

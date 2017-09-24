@@ -1,64 +1,70 @@
 import * as React from 'react';
+import * as update from 'immutability-helper';
+import { connect } from 'react-redux';
 
-import Signal from '../../../functions/Signal';
+import * as model from '../../../reducers/subscribers/model';
+import * as actions from '../../../reducers/subscribers/actions';
 
 import {
 	Select
 } from '../../../components/form';
 
-interface Parent {
-	projectsList: any,
-	activeProject: string
-};
-
-interface State {
-	activeProject: number
+interface Props {
+	projects: any,
+	subscribers: model.subscribersModel,
+	setActiveProject: (data: any) => void
 }
 
-class ProjectsSelector extends React.Component<Parent, State> {
-	projectsList: any;
+interface State {
+	projectsList: any
+	activeProject: number
+	loaded: boolean
+}
 
+class ProjectsSelector extends React.Component<Props, State> {
 	constructor(props: any) {
 		super();
 
-		this.projectsList  = this.getProjectsList(props.projectsList);
-
 		this.state = {
-			activeProject: this.getRowId(props.activeProject)
+			projectsList: null,
+			activeProject: null,
+			loaded: false
 		};
 	}
 
-	getProjectsList(projectList: any) {
-		let list = [];
+	componentWillReceiveProps(nextProps: any) {
+		this.setState(update(this.state, {
+			projectsList: {$set: this.getProjectsList(nextProps.projects['list'])},
+			activeProject: {$set: nextProps.subscribers['activeProject']},
+			loaded: {$set: true}
+		}));
+	}
 
-		for(let k in projectList) {
-			list.push(
-				{
-					value: projectList[k].publickey,
-					label: projectList[k].description
-				}
-			);
-		}
+	getProjectsList = (projects: any) => {
+		let list: any = [];
+
+		projects.map((item: any) => {
+			list.push({
+				value: item.publickey,
+				label: item.description
+			});
+		});
 
 		return list;
-	}
+	};
 
-	changeProjectHandler(value: string) {
-		this.setState({activeProject: this.getRowId(value)});
-		Signal.dispatch('changeProject', value);
-	}
+	getRowId = (projects: any, activeProject: string) => {
+		let active: number = 0;
 
-	getRowId(activeProject: string) {
-		let active:number = 0;
-		for(let k in this.projectsList) {
-			if(this.projectsList[k].value === activeProject) {
+		for (let k in projects) {
+			if(projects[k].publickey === activeProject) {
 				active = Number(k);
 				break;
 			}
-		};
+		}
 
 		return active;
-	}
+	};
 
 	render() {
 		return (
@@ -66,12 +72,13 @@ class ProjectsSelector extends React.Component<Parent, State> {
 				<div className="layout_head_content">
 					<h1 className="layout_h1">
 						Subscribers
-						<Select
-							value={this.projectsList[this.state.activeProject].value}
-							options={this.projectsList}
-							onChange={(e) => this.changeProjectHandler(e.target.value)}>
-							Projects
-						</Select>
+						{this.state.loaded &&
+							<Select
+								value={this.state.projectsList[this.state.activeProject].value}
+								options={this.state.projectsList}
+								onChange={(e) => this.props.setActiveProject(this.getRowId(this.props.projects['list'], e.target.value))} >
+								Projects
+							</Select>}
 					</h1>
 				</div>
 			</header>
@@ -79,4 +86,12 @@ class ProjectsSelector extends React.Component<Parent, State> {
 	}
 }
 
-export default ProjectsSelector;
+export default connect(
+	state => ({
+		projects: state.projects,
+		subscribers: state.subscribers
+	}),
+	({
+		setActiveProject: actions.setActiveProject
+	})
+)(ProjectsSelector);

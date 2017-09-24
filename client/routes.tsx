@@ -8,7 +8,7 @@ import Reset from './routes/auth/reset';
 import Signin from './routes/auth/signin';
 import Signup from './routes/auth/signup';
 import {Projects} from './routes/projects/';
-import {Subscribers} from './routes/subscribers/';
+import Subscribers from './routes/subscribers/';
 import {NotFound} from './routes/404/';
 import {firebaseInit} from '../client/functions/firebaseInit';
 

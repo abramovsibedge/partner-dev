@@ -25,10 +25,9 @@ interface State {
 }
 
 interface Props {
-    signInModel: model.SignInModel;
-    actionSignIn: (email: string, password: string)=>void;
+	signInModel: model.SignInModel;
+	actionSignIn: (email: string, password: string)=>void;
 }
-
 
 class Signin extends React.Component<Props, State> {
 	constructor(props: any) {
@@ -42,24 +41,24 @@ class Signin extends React.Component<Props, State> {
 		}
 	}
 
-    componentDidMount() {
-        if (!this.props.signInModel.statusAuth) {
-            this.setState(update(this.state, {
-                message: {$set: this.props.signInModel.errorMessages}
-            }));
-        }
-    }
-    componentWillReceiveProps(nextProps:any) {
+	componentDidMount() {
+		if (!this.props.signInModel.statusAuth) {
+			this.setState(update(this.state, {
+				message: {$set: this.props.signInModel.errorMessages}
+			}));
+		}
+	}
+
+	componentWillReceiveProps(nextProps:any) {
 		if (!nextProps.signInModel.statusAuth) {
-            this.setState(update(this.state, {
+			this.setState(update(this.state, {
 				message: {$set: nextProps.signInModel.errorMessages}
 			}));
 		}
 		else {
-            hashHistory.push('/projects');
+			hashHistory.push('/projects');
 		}
 	}
-
 
 	private submitHandler() {
 		const $t = this;
@@ -146,10 +145,10 @@ class Signin extends React.Component<Props, State> {
 }
 
 export default connect(
-    state => ({
-        signInModel: state.signin
-    }),
-    ({
-        actionSignIn: actions.actionSignIn
-    })
+	state => ({
+		signInModel: state.signin
+	}),
+	({
+		actionSignIn: actions.actionSignIn
+	})
 )(Signin);

@@ -7,7 +7,7 @@ const initialState: IState = <SignUpModelStatus>{
     errorMessages: ''
 };
 
-export default handleActions<IState>({
+export default handleActions<any>({
     [`${types.ACTIONS_SIGNUP}_LOADING`] : (state: IState, action: Action<string>) : IState => {
         return {statusSignUp: false, errorMessages: ''};
     },

@@ -4,40 +4,14 @@ import AddSubscriber from './AddSubscriber';
 import SearchSubscriber from './Search';
 import DashboardHeader from '../../../components/dashboard/dashboardHeader';
 
-import Signal from '../../../functions/Signal';
-
-interface Parent {
-	loaded: boolean
-}
-
-interface State {
-	loaded: boolean,
-}
-
-export default class Header extends React.Component <Parent, State>{
-	signal: any;
-
-	constructor(props: any) {
-		super(props);
-
-		this.state = {
-			loaded: props.loaded,
-		};
-	}
-
-	componentDidMount() {
-		Signal.attach('loaded', (loaded: boolean) => {
-			this.setState({loaded: loaded});
-		});
-	}
-
+export default class Header extends React.Component <{}, {}> {
 	render() {
 		return (
 			<DashboardHeader>
-				{this.state.loaded && <div className="subscriber_filter">
+				<div className="subscriber_filter">
 					<SearchSubscriber />
 					<AddSubscriber />
-				</div>}
+				</div>
 			</DashboardHeader>
 		);
 	}

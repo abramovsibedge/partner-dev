@@ -244,6 +244,7 @@
       }
       &_reset {
         position: absolute;
+        z-index: 100;
         top: 6px;
         right: 12px;
         width: 36px;

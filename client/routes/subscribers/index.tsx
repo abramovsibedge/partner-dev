@@ -1,119 +1,72 @@
 import * as React from 'react';
-import Signal from '../../functions/Signal';
+import { connect } from 'react-redux';
+import { hashHistory } from 'react-router';
 
-import Body   from './Body';
+// for redux
+import * as model from '../../reducers/subscribers/model';
+import * as actions from '../../reducers/subscribers/actions';
+import { getProjects } from '../../reducers/projects/actions';
+
+import Dashboard from '../../components/dashboard';
 import Header from './Header';
-
-import Loading from './Loading';
+import ProjectsSelector from './Body/ProjectsSelector';
+import SubscribersList from './Body/SubscribersList';
 
 import '../../static/scss/components/modal.scss';
 import '../../static/scss/components/table.scss';
 import '../../static/scss/routes/subscribers.scss';
 
 import {
-	logOut
+	check
 } from '../../functions/auth'
 
-import Dashboard from '../../components/dashboard';
+interface Props {
+	projects: any;
+	subscribers: model.subscribersModel;
+	loadProjects: () => void;
+	setActiveProject: (project: any) => void;
+}
 
-import {
-	loadProjects
-} from '../../functions/projects';
-
-import {
-	logIn,
-	checkLogin,
-	getActiveProject
-} from '../../functions/subscribers';
-
-interface State {
-	projectsList: any,
-	loaded: boolean
-};
-
-export class Subscribers extends React.Component<{}, State> {
-	activeProject: string;
-
+class Subscribers extends React.Component<Props, {}> {
 	constructor(props: any) {
 		super(props);
-
-		this.state = {
-			projectsList: [],
-			loaded: false
-		};
-
-		this.signals();
 	}
 
-	signals() {
-		new Signal('loaded');
-		new Signal('changeProject');
-		new Signal('projectChanged');
-		new Signal('subscriberAdded');
-
-		Signal.attach('changeProject', (newProject: string) => {
-			for(let k in this.state.projectsList) {
-				if(this.state.projectsList[k].publickey === newProject) {
-					return this.logIn(this.state.projectsList[k]).then((activeProject: string) => {
-						this.activeProject = activeProject;
-						Signal.dispatch('projectChanged', this.activeProject);
-					});
-				}
-			}
-		});
+	componentWillMount() {
+		if (!check()) {
+			hashHistory.push('/auth/signin');
+			return false;
+		} else {
+			this.props.loadProjects();
+		}
 	}
 
-	componentDidMount() {
-		this.getData();
-	}
-
-	getData() {
-		let state = {};
-
-		loadProjects().then((response) => {
-			state['projectsList'] = response.projects;
-
-			let id = 0;
-
-			if(getActiveProject() !== '') {
-				let active = getActiveProject();
-				for(let k in state['projectsList']) {
-					if(state['projectsList'][k].publickey === active) {
-						id = Number(k);
-						break;
-					}
-				}
-			}
-
-			this.logIn(state['projectsList'][id]).then((activeProject: string) => {
-				state['loaded']    = true;
-				this.activeProject = activeProject;
-
-				Signal.dispatch('loaded', true);
-
-				this.setState(state);
-			});
-		}).catch(() => logOut());
-	}
-
-	logIn(project: object) {
-		return new Promise((resolve) => {
-			if(checkLogin() && getActiveProject() === project['publickey']) return resolve(project['publickey']);
-
-			logIn(project['publickey'], project['privatekey']).then((result: boolean) => {
-				if(result) return resolve(getActiveProject());
-			});
-		});
+	componentWillReceiveProps(nextProps: any) {
+		if (nextProps.subscribers['activeProject'] === null || typeof nextProps.subscribers['activeProject'] === 'undefined') {
+			this.props.setActiveProject(0);
+		}
 	}
 
 	render() {
 		return (
 			<Dashboard current="subscribers">
-				<Header loaded={this.state.loaded} />,
-				{this.state.loaded
-					?<Body projectsList={this.state.projectsList} activeProject={this.activeProject} />
-					:<Loading />}
+				<Header />
+				<section className="layout">
+					<ProjectsSelector />
+					<SubscribersList />
+				</section>
 			</Dashboard>
 		);
 	}
 }
+
+export default connect(
+	state => ({
+		projects: state.projects,
+		subscribers: state.subscribers
+	}),
+	({
+		loadProjects: getProjects,
+		setActiveProject: actions.setActiveProject
+	})
+)(Subscribers);

@@ -1,7 +1,10 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
 import * as update from 'immutability-helper';
-import Signal from '../../../functions/Signal';
+import { connect } from 'react-redux';
+
+import * as model from '../../../reducers/subscribers/model';
+import * as actions from '../../../reducers/subscribers/actions';
 
 import { Button } from '../../../components/button';
 
@@ -9,6 +12,13 @@ import {
 	IconSearch,
 	IconClose
 } from '../../../components/icons';
+
+interface Props {
+	projects: any
+	subscribers: model.subscribersModel
+	getSubscribers: (data: any) => void
+	searchSubscriber: (type: string, value: string) => void
+}
 
 interface State {
 	isFocused: boolean
@@ -18,7 +28,7 @@ interface State {
 	showDrop: boolean
 }
 
-class SearchSubscriber extends React.Component<{}, State> {
+class SearchSubscriber extends React.Component<Props, State> {
 	constructor(props: any) {
 		super(props);
 
@@ -38,7 +48,7 @@ class SearchSubscriber extends React.Component<{}, State> {
 			showDrop: { $set: false },
 			searchType: { $set: '' }
 		}), () => {
-			!value && Signal.dispatch('loadSubscribers', null);
+			!value && this.props.getSubscribers(this.props.projects.list[this.props.subscribers.activeProject]);
 		});
 	}
 
@@ -82,7 +92,7 @@ class SearchSubscriber extends React.Component<{}, State> {
 			searchType: { $set: searchType[type] },
 			showDrop: { $set: false }
 		}), () => {
-			Signal.dispatch('searchSubscriber', {type, value: this.state.value});
+			this.props.searchSubscriber(type, this.state.value);
 		});
 	}
 
@@ -132,4 +142,13 @@ class SearchSubscriber extends React.Component<{}, State> {
 	}
 }
 
-export default SearchSubscriber;
+export default connect(
+	state => ({
+		projects: state.projects,
+		subscribers: state.subscribers
+	}),
+	({
+		getSubscribers: actions.getSubscribers,
+		searchSubscriber: actions.searchSubscriber
+	})
+)(SearchSubscriber);

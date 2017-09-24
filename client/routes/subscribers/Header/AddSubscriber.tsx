@@ -1,6 +1,10 @@
 import * as React from 'react';
-import Modal from 'react-modal';
 import * as update from 'immutability-helper';
+import { connect } from 'react-redux';
+import Modal from 'react-modal';
+
+import * as actions from '../../../reducers/subscribers/actions';
+import * as model from '../../../reducers/subscribers/model';
 
 import Signal from '../../../functions/Signal';
 
@@ -22,13 +26,22 @@ import {
 	getLicences
 } from '../../../functions/subscribers';
 
-interface State {
-	showModal: boolean,
-	addObject: object,
-	licencesList: any
-};
+interface Props {
+	projects: any
+	subscribers: model.subscribersModel
+	getLicenses: () => void
+	getSubscribers: (data: any) => void
+	addSubscriber: (data: any) => void
+}
 
-class AddSubscriber extends React.Component<{}, State>{
+interface State {
+	showModal: boolean
+	addObject: object
+	message: string
+	licencesList: any
+}
+
+class AddSubscriber extends React.Component<Props, State>{
 	constructor(props: any) {
 		super(props);
 
@@ -55,40 +68,72 @@ class AddSubscriber extends React.Component<{}, State>{
 					value: '',
 					valid: true,
 					check: new RegExp('^\\w+$')
-				},
-				message: ''
-			}
+				}
+			},
+			message: null
 		};
 
-		Signal.attach('projectChanged', () => {this.fetchLicence()})
+		// Signal.attach('projectChanged', () => {this.fetchLicence()})
 	}
 
-	componentDidMount() {
-		this.fetchLicence();
+	componentWillMount() {
+		this.props.getLicenses();
 	}
 
-	fetchLicence() {
-		getLicences().then((result) => {
-			if(!result || !result.result || result.result !== 'OK' || !result.licenses) {
-				return;
-			}
+	componentWillReceiveProps(nextprops: any) {
+		this.fetchLicence(nextprops.subscribers.licenses);
 
-			let licenceList = [];
-			for(let k in result.licenses) {
-				licenceList.push(
-					{
-						value: result.licenses[k].id,
-						label: result.licenses[k].name
+		if (nextprops.subscribers.addSubscriberStatus && nextprops.subscribers.addSubscriberStatus['type'] === 'error') {
+			this.setState(update(this.state, {
+				message: {$set: nextprops.subscribers.addSubscriberStatus.reason}
+			}));
+		}
+
+		if (nextprops.subscribers.addSubscriberStatus && nextprops.subscribers.addSubscriberStatus['type'] === 'success') {
+			this.setState({
+				showModal: false,
+				message: null,
+				addObject: {
+					extref: {
+						value: '',
+						valid: true,
+						check: new RegExp('^\\w+$')
+					},
+					licence: {
+						value: '',
+						valid: true,
+						check: new RegExp('^[0-9]+$')
+					},
+					username: {
+						value: '',
+						valid: true,
+						check: new RegExp('^\\w+$')
+					},
+					oauth_token: {
+						value: '',
+						valid: true,
+						check: new RegExp('^\\w+$')
 					}
-				);
-			}
+				},
+			}, () => this.props.getSubscribers(nextprops.projects.list[nextprops.subscribers.activeProject]));
+		}
+	}
 
-			this.setState(update(
-				this.state, {
-					licencesList: {$set: licenceList}
-				}
-			));
-		});
+	fetchLicence(list: any) {
+		let licenceList = [];
+
+		for(let k in list) {
+			licenceList.push({
+				value: list[k].id,
+				label: list[k].name
+			});
+		}
+
+		this.setState(update(
+			this.state, {
+				licencesList: {$set: licenceList}
+			}
+		));
 	}
 
 	showAddSubscriber(value: boolean) {
@@ -127,42 +172,7 @@ class AddSubscriber extends React.Component<{}, State>{
 			oauth_token: object['oauth_token'].value
 		};
 
-		addSubscriber(subscriber).then((response) => {
-			if(response.result !== 'OK') {
-				// @todo handle error
-				return;
-			}
-
-			this.setState({
-				showModal: false,
-				addObject: {
-					extref: {
-						value: '',
-						valid: true,
-						check: new RegExp('^\\w+$')
-					},
-					licence: {
-						value: '',
-						valid: true,
-						check: new RegExp('^[0-9]+$')
-					},
-					username: {
-						value: '',
-						valid: true,
-						check: new RegExp('^\\w+$')
-					},
-					oauth_token: {
-						value: '',
-						valid: true,
-						check: new RegExp('^\\w+$')
-					},
-					message: ''
-				}
-			});
-
-			this.showAddSubscriber(false);
-			Signal.dispatch('subscriberAdded', true);
-		});
+		this.props.addSubscriber(subscriber);
 	}
 
 	addSubscriberHandler(value: string, stateItem: string) {
@@ -193,7 +203,7 @@ class AddSubscriber extends React.Component<{}, State>{
 						<h2>Create subscriber</h2>
 					</div>
 					<Form submit={() => this.addSubscriberSubmit()} className="modal_form">
-						<div className="modal_error">{this.state.addObject['message']}</div>
+						<div className="modal_error">{this.state.message}</div>
 						<div className="modal_content">
 							<FormRow>
 								<Input
@@ -246,4 +256,14 @@ class AddSubscriber extends React.Component<{}, State>{
 	}
 }
 
-export default AddSubscriber;
+export default connect(
+	state => ({
+		projects: state.projects,
+		subscribers: state.subscribers
+	}),
+	({
+		getLicenses: actions.getLicenses,
+		addSubscriber: actions.addSubscriber,
+		getSubscribers: actions.getSubscribers
+	})
+)(AddSubscriber);

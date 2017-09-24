@@ -7,15 +7,15 @@ const initialState: IState = <SignInModel>{
     errorMessages: '',
 };
 
-export default handleActions<IState>({
+export default handleActions<any>({
     [`${types.ACTIONS_SIGNIN}_LOADING`] : (state: IState, action: Action<string>) : IState => {
         return {statusAuth: false, errorMessages: ''};
     },
     [`${types.ACTIONS_SIGNIN}_SUCCESS`] : (state: IState, action: Action<string>) : IState => {
-        return {statusAuth: true, errorMessages: ''};
+    	return {statusAuth: true, errorMessages: ''};
     },
     [`${types.ACTIONS_SIGNIN}_ERROR`] : (state: IState, action: Action<string>) : IState => {
-        return {statusAuth: false, errorMessages: action.payload};
+    	return {statusAuth: false, errorMessages: action.payload};
     },
 
 }, initialState);

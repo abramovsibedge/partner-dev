@@ -1,4 +1,9 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
+import * as update from 'immutability-helper';
+
+import * as model from '../../../reducers/subscribers/model';
+import * as actions from '../../../reducers/subscribers/actions';
 
 import Signal from '../../../functions/Signal';
 import Loader from '../Loading';
@@ -8,19 +13,27 @@ import {
 	searchSubscriber
 } from '../../../functions/subscribers';
 
+interface Props {
+	projects: any,
+	subscribers: model.subscribersModel,
+	getSubscribers: (data: any) => void
+}
+
 interface State {
 	loaded: boolean,
+	activeProject: number,
 	subscribers: any,
-};
+}
 
 import SubscriberRow from './Subscriber/SubscriberRow';
 
-class SubscribersList extends React.Component<{}, State> {
+class SubscribersList extends React.Component<Props, State> {
 	constructor(props: any) {
 		super(props);
 
 		this.state = {
 			loaded: false,
+			activeProject: null,
 			subscribers: []
 		};
 
@@ -31,54 +44,67 @@ class SubscribersList extends React.Component<{}, State> {
 		new Signal('loadSubscribers');
 	}
 
-	componentDidMount() {
-		this.getSubscribers();
+	componentWillReceiveProps(nextprops: any) {
+		if (nextprops.subscribers.activeProject !== this.state.activeProject) {
+			this.setState(update(this.state, {
+				activeProject: {$set: nextprops.subscribers.activeProject}
+			}));
 
-		Signal.attach('projectChanged', () => {
-			this.getSubscribers();
-		});
-
-		Signal.attach('subscriberAdded', () => {
-			this.getSubscribers();
-		});
-
-		Signal.attach('searchSubscriber', (params: any) => {
-			this.searchSubscriber(params);
-		});
-
-		Signal.attach('loadSubscribers', () => {
-			this.getSubscribers();
-		});
+			this.props.getSubscribers(nextprops.projects.list[nextprops.subscribers.activeProject]);
+		}
 	}
 
-	searchSubscriber(params: any) {
-		this.setState({loaded: true});
-
-		searchSubscriber(params).then((subscribers) => {
-			this.setState({
-				loaded: true,
-				subscribers: subscribers.result==='OK' ? subscribers.subscriber ? [subscribers.subscriber] : subscribers.subscribers : []
-			});
-		}).catch();
-	}
-
-	getSubscribers() {
-		this.setState({loaded: false});
-		getSubscribersList().then((subscribers) => {
-			this.setState({
-				loaded: true,
-				subscribers: subscribers.result==='OK' ? subscribers.subscribers : []
-			})
-		});
-	}
-
-	openSubscriber(subscriberId: number) {
-		Signal.dispatch('openSubscriber', subscriberId);
-	}
-
-	closeSubscriber(subscriberId: number) {
-		Signal.dispatch('closeSubscriber', subscriberId);
-	}
+	//
+	//
+	//
+	// componentDidMount() {
+	// 	this.getSubscribers();
+	//
+	// 	Signal.attach('projectChanged', () => {
+	// 		this.getSubscribers();
+	// 	});
+	//
+	// 	Signal.attach('subscriberAdded', () => {
+	// 		this.getSubscribers();
+	// 	});
+	//
+	// 	Signal.attach('searchSubscriber', (params: any) => {
+	// 		this.searchSubscriber(params);
+	// 	});
+	//
+	// 	Signal.attach('loadSubscribers', () => {
+	// 		this.getSubscribers();
+	// 	});
+	// }
+	//
+	// searchSubscriber(params: any) {
+	// 	this.setState({loaded: true});
+	//
+	// 	searchSubscriber(params).then((subscribers) => {
+	// 		this.setState({
+	// 			loaded: true,
+	// 			subscribers: subscribers.result==='OK' ? subscribers.subscriber ? [subscribers.subscriber] : subscribers.subscribers : []
+	// 		});
+	// 	}).catch();
+	// }
+	//
+	// getSubscribers() {
+	// 	this.setState({loaded: false});
+	// 	getSubscribersList().then((subscribers) => {
+	// 		this.setState({
+	// 			loaded: true,
+	// 			subscribers: subscribers.result==='OK' ? subscribers.subscribers : []
+	// 		})
+	// 	});
+	// }
+	//
+	// openSubscriber(subscriberId: number) {
+	// 	Signal.dispatch('openSubscriber', subscriberId);
+	// }
+	//
+	// closeSubscriber(subscriberId: number) {
+	// 	Signal.dispatch('closeSubscriber', subscriberId);
+	// }
 
 	render() {
 		return (
@@ -103,37 +129,49 @@ class SubscribersList extends React.Component<{}, State> {
 							</tbody>
 						</table>
 					</div>
-					{this.tableBody()}
+
+					test
+					{/*{this.tableBody()}*/}
 				</div>}
 			</div>
 		);
 	}
 
-	tableBody() {
-		let content = [];
-
-		for(let k in this.state.subscribers) {
-			content.push(
-				<SubscriberRow
-					key={this.state.subscribers[k].id}
-					subscriber={this.state.subscribers[k]}
-					openSubscriber ={this.openSubscriber.bind(this, this.state.subscribers[k].id)}
-					closeSubscriber={this.closeSubscriber.bind(this, this.state.subscribers[k].id)}
-				/>
-			)
-		}
-
-		return (
-			<div className="table_body">
-				{content}
-				{content.length === 0 && <div className="table_row table_row_empty">
-					<div className="table_cell" style={{width: '100%'}}>
-						<div className="table_cell_content">No result for your request.</div>
-					</div>
-				</div>}
-			</div>
-		);
-	}
+	// tableBody() {
+	// 	let content = [];
+	//
+	// 	for(let k in this.state.subscribers) {
+	// 		content.push(
+	// 			<SubscriberRow
+	// 				key={this.state.subscribers[k].id}
+	// 				subscriber={this.state.subscribers[k]}
+	// 				openSubscriber ={this.openSubscriber.bind(this, this.state.subscribers[k].id)}
+	// 				closeSubscriber={this.closeSubscriber.bind(this, this.state.subscribers[k].id)}
+	// 			/>
+	// 		)
+	// 	}
+	//
+	// 	return (
+	// 		<div className="table_body">
+	// 			{content}
+	// 			{content.length === 0 && <div className="table_row table_row_empty">
+	// 				<div className="table_cell" style={{width: '100%'}}>
+	// 					<div className="table_cell_content">No result for your request.</div>
+	// 				</div>
+	// 			</div>}
+	// 		</div>
+	// 	);
+	// }
 }
 
-export default SubscribersList;
+// export default SubscribersList;
+
+export default connect(
+	state => ({
+		projects: state.projects,
+		subscribers: state.subscribers
+	}),
+	({
+		getSubscribers: actions.getSubscribers
+	})
+)(SubscribersList);

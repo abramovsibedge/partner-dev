@@ -7,7 +7,7 @@ const initialState: IState = <resetModelStatus>{
     errorMessages: ''
 };
 
-export default handleActions<IState>({
+export default handleActions<any>({
 
     [`${types.ACTIONS_RESET}_LOADING`] : (state: IState, action: Action<string>) : IState => {
         return {statusReset: false, errorMessages: ''};

@@ -24,10 +24,9 @@ interface State {
 	success: boolean
 }
 
-
 interface Props {
-    resetModelStatus: model.resetModelStatus;
-    actionReset: (email: string)=>void;
+	resetModelStatus: model.resetModelStatus;
+	actionReset: (email: string)=>void;
 }
 
 class Reset extends React.Component<Props, State> {
