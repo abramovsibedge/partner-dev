@@ -17,8 +17,8 @@ import '../../static/scss/components/table.scss';
 import '../../static/scss/routes/subscribers.scss';
 
 import {
-	check
-} from '../../functions/auth'
+	checkAuth
+} from '../../utils'
 
 interface Props {
 	projects: any;
@@ -33,7 +33,7 @@ class Subscribers extends React.Component<Props, {}> {
 	}
 
 	componentWillMount() {
-		if (!check()) {
+		if (!checkAuth()) {
 			hashHistory.push('/auth/signin');
 			return false;
 		} else {

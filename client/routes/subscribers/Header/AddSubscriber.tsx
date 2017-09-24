@@ -6,8 +6,6 @@ import Modal from 'react-modal';
 import * as actions from '../../../reducers/subscribers/actions';
 import * as model from '../../../reducers/subscribers/model';
 
-import Signal from '../../../functions/Signal';
-
 import {
 	IconPlus,
 	IconClose,
@@ -20,11 +18,6 @@ import {
 	Select
 } from '../../../components/form';
 import { Button } from '../../../components/button';
-
-import {
-	addSubscriber,
-	getLicences
-} from '../../../functions/subscribers';
 
 interface Props {
 	projects: any
@@ -72,8 +65,6 @@ class AddSubscriber extends React.Component<Props, State>{
 			},
 			message: null
 		};
-
-		// Signal.attach('projectChanged', () => {this.fetchLicence()})
 	}
 
 	componentWillMount() {

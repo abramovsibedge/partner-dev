@@ -56,7 +56,7 @@ class Signin extends React.Component<Props, State> {
 			}));
 		}
 		else {
-			hashHistory.push('/projects');
+			hashHistory.push('/subscribers');
 		}
 	}
 

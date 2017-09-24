@@ -30,7 +30,9 @@ const logIn = async function(project: any) {
 };
 
 export const loadLicenses = () => {
-	return axios.get(config.host + 'partner/licenses?access_token=' + JSON.parse(storage.get('rest')).restToken)
+	console.log( config.restToken );
+
+	return axios.get(config.host + 'partner/licenses?access_token=' + config.restToken)
 		.then((response) => response.data.licenses)
 		.then((responseJson) => {
 			return responseJson;
@@ -51,7 +53,7 @@ export const loadSubscribers = async (project: any) => {
 
 export const loadSubscriber = (type: string, value: string) => {
 	const filterType: string = type === 'userId' ? '/' : '/' + type + '/';
-	let request: string = config.host + 'partner/subscribers' + filterType + value + '?access_token=' + JSON.parse(storage.get('rest')).restToken;
+	let request: string = config.host + 'partner/subscribers' + filterType + value + '?access_token=' + config.restToken;
 
 	return axios.get(request)
 		.then(response => {
@@ -67,7 +69,7 @@ export const loadSubscriber = (type: string, value: string) => {
 };
 
 export const addNewSubscriber = (data: any) => {
-	let request:string = config.host + 'partner/subscribers?access_token=' + JSON.parse(storage.get('rest')).restToken;
+	let request:string = config.host + 'partner/subscribers?access_token=' + config.restToken;
 	request += '&extref=' + data['extref'];
 	request += '&username=' + data['username'];
 	request += '&license_id=' + data['license_id'];
