@@ -37,7 +37,7 @@ export class Projects extends React.Component<{}, State> {
 				if (result.result !== "OK") {
 					if (result.result === "NOT_AUTHORIZED") {
 						console.log( 123 );
-						storage.remove('tokens');
+						// storage.remove('tokens');
 					}
 				}
 

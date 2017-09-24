@@ -22,7 +22,7 @@ interface State {
 }
 
 class ProjectsSelector extends React.Component<Props, State> {
-	constructor(props: any) {
+	constructor() {
 		super();
 
 		this.state = {
@@ -32,12 +32,14 @@ class ProjectsSelector extends React.Component<Props, State> {
 		};
 	}
 
-	componentWillReceiveProps(nextProps: any) {
-		this.setState(update(this.state, {
-			projectsList: {$set: this.getProjectsList(nextProps.projects['list'])},
-			activeProject: {$set: nextProps.subscribers['activeProject']},
-			loaded: {$set: true}
-		}));
+	componentWillReceiveProps(nextprops: any) {
+		if (nextprops.projects.list.length > 0) {
+			this.setState(update(this.state, {
+				projectsList: {$set: this.getProjectsList(nextprops.projects['list'])},
+				activeProject: {$set: nextprops.subscribers['activeProject']},
+				loaded: {$set: true}
+			}));
+		}
 	}
 
 	getProjectsList = (projects: any) => {

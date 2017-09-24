@@ -3,7 +3,7 @@ import {AuthMessage} from './messages';
 
 import '../../static/scss/routes/auth.scss';
 
-import {check} from '../../functions/auth';
+import {checkAuth} from '../../utils';
 
 export class Auth extends React.Component<{}, {}> {
 	constructor(props: any) {
@@ -13,7 +13,7 @@ export class Auth extends React.Component<{}, {}> {
 	render() {
 		return (
 			<div className="register">
-				{check() ? <AuthMessage isSigned={check()} /> : this.props.children}
+				{checkAuth() ? <AuthMessage isSigned={checkAuth()} /> : this.props.children}
 			</div>
 		);
 	}

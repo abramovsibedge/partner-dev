@@ -10,7 +10,7 @@ import {
 
 import '../../static/scss/routes/main.scss';
 
-import {check} from '../../../client/functions/auth';
+import {checkAuth} from '../../utils';
 
 interface State {
 	isSigned: boolean
@@ -21,7 +21,7 @@ export class Main extends React.Component<{}, State> {
 		super(props);
 
 		this.state = {
-			isSigned: check(),
+			isSigned: checkAuth(),
 		}
 	}
 

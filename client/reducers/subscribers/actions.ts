@@ -11,7 +11,7 @@ import config from '../../config';
 import { subscribersModel } from './model';
 
 const logIn = async function(project: any) {
-	let request: string = config.host + 'partner/login?access_token=' + config.firebaseToken;
+	let request: string = config.host + 'partner/login?access_token=' + config.firebaseToken();
 	request += '&login=' + project['publickey'];
 	request += '&password=' + project['privatekey'];
 
@@ -30,13 +30,13 @@ const logIn = async function(project: any) {
 };
 
 export const loadLicenses = () => {
-	console.log( config.restToken );
-
-	return axios.get(config.host + 'partner/licenses?access_token=' + config.restToken)
-		.then((response) => response.data.licenses)
-		.then((responseJson) => {
-			return responseJson;
-		});
+	if (config.restToken) {
+		return axios.get(config.host + 'partner/licenses?access_token=' + config.restToken)
+			.then((response) => response.data.licenses)
+			.then((responseJson) => {
+				return responseJson;
+			});
+	}
 };
 
 export const setProject = (project: any) => project;

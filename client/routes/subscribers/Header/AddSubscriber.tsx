@@ -67,11 +67,11 @@ class AddSubscriber extends React.Component<Props, State>{
 		};
 	}
 
-	componentWillMount() {
-		this.props.getLicenses();
-	}
-
 	componentWillReceiveProps(nextprops: any) {
+		if (nextprops.subscribers.licenses.length === 0) {
+			this.props.getLicenses();
+		}
+
 		this.fetchLicence(nextprops.subscribers.licenses);
 
 		if (nextprops.subscribers.addSubscriberStatus && nextprops.subscribers.addSubscriberStatus['type'] === 'error') {

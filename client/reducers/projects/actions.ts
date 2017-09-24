@@ -1,4 +1,3 @@
-import * as firebase from 'firebase';
 import * as ReduxActions from "redux-actions";
 import * as types from './constants';
 
@@ -7,8 +6,8 @@ import config from '../../config';
 
 import { projectsModel } from './model';
 
-export const loadProjects = (state: projectsModel) => {
-	const request = config.host + 'portal/projects?access_token=' + config.firebaseToken;
+export const loadProjects = () => {
+	const request = config.host + 'portal/projects?access_token=' + config.firebaseToken();
 
 	return axios(request)
 		.then(response => response.data)
@@ -17,7 +16,7 @@ export const loadProjects = (state: projectsModel) => {
 
 const getProjects = ReduxActions.createAction<any, projectsModel>(
     types.LOAD_PROJECTS,
-    (staty: projectsModel) => loadProjects(staty)
+    () => loadProjects()
 );
 
 export {

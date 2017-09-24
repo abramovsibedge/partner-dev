@@ -36,16 +36,10 @@ class SubscribersList extends React.Component<Props, State> {
 			activeProject: null,
 			subscribers: []
 		};
-
-		new Signal('openSubscriber');
-		new Signal('closeSubscriber');
-		new Signal('subscriberModified');
-		new Signal('searchSubscriber');
-		new Signal('loadSubscribers');
 	}
 
 	componentWillReceiveProps(nextprops: any) {
-		if (nextprops.subscribers.activeProject !== this.state.activeProject) {
+		if (nextprops.projects.list.length > 0 && nextprops.subscribers.activeProject !== this.state.activeProject) {
 			this.setState(update(this.state, {
 				activeProject: {$set: nextprops.subscribers.activeProject}
 			}));
