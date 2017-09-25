@@ -10,9 +10,10 @@ export const check = () => {
 
 	firebase.auth().onAuthStateChanged((user: any) => {
 		if (user && user.emailVerified) {
-			const data = JSON.stringify({firebaseToken: user.De});
+			const data = JSON.stringify({firebaseToken: user.He});
+
 			storage.add('tokens', data);
-            storage.add('username', (user.displayName) ? user.displayName : user.email);
+			storage.add('username', (user.displayName) ? user.displayName : user.email);
 			isSigned = true;
 		} else {
 			storage.remove('tokens');
