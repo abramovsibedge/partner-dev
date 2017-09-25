@@ -51,7 +51,7 @@ export const loadSubscribers = async (project: any) => {
 		.catch(error => error);
 };
 
-export const loadSubscriber = (type: string, value: string) => {
+export const findSubscribers = (type: string, value: string) => {
 	const filterType: string = type === 'userId' ? '/' : '/' + type + '/';
 	let request: string = config.host + 'partner/subscribers' + filterType + value + '?access_token=' + config.restToken;
 
@@ -59,9 +59,7 @@ export const loadSubscriber = (type: string, value: string) => {
 		.then(response => {
 			let result = response.data;
 
-			if (result.result === 'OK') {
-				return result.subscriber ? [result.subscriber] : result.subscribers
-			}
+      return result.result === 'OK' ? result.subscriber ? [result.subscriber] : result.subscribers : [];
 		})
 		.catch(error => {
 			return [];
@@ -87,6 +85,10 @@ export const addNewSubscriber = (data: any) => {
 		.catch(error => error)
 };
 
+export const getSubscriberData = (id: any) => {
+	console.log( id );
+};
+
 const getLicenses = ReduxActions.createAction<any, subscribersModel>(
 	types.LOAD_LICENSES,
 	() => loadLicenses()
@@ -99,7 +101,7 @@ const getSubscribers = ReduxActions.createAction<any, any, string>(
 
 const searchSubscriber = ReduxActions.createAction<any, string, string>(
 	types.SEARCH_SUBSCRIBERS,
-	(type: string, value: string) => loadSubscriber(type, value)
+	(type: string, value: string) => findSubscribers(type, value)
 );
 
 const setActiveProject = ReduxActions.createAction<any, number>(
@@ -112,10 +114,16 @@ const addSubscriber = ReduxActions.createAction<any, any>(
 	(data: any) => addNewSubscriber(data)
 );
 
+const getSubscriber = ReduxActions.createAction<any, any>(
+	types.ADD_SUBSCRIBER,
+	(id: any) => getSubscriberData(id)
+);
+
 export {
 	getLicenses,
 	getSubscribers,
 	searchSubscriber,
 	setActiveProject,
-	addSubscriber
+	addSubscriber,
+  getSubscriber
 }
