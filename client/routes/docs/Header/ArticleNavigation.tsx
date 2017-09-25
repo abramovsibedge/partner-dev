@@ -28,7 +28,7 @@ class ArticleNavigation extends React.Component<Parent, State> {
 
 		return (
 			<div className="navigation articleNavigation">
-				<a href="/docs">Docs</a> > <a href="/docs">{this.state.article.type[0]}</a> > <a href="/docs">{this.state.article.title}</a>
+				<a href="/docs">Docs</a><span>></span><a href="/docs">{this.state.article.type[0]}</a><span>></span><a href="/docs">{this.state.article.title}</a>
 			</div>
 		);
 	}
