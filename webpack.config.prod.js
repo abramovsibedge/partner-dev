@@ -4,6 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const rupture = require('rupture');
 const autoprefixer = require('autoprefixer');
 const ReactStaticPlugin = require('react-static-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
 	context: __dirname,
@@ -31,6 +32,9 @@ module.exports = {
 	},
 
 	plugins: [
+		new CopyWebpackPlugin([
+			{ from: 'client/verify' }
+		]),
 		new webpack.LoaderOptionsPlugin({
 			minimize: true,
 			options: {
