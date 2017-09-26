@@ -16,7 +16,7 @@ import {
 } from '../../../../components/icons'
 
 interface Parent {
-	updateSearch: () => void,
+	updateSearch: (data: any) => void,
 	calendarOpened: () => void,
 	devicesDropdown: boolean
 }

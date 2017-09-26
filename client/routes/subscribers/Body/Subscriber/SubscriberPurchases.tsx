@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Modal from 'react-modal';
 import Loading from '../../Loading';
+import { connect } from 'react-redux';
+import * as actions from '../../../../reducers/subscriber/actions';
 
 import {
 	getPurchases,
@@ -14,8 +16,10 @@ import {
 } from '../../../../components/icons'
 import {Button} from '../../../../components/button';
 
-interface Parent {
-	subscriber: any
+interface Props {
+	data: any
+	getPurchases?: (data: any) => void
+	deletePurchase?: (id: any, params: any) => void
 }
 
 interface State {
@@ -23,16 +27,16 @@ interface State {
 	loaded: boolean,
 	purchases: any,
 	showModal: boolean
-};
+}
 
-class SubscriberPurchases extends React.Component<Parent, State> {
+class SubscriberPurchases extends React.Component<Props, State> {
 	constructor(props: any) {
 		super(props);
 
 		this.state = {
 			subscriber: props.subscriber,
 			loaded: false,
-			purchases: [],
+			purchases: null,
 			showModal: false
 		};
 	}
@@ -42,39 +46,41 @@ class SubscriberPurchases extends React.Component<Parent, State> {
 	}
 
 	componentWillReceiveProps(props: any) {
-		this.setState({
-			subscriber: props.subscriber,
-			loaded: false
-		});
-
-		this.getPurchases();
+		if (!this.state.purchases) {
+			this.setState({
+				purchases: props.subscriber.purchases,
+				loaded: true
+			});
+		}
 	}
 
 	getPurchases() {
-		getPurchases(this.state.subscriber.id).then((response) => {
-			/*response.purchases = [
-				{
-					purchase_id: 123,
-					purchase_type: 'First',
-					purchase_time: 1504011677525
-				},
-				{
-					purchase_id: 2344,
-					purchase_type: 'Second',
-					purchase_time: 1504111677525
-				},
-				{
-					purchase_id: 7567,
-					purchase_type: 'Third',
-					purchase_time: 1504211677525
-				},
-			];*/
+		this.props.getPurchases(this.props.data.id)
 
-			this.setState({
-				loaded: true,
-				purchases: response.purchases
-			});
-		});
+		// getPurchases(this.state.subscriber.id).then((response) => {
+		// 	/*response.purchases = [
+		// 		{
+		// 			purchase_id: 123,
+		// 			purchase_type: 'First',
+		// 			purchase_time: 1504011677525
+		// 		},
+		// 		{
+		// 			purchase_id: 2344,
+		// 			purchase_type: 'Second',
+		// 			purchase_time: 1504111677525
+		// 		},
+		// 		{
+		// 			purchase_id: 7567,
+		// 			purchase_type: 'Third',
+		// 			purchase_time: 1504211677525
+		// 		},
+		// 	];*/
+		//
+		// 	this.setState({
+		// 		loaded: true,
+		// 		purchases: response.purchases
+		// 	});
+		// });
 	}
 
 	showModal(state: boolean) {
@@ -88,9 +94,12 @@ class SubscriberPurchases extends React.Component<Parent, State> {
 			loaded: false,
 			showModal: false
 		});
-		deletePurchase(this.state.subscriber.id, id).then(() => {
-			this.getPurchases();
-		});
+
+		this.props.deletePurchase(this.props.data.id, id);
+
+		// deletePurchase(this.state.subscriber.id, id).then(() => {
+		// 	this.getPurchases();
+		// });
 	}
 
 	render() {
@@ -191,4 +200,14 @@ class SubscriberPurchases extends React.Component<Parent, State> {
 	}
 }
 
-export default SubscriberPurchases;
+// export default SubscriberPurchases;
+
+export default connect<any, any, Props>(
+	state => ({
+		subscriber: state.subscriber
+	}),
+	({
+		getPurchases: actions.getPurchases,
+		deletePurchase: actions.deletePurchase
+	})
+)(SubscriberPurchases);

@@ -85,10 +85,6 @@ export const addNewSubscriber = (data: any) => {
 		.catch(error => error)
 };
 
-export const getSubscriberData = (id: any) => {
-	console.log( id );
-};
-
 const getLicenses = ReduxActions.createAction<any, subscribersModel>(
 	types.LOAD_LICENSES,
 	() => loadLicenses()
@@ -114,16 +110,10 @@ const addSubscriber = ReduxActions.createAction<any, any>(
 	(data: any) => addNewSubscriber(data)
 );
 
-const getSubscriber = ReduxActions.createAction<any, any>(
-	types.ADD_SUBSCRIBER,
-	(id: any) => getSubscriberData(id)
-);
-
 export {
 	getLicenses,
 	getSubscribers,
 	searchSubscriber,
 	setActiveProject,
-	addSubscriber,
-  getSubscriber
+	addSubscriber
 }

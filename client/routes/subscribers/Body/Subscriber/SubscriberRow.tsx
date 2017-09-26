@@ -31,6 +31,7 @@ interface Props {
 }
 
 interface State {
+	subscriber: object
 	isOpened: boolean
 }
 
@@ -46,6 +47,7 @@ class SubscriberRow extends React.Component<Props, State> {
 		// this.closeSubscriber   = props.closeSubscriber;
 
 		this.state = {
+			subscriber: null,
 			isOpened: false
 		};
 	}
@@ -84,9 +86,14 @@ class SubscriberRow extends React.Component<Props, State> {
 	// }
   //
 
-	getSubscriber(id: number) {
+	componentWillReceiveProps(nextprops: any) {
+		console.log( nextprops );
+	}
 
-	  console.log( id );
+	openSubscriber(id: number) {
+		this.setState(update(this.state, {
+			isOpened: {$set: true}
+		}));
 
 		// getSubscriber(this.state.subscriber.id).then((response) => {
 		// 	if(response.result === 'OK') {
@@ -95,6 +102,12 @@ class SubscriberRow extends React.Component<Props, State> {
 		// });
 
     // this.props.getSubscriber(id)
+	}
+
+	closeSubscriber() {
+		this.setState(update(this.state, {
+			isOpened: {$set: false}
+		}));
 	}
 
   // onClick={() => this.props.getSubscriber(this.props.subscriber.id)}
@@ -106,7 +119,7 @@ class SubscriberRow extends React.Component<Props, State> {
 
 		return (
 			<div className={classNames('table_row', this.state.isOpened && 'table_row_open')}>
-				<div className="table_row_wrapper" onClick={() => this.getSubscriber(this.props.subscriber.id)}>
+				<div className="table_row_wrapper" onClick={() => this.openSubscriber(this.props.subscriber.id)}>
 					<div className="table_cell" style={{width: '8.15%'}}>
 						<div className="table_cell_content">{subscriber.id}</div>
 					</div>
@@ -144,11 +157,12 @@ class SubscriberRow extends React.Component<Props, State> {
 							</div>
 						</div>}
 				</div>
-				{/*{this.state.isOpened &&*/}
-					{/*<Button type="button" className="subscriber_close" onClick={() => this.closeSubscriber()}>*/}
-						{/*<IconClose width="24" height="24"/>*/}
-					{/*</Button>}*/}
-				{/*<SubscriberRowOpened isOpened={this.state.isOpened} subscriber={this.state.subscriber}/>*/}
+				{this.state.isOpened &&
+					<Button type="button" className="subscriber_close" onClick={() => this.closeSubscriber()}>
+						<IconClose width="24" height="24"/>
+					</Button>}
+
+				{this.state.isOpened && <SubscriberRowOpened data={this.props.subscriber} />}
 			</div>
 		);
 	}
@@ -159,6 +173,5 @@ export default connect<any, any, Props>(
     subscribers: state.subscribers
   }),
   ({
-    getSubscriber: actions.getSubscriber
   })
 )(SubscriberRow);

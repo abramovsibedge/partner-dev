@@ -1,6 +1,9 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
+import * as update from 'immutability-helper';
 import Modal from 'react-modal';
 import Signal from '../../../../functions/Signal';
+import * as actions from '../../../../reducers/subscriber/actions';
 
 import {
 	IconPen
@@ -19,8 +22,9 @@ import {
 	modifyTraffic
 } from '../../../../functions/subscribers';
 
-interface Parent {
-	subscriber: any
+interface Props {
+	data: any
+	setLimit?: (id: any, data: any) => void
 }
 
 interface State {
@@ -29,7 +33,7 @@ interface State {
 	modalObject: object,
 };
 
-class SubscriberSetLimit extends React.Component<Parent, State> {
+class SubscriberSetLimit extends React.Component<Props, State> {
 	constructor(props: any) {
 		super(props);
 
@@ -92,24 +96,30 @@ class SubscriberSetLimit extends React.Component<Parent, State> {
 		}
 
 		this.showModal(false);
-		modifyTraffic(this.state.subscriber.id, {traffic_limit: this.state.modalObject['limit'].value, reset: (this.state.modalObject['reset']?true:false)}).then((response) => {
-			if(response.result !== 'OK') {
-				// @todo handle error
-				return;
-			}
 
-			this.setState({
-				modalObject: {
-					limit: {
-						value: '',
-						valid: true
-					},
-					message: ''
-				}
-			});
+		this.props.setLimit(this.props.data.id, {
+			traffic_limit: this.state.modalObject['limit'].value,
+			reset: (this.state.modalObject['reset']?true:false)
+		})
 
-			Signal.dispatch('subscriberModified', {id: this.state.subscriber.id});
-		});
+		// modifyTraffic(this.state.subscriber.id, {traffic_limit: this.state.modalObject['limit'].value, reset: (this.state.modalObject['reset']?true:false)}).then((response) => {
+		// 	if(response.result !== 'OK') {
+		// 		// @todo handle error
+		// 		return;
+		// 	}
+		//
+		// 	this.setState({
+		// 		modalObject: {
+		// 			limit: {
+		// 				value: '',
+		// 				valid: true
+		// 			},
+		// 			message: ''
+		// 		}
+		// 	});
+		//
+		// 	// Signal.dispatch('subscriberModified', {id: this.state.subscriber.id});
+		// });
 	}
 
 	inputHandler(value: string, stateItem: string) {
@@ -181,4 +191,12 @@ class SubscriberSetLimit extends React.Component<Parent, State> {
 	}
 }
 
-export default SubscriberSetLimit;
+export default connect<any, any, Props>(
+	state => ({
+		subscribers: state.subscribers,
+		subscriber: state.subscriber
+	}),
+	({
+		setLimit: actions.setLimit
+	})
+)(SubscriberSetLimit);
