@@ -30,10 +30,12 @@ export const loadProjects = () => {
 };
 
 export const loadProjectItem = (id: string) => {
+  console.log('id', id);
   const countriesRequest = config.host + 'portal/project/countries?access_token=' + config.firebaseToken()+ '&publickey=' + id;
   const countries = axios(countriesRequest, { method: 'POST' })
       .then(response => response.data)
       .catch(error => {
+        console.log('1', error);
         throw (error.message);
       });
 
@@ -42,6 +44,7 @@ export const loadProjectItem = (id: string) => {
   const emails = axios(emailsRequest)
       .then(response => response.data)
       .catch(error => {
+        console.log('2', error);
         throw (error.message);
       });
 
@@ -50,6 +53,7 @@ export const loadProjectItem = (id: string) => {
   return Promise.all([countries, emails]).then(result => {
     combinedData["countries"] = result[0];
     combinedData["emails"] = result[1];
+    console.log(combinedData);
     return combinedData;
   });
 }

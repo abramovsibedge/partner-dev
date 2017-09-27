@@ -72,6 +72,7 @@ class Body extends React.Component<Props, State> {
 			projects
 		} = this.props;
 
+
 		return (
 			<section className="layout">
 				<header className="layout_head">

@@ -20,6 +20,7 @@ import {
 	IconClose,
 	IconDelete
 } from '../../../components/icons'
+
 import Spinner from '../../../components/spinner';
 
 import {
@@ -31,9 +32,14 @@ import {
 import {Button} from '../../../components/button';
 import {emailValidation} from '../../../utils';
 
+
+import * as actions from '../../../reducers/projects/actions';
+
 interface Props {
 	onUpdate: () => void
 	project: any
+  getProject: (id: string) => void
+  selectedProject: {}
 }
 
 interface State {
@@ -86,14 +92,7 @@ class ProjectItem extends React.Component<Props, State> {
     this.setState(update(this.state, {
 			selectedProjectId: {$set: id}
 		}));
-
-		loadProjectItem(id).then(result => {
-		  console.log('result', result);
-			this.setState(update(this.state, {
-				selectedProjectId: {$set: id},
-				selectedProject: {$set: result}
-			}));
-		})
+    this.props.getProject(id);
 	}
 
 	closeProject() {
@@ -197,17 +196,16 @@ class ProjectItem extends React.Component<Props, State> {
 	render() {
 		const {
 			selectedProjectId,
-			selectedProject,
 			deleteProjectModalState,
 			selectedProjectTab,
 			addUserObject,
 			addUserModalState,
-			deleteUserModalState
+			deleteUserModalState,
 		} = this.state;
-
 		const {
-			project
-		} = this.props;
+      project,
+      selectedProject
+    } = this.props;
 
 		return (
 			<div className={classNames("table_row", selectedProjectId === project.publickey && "table_row_open")}>
@@ -441,11 +439,11 @@ class ProjectItem extends React.Component<Props, State> {
 	}
 }
 
-export default connect<{}, {}, Props>(
+export default connect<any,any, any>(
     state => ({
-
+      selectedProject: state.projects.selectedProject
     }),
     ({
-
+      getProject: actions.getProject
     })
 )(ProjectItem);

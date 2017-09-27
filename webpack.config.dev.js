@@ -4,7 +4,7 @@ const rupture = require('rupture');
 const autoprefixer = require('autoprefixer');
 
 module.exports = {
-  devtool: 'inline-source-map',
+  devtool: 'eval',
 
   entry: {
     app: [

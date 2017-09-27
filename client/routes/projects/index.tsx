@@ -50,7 +50,6 @@ class Projects extends React.Component<Props, State> {
       loading,
       projects
 		} = this.props;
-
 		return (
 			<Dashboard current="projects">
 				<DashboardHeader>

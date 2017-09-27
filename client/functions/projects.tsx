@@ -14,7 +14,7 @@ export const loadProjectItem = (id: string) => {
 	const countries = axios(countriesRequest, { method: 'POST' })
       .then(response => response.data)
       .catch(error => {
-        console.log(error);
+        console.log('1', error);
       });
 
   const emailsRequest = config.host + 'portal/project/access?access_token=' + config.firebaseToken() + '&publickey=' + id;
@@ -22,7 +22,7 @@ export const loadProjectItem = (id: string) => {
 	const emails = axios(emailsRequest)
       .then(response => response.data)
       .catch(error => {
-        console.log(error);
+        console.log('2', error);
       });
 
 	const combinedData = {"countries":{},"emails":{}};
@@ -69,7 +69,7 @@ export const deleteUser = (project: string, email: string) => {
 };
 
 export const setVisibility = (project: string, country: string, visibility: boolean) => {
-	let request:string = config.host + 'portal/project/country?access_token=' + config.firebaseToken;
+	let request:string = config.host + 'portal/project/country?access_token=' + config.firebaseToken();
 	request += '&publickey=' + project;
 	request += '&country=' + country;
 	request += '&visibility=' + visibility;

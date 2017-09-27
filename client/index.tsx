@@ -25,7 +25,7 @@ const store: Store<any> = createStore(
         {
             promiseTypeSuffixes: ['LOADING', 'SUCCESS', 'ERROR']
         }
-	))
+	), logger)
 );
 
 
