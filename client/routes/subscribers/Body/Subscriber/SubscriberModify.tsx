@@ -1,5 +1,9 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
+import * as update from 'immutability-helper';
+
 import Modal from 'react-modal';
+import * as actions from '../../../../reducers/subscriber/actions';
 import Signal from '../../../../functions/Signal';
 
 import {
@@ -19,8 +23,9 @@ import {
 	modifySubscriber
 } from '../../../../functions/subscribers';
 
-interface Parent {
-	subscriber: any
+interface Props {
+	data: any
+	modifySubscriber?: (id: any, data: any) => void
 }
 
 interface State {
@@ -28,29 +33,29 @@ interface State {
 	showModal: boolean,
 	modalObject: object,
 	licencesList: any,
-};
+}
 
-class SubscriberModify extends React.Component<Parent, State> {
+class SubscriberModify extends React.Component<Props, State> {
 	constructor(props: any) {
 		super(props);
 
 		this.state = {
-			subscriber: props.subscriber,
+			subscriber: props.data,
 			showModal: false,
 			licencesList: [],
 			modalObject: {
 				extref: {
-					value: props.subscriber.extref,
+					value: props.data.extref,
 					valid: true,
 					check: new RegExp('^\\w+$')
 				},
 				licence: {
-					value: props.subscriber.bundle.id,
+					value: props.data.bundle.id,
 					valid: true,
 					check: new RegExp('^[0-9]+$')
 				},
 				name: {
-					value: props.subscriber.name,
+					value: props.data.name,
 					valid: true,
 					check: new RegExp('^\\w+$')
 				},
@@ -60,51 +65,47 @@ class SubscriberModify extends React.Component<Parent, State> {
 	}
 
 	componentDidMount() {
-		this.fetchLicence();
 	}
 
 	componentWillReceiveProps(props: any) {
-		this.setState({
-			subscriber: props.subscriber,
-			modalObject: {
-				extref: {
-					value: props.subscriber.extref,
-					valid: true,
-					check: new RegExp('^\\w+$')
-				},
-				licence: {
-					value: props.subscriber.bundle.id,
-					valid: true,
-					check: new RegExp('^[0-9]+$')
-				},
-				name: {
-					value: props.subscriber.name,
-					valid: true,
-					check: new RegExp('^\\w+$')
-				},
-				message: ''
-			}
-		});
+		console.log( props );
+		this.fetchLicence(props.subscribers.licenses);
+
+		// this.setState({
+		// 	subscriber: props.subscriber,
+		// 	modalObject: {
+		// 		extref: {
+		// 			value: props.subscriber.extref,
+		// 			valid: true,
+		// 			check: new RegExp('^\\w+$')
+		// 		},
+		// 		licence: {
+		// 			value: props.subscriber.bundle.id,
+		// 			valid: true,
+		// 			check: new RegExp('^[0-9]+$')
+		// 		},
+		// 		name: {
+		// 			value: props.subscriber.name,
+		// 			valid: true,
+		// 			check: new RegExp('^\\w+$')
+		// 		},
+		// 		message: ''
+		// 	}
+		// });
 	}
 
-	fetchLicence() {
-		getLicences().then((result) => {
-			if(!result || !result.result || result.result !== 'OK' || !result.licenses) {
-				return;
-			}
+	fetchLicence(licenses: any) {
+		let licenceList = [];
+		for(let k in licenses) {
+			licenceList.push(
+				{
+					value: licenses[k].id,
+					label: licenses[k].name
+				}
+			);
+		}
 
-			let licenceList = [];
-			for(let k in result.licenses) {
-				licenceList.push(
-					{
-						value: result.licenses[k].id,
-						label: result.licenses[k].name
-					}
-				);
-			}
-
-			this.setState({licencesList: licenceList});
-		});
+		this.setState({licencesList: licenceList});
 	}
 
 	showModal(state: boolean) {
@@ -138,37 +139,41 @@ class SubscriberModify extends React.Component<Parent, State> {
 			license_id: object['licence'].value,
 		};
 
-		modifySubscriber(this.state.subscriber.id, subscriber).then((response) => {
-			if(response.result !== 'OK') {
-				// @todo handle error
-				return;
-			}
+		this.props.modifySubscriber(this.state.subscriber.id, subscriber);
 
-			this.setState({
-				showModal: false,
-				modalObject: {
-					extref: {
-						value: subscriber.extref,
-						valid: true,
-						check: new RegExp('^\\w+$')
-					},
-					licence: {
-						value: subscriber['licence_id'],
-						valid: true,
-						check: new RegExp('^[0-9]+$')
-					},
-					name: {
-						value: subscriber.name,
-						valid: true,
-						check: new RegExp('^\\w+$')
-					},
-					message: ''
-				}
-			});
-
-			this.showModal(false);
-			Signal.dispatch('subscriberModified', {id: this.state.subscriber.id});
-		});
+		// modifySubscriber(this.state.subscriber.id, subscriber).then((response) => {
+		// 	if(response.result !== 'OK') {
+		// 		// @todo handle error
+		// 		return;
+		// 	}
+		//
+		// 	this.setState({
+		// 		showModal: false,
+		// 		modalObject: {
+		// 			extref: {
+		// 				value: subscriber.extref,
+		// 				valid: true,
+		// 				check: new RegExp('^\\w+$')
+		// 			},
+		// 			licence: {
+		// 				value: subscriber['licence_id'],
+		// 				valid: true,
+		// 				check: new RegExp('^[0-9]+$')
+		// 			},
+		// 			name: {
+		// 				value: subscriber.name,
+		// 				valid: true,
+		// 				check: new RegExp('^\\w+$')
+		// 			},
+		// 			message: ''
+		// 		}
+		// 	});
+		//
+		// 	this.showModal(false);
+		//
+		//
+		// 	// Signal.dispatch('subscriberModified', {id: this.state.subscriber.id});
+		// });
 	}
 
 	inputHandler(value: string, stateItem: string) {
@@ -236,4 +241,12 @@ class SubscriberModify extends React.Component<Parent, State> {
 	}
 }
 
-export default SubscriberModify;
+export default connect<any, any, Props>(
+	state => ({
+		subscribers: state.subscribers,
+		subscriber: state.subscriber
+	}),
+	({
+		modifySubscriber: actions.modifySubscriber
+	})
+)(SubscriberModify);

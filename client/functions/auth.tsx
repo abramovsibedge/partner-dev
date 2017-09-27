@@ -25,8 +25,10 @@ export const check = () => {
 };
 
 export const logOut = () => firebase.auth().signOut().then(() => {
-	// storage.remove('tokens');
-	window.location.replace("/");
+	storage.remove('firebase');
+	storage.remove('rest');
+	storage.remove('username');
+	window.location.replace("#/auth/signin");
 });
 
 export const signIn = (login: string, password: string) => {

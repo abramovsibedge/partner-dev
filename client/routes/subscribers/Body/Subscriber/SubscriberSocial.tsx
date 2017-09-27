@@ -1,19 +1,19 @@
 import * as React from 'react';
 
-interface Parent {
-	subscriber: any
+interface Props {
+	data: any
 }
 
 interface State {
 	subscriber: any
 };
 
-class SubscriberSocial extends React.Component<Parent, State> {
+class SubscriberSocial extends React.Component<Props, State> {
 	constructor(props: any) {
 		super(props);
 
 		this.state = {
-			subscriber: props.subscriber
+			subscriber: props.data
 		};
 	}
 

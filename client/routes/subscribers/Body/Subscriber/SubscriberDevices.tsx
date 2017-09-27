@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Modal from 'react-modal';
 import Loading from '../../Loading';
+import { connect } from 'react-redux';
+import * as actions from '../../../../reducers/subscriber/actions';
 
 import {
 	getDevices,
@@ -14,8 +16,10 @@ import {
 } from '../../../../components/icons'
 import {Button} from '../../../../components/button';
 
-interface Parent {
-	subscriber: any,
+interface Props {
+	subscriber?: any
+	data: any,
+	deleteDevice?: (id: any, params: any) => void
 }
 
 interface State {
@@ -23,14 +27,14 @@ interface State {
 	devices: any,
 	showModal: boolean,
 	loaded: boolean
-};
+}
 
-class SubscriberDevices extends React.Component<Parent, State> {
+class SubscriberDevices extends React.Component<Props, State> {
 	constructor(props: any) {
 		super(props);
 
 		this.state = {
-			subscriber: props.subscriber,
+			subscriber: props.data,
 			loaded: false,
 			devices: [],
 			showModal: false
@@ -41,46 +45,51 @@ class SubscriberDevices extends React.Component<Parent, State> {
 		this.getDevices();
 	}
 
-	componentWillReceiveProps(props: any) {
-		this.setState({
-			subscriber: props.subscriber,
-			loaded: false
-		});
-
-		this.getDevices();
-	}
+	// componentWillReceiveProps(props: any) {
+	// 	this.setState({
+	// 		subscriber: props.data,
+	// 		loaded: false
+	// 	});
+	//
+	// 	this.getDevices();
+	// }
 
 	getDevices() {
-		getDevices(this.state.subscriber.id).then((response) => {
-			/*response.devices = [
-				{
-					type: "Mobile",
-					device_id: 1359,
-					name: "Test mobile 1",
-					registration_time: 1504011677525,
-					connection_time: 1504111677525
-				},
-				{
-					type: "Mobile 2",
-					device_id: 18654,
-					name: "Test mobile 2",
-					registration_time: 1503011677525,
-					connection_time: 1503111677525
-				},
-				{
-					type: "Mobile",
-					device_id: 135987,
-					name: "Test mobile 3",
-					registration_time: 1502011677525,
-					connection_time: 1502111677525
-				}
-			]; */
-
-			this.setState({
-				loaded: true,
-				devices: response.devices
-			});
+		this.setState({
+			loaded: true,
+			devices: this.props.subscriber.devices
 		});
+
+		// getDevices(this.state.subscriber.id).then((response) => {
+		// 	/*response.devices = [
+		// 		{
+		// 			type: "Mobile",
+		// 			device_id: 1359,
+		// 			name: "Test mobile 1",
+		// 			registration_time: 1504011677525,
+		// 			connection_time: 1504111677525
+		// 		},
+		// 		{
+		// 			type: "Mobile 2",
+		// 			device_id: 18654,
+		// 			name: "Test mobile 2",
+		// 			registration_time: 1503011677525,
+		// 			connection_time: 1503111677525
+		// 		},
+		// 		{
+		// 			type: "Mobile",
+		// 			device_id: 135987,
+		// 			name: "Test mobile 3",
+		// 			registration_time: 1502011677525,
+		// 			connection_time: 1502111677525
+		// 		}
+		// 	]; */
+		//
+		// 	this.setState({
+		// 		loaded: true,
+		// 		devices: response.devices
+		// 	});
+		// });
 	}
 
 	showModal(state: boolean) {
@@ -94,9 +103,12 @@ class SubscriberDevices extends React.Component<Parent, State> {
 			loaded: false,
 			showModal: false
 		});
-		deleteDevice(this.state.subscriber.id, id).then(() => {
-			this.getDevices();
-		});
+
+		this.props.deleteDevice(this.props.data.id, id);
+
+		// deleteDevice(this.state.subscriber.id, id).then(() => {
+		// 	this.getDevices();
+		// });
 	}
 
 	render() {
@@ -204,4 +216,13 @@ class SubscriberDevices extends React.Component<Parent, State> {
 	}
 }
 
-export default SubscriberDevices;
+// export default SubscriberDevices;
+
+export default connect<any, any, Props>(
+	state => ({
+		subscriber: state.subscriber
+	}),
+	({
+		deleteDevice: actions.deleteDevice
+	})
+)(SubscriberDevices);

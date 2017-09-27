@@ -2,6 +2,9 @@ import * as React from 'react';
 import Loading from '../../Loading';
 import {Button} from "../../../../components/button/index";
 import Calendar from "./Calendar";
+import { connect } from 'react-redux';
+import * as model from '../../../../reducers/subscriber/model';
+import * as actions from '../../../../reducers/subscriber/actions';
 
 import {
 	IconPhone,
@@ -15,8 +18,11 @@ import {
 	getDevices
 } from '../../../../functions/subscribers';
 
-interface Parent {
-	subscriber: any
+interface Props {
+	data: any
+	subscriber?: model.subscriberModel
+	getSessions?: (id: any, data: any) => void
+	getDevices?: (data: any) => void
 }
 
 interface State {
@@ -31,13 +37,13 @@ interface State {
 	showDevicesDropdown: boolean
 }
 
-class SubscriberSessions extends React.Component<Parent, State> {
+class SubscriberSessions extends React.Component<Props, State> {
 	time: any;
 	constructor(props: any) {
 		super(props);
 
 		this.state = {
-			subscriber: props.subscriber,
+			subscriber: props.data,
 			sessions: [],
 			loaded: false,
 			tx: 0,
@@ -49,35 +55,45 @@ class SubscriberSessions extends React.Component<Parent, State> {
 		};
 	}
 
-	componentDidMount() {
-		getDevices(this.state.subscriber.id).then((response) => {
-			/*response.devices = [
-				{
-					type: "Mobile",
-					device_id: 1359,
-					name: "Test mobile 1",
-					registration_time: 1504011677525,
-					connection_time: 1504111677525
-				},
-				{
-					type: "Mobile 2",
-					device_id: 18654,
-					name: "Test mobile 2",
-					registration_time: 1503011677525,
-					connection_time: 1503111677525
-				},
-				{
-					type: "Mobile",
-					device_id: 135987,
-					name: "Test mobile 3",
-					registration_time: 1502011677525,
-					connection_time: 1502111677525
-				}
-			];*/
+	componentWillMount() {
+		this.props.getDevices(this.props.data.id);
 
-			this.setState({
-				devices: response.devices
-			});
+		// getDevices(this.state.subscriber.id).then((response) => {
+		// 	/*response.devices = [
+		// 		{
+		// 			type: "Mobile",
+		// 			device_id: 1359,
+		// 			name: "Test mobile 1",
+		// 			registration_time: 1504011677525,
+		// 			connection_time: 1504111677525
+		// 		},
+		// 		{
+		// 			type: "Mobile 2",
+		// 			device_id: 18654,
+		// 			name: "Test mobile 2",
+		// 			registration_time: 1503011677525,
+		// 			connection_time: 1503111677525
+		// 		},
+		// 		{
+		// 			type: "Mobile",
+		// 			device_id: 135987,
+		// 			name: "Test mobile 3",
+		// 			registration_time: 1502011677525,
+		// 			connection_time: 1502111677525
+		// 		}
+		// 	];*/
+		//
+		// 	this.setState({
+		// 		devices: response.devices
+		// 	});
+		// });
+	}
+
+	componentWillReceiveProps(nextprop: any) {
+		this.setState({
+			devices: nextprop.subscriber.devices,
+			sessions: nextprop.subscriber.sessions,
+			loaded: true
 		});
 	}
 
@@ -85,58 +101,61 @@ class SubscriberSessions extends React.Component<Parent, State> {
 		this.time = time;
 
 		this.setState({loaded: false});
-		getSessions(this.state.subscriber.id, {start_time: this.time.from[0], end_time: this.time.till[0]}).then(response => {
-			/*response.sessions = [
-				{
-					"user_id": 123,
-					"device_id": "123213",
-					"server": "asdkasd",
-					"start_time": 123761723123,
-					"end_time": 123762723123,
-					"client_address": "asdasdasljdk",
-					"internal_address": "lakidssa;ld;s'ad",
-					"tx": 12323388,
-					"rx": 6863513
-				},
-				{
-					"user_id": 123,
-					"device_id": "123213",
-					"server": "asdkasd",
-					"start_time": 123761723123,
-					"end_time": 123762723123,
-					"client_address": "asdasdasljdk",
-					"internal_address": "lakidssa;ld;s'ad",
-					"tx": 867432,
-					"rx": 16565232
-				},
-				{
-					"user_id": 123,
-					"device_id": "123213",
-					"server": "asdkasd",
-					"start_time": 123761723123,
-					"end_time": 123762723123,
-					"client_address": "asdasdasljdk",
-					"internal_address": "lakidssa;ld;s'ad",
-					"tx": 1561321321,
-					"rx": 6874321
-				}
-			];*/
 
-			let tx = 0, rx = 0;
+		this.props.getSessions(this.props.data.id, {start_time: this.time.from[0], end_time: this.time.till[0]});
 
-			for(let k in response.sessions) {
-				tx += response.sessions[k].tx;
-				rx += response.sessions[k].rx;
-			}
-
-			this.setState({
-				loaded: true,
-				sessions: response.sessions,
-				tx: tx,
-				rx: rx,
-				size: response.sessions.length
-			});
-		});
+		// getSessions(this.state.subscriber.id, {start_time: this.time.from[0], end_time: this.time.till[0]}).then(response => {
+		// 	/*response.sessions = [
+		// 		{
+		// 			"user_id": 123,
+		// 			"device_id": "123213",
+		// 			"server": "asdkasd",
+		// 			"start_time": 123761723123,
+		// 			"end_time": 123762723123,
+		// 			"client_address": "asdasdasljdk",
+		// 			"internal_address": "lakidssa;ld;s'ad",
+		// 			"tx": 12323388,
+		// 			"rx": 6863513
+		// 		},
+		// 		{
+		// 			"user_id": 123,
+		// 			"device_id": "123213",
+		// 			"server": "asdkasd",
+		// 			"start_time": 123761723123,
+		// 			"end_time": 123762723123,
+		// 			"client_address": "asdasdasljdk",
+		// 			"internal_address": "lakidssa;ld;s'ad",
+		// 			"tx": 867432,
+		// 			"rx": 16565232
+		// 		},
+		// 		{
+		// 			"user_id": 123,
+		// 			"device_id": "123213",
+		// 			"server": "asdkasd",
+		// 			"start_time": 123761723123,
+		// 			"end_time": 123762723123,
+		// 			"client_address": "asdasdasljdk",
+		// 			"internal_address": "lakidssa;ld;s'ad",
+		// 			"tx": 1561321321,
+		// 			"rx": 6874321
+		// 		}
+		// 	];*/
+		//
+		// 	let tx = 0, rx = 0;
+		//
+		// 	for(let k in response.sessions) {
+		// 		tx += response.sessions[k].tx;
+		// 		rx += response.sessions[k].rx;
+		// 	}
+		//
+		// 	this.setState({
+		// 		loaded: true,
+		// 		sessions: response.sessions,
+		// 		tx: tx,
+		// 		rx: rx,
+		// 		size: response.sessions.length
+		// 	});
+		// });
 	}
 
 	render() {
@@ -144,7 +163,7 @@ class SubscriberSessions extends React.Component<Parent, State> {
 			<div className="subscriber_body_content">
 				<div className="session_filter">
 					<Calendar
-						updateSearch={this.updateSearch.bind(this)}
+						updateSearch={(time: any) => this.updateSearch(time)}
 						calendarOpened={() => {
 							if(this.state.showDevicesDropdown) this.setState({showDevicesDropdown: false});
 						}}
@@ -299,4 +318,14 @@ class SubscriberSessions extends React.Component<Parent, State> {
 	}
 }
 
-export default SubscriberSessions;
+// export default SubscriberSessions;
+
+export default connect<any, any, Props>(
+	state => ({
+		subscriber: state.subscriber
+	}),
+	({
+		getSessions: actions.getSessions,
+		getDevices: actions.getDevices
+	})
+)(SubscriberSessions);

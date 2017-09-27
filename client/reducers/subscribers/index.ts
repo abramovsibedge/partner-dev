@@ -7,7 +7,8 @@ const initialState: IState = <subscribersModel>{
 	activeProject: null,
 	list: [],
 	licenses: [],
-	addSubscriberStatus: null
+	addSubscriberStatus: null,
+	subscriber: null
 };
 
 export default handleActions<any>({

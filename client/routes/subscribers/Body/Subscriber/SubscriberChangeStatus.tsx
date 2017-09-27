@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Modal from 'react-modal';
 import Signal from '../../../../functions/Signal';
+import { connect } from 'react-redux';
+import * as actions from '../../../../reducers/subscriber/actions';
 
 import {
 	IconClose,
@@ -13,8 +15,9 @@ import {
 	modifySubscriber
 } from '../../../../functions/subscribers';
 
-interface Parent {
-	subscriber: any
+interface Props {
+	data: any
+	modifySubscriber?: (id: any, data: any) => void
 };
 
 interface State {
@@ -22,7 +25,7 @@ interface State {
 	subscriber: any
 };
 
-class SubscriberChangeStatus extends React.Component<Parent, State> {
+class SubscriberChangeStatus extends React.Component<Props, State> {
 	constructor(props: any) {
 		super(props);
 
@@ -42,11 +45,13 @@ class SubscriberChangeStatus extends React.Component<Parent, State> {
 
 	changeStatus(status: number) {
 		this.setState({showModal: false});
-		modifySubscriber(this.state.subscriber.id, {condition: status}).then(response => {
-			if(response.result === 'OK') {
-				Signal.dispatch('subscriberModified', {id: this.state.subscriber.id});
-			}
-		});
+
+		this.props.modifySubscriber(this.props.data.id, {condition: status});
+		// modifySubscriber(this.state.subscriber.id, {condition: status}).then(response => {
+		// 	if(response.result === 'OK') {
+		// 		Signal.dispatch('subscriberModified', {id: this.state.subscriber.id});
+		// 	}
+		// });
 	}
 
 	render() {
@@ -92,4 +97,12 @@ class SubscriberChangeStatus extends React.Component<Parent, State> {
 	}
 }
 
-export default SubscriberChangeStatus;
+export default connect<any, any, Props>(
+	state => ({
+		subscribers: state.subscribers,
+		subscriber: state.subscriber
+	}),
+	({
+		modifySubscriber: actions.modifySubscriber
+	})
+)(SubscriberChangeStatus);

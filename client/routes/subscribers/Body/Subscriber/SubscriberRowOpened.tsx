@@ -1,4 +1,9 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
+import * as update from 'immutability-helper';
+
+import * as model from '../../../../reducers/subscriber/model';
+import * as actions from '../../../../reducers/subscriber/actions';
 
 import Spinner from '../../../../components/spinner';
 
@@ -17,20 +22,20 @@ import SubscriberPurchases    from './SubscriberPurchases';
 import SubscriberChangeStatus from './SubscriberChangeStatus';
 
 
-interface Parent {
-	isOpened: boolean,
-	subscriber: any
+interface Props {
+	getTraffic?: (data: any) => void
+	data: any
+	subscriber?: any
 }
 
 interface State {
 	tab: string,
 	trafic: any,
 	isLoaded: boolean,
-	subscriber: any,
-	isOpened: boolean
-};
+	subscriber: any
+}
 
-class SubscriberRowOpened extends React.Component<Parent, State> {
+class SubscriberRowOpened extends React.Component<Props, State> {
 	constructor(props: any) {
 		super(props);
 
@@ -38,37 +43,52 @@ class SubscriberRowOpened extends React.Component<Parent, State> {
 			tab: 'sessions',
 			trafic: {},
 			isLoaded: false,
-			subscriber: props.subscriber,
-			isOpened: props.isOpened
+			subscriber: {}
 		};
 
-		if(props.isOpened) this.loadInfo(props.subscriber.id);
+		// if(props.isOpened) this.loadInfo(props.subscriber.id);
 	}
 
-	componentWillReceiveProps(props: any) {
-		this.setState({
-			isOpened: props.isOpened,
-			subscriber: props.subscriber,
-		});
+	componentWillMount() {
+		this.loadInfo(this.props.data.id);
+	}
 
-		if(props.isOpened) this.loadInfo(props.subscriber.id);
+	componentWillReceiveProps(nextprops: any) {
+		if (Object.keys(this.state.trafic).length === 0) {
+			this.loadInfo(this.props.data.id)
+		}
+
+		if (nextprops.subscriber.data) {
+			this.setState(update(this.state, {
+				trafic: {$set: nextprops.subscriber.data}
+			}));
+		}
+
+		// console.log( nextprops );
+		// this.setState({
+		// 	isOpened: nextprops.isOpened
+		// });
+		//
+		// if(props.isOpened) this.loadInfo(props.id);
 	}
 
 	loadInfo(id: number) {
-		getTraffic(id).then(trafic => {
-			trafic = {
-				used:      trafic['traffic_used']      ? trafic['traffic_used']     :0,
-				start:     trafic['traffic_start']     ? trafic['traffic_start']    :0,
-				limit:     trafic['traffic_limit']     ? trafic['traffic_limit']    :0,
-				remaining: trafic['traffic_remaining'] ? trafic['traffic_remaining']:0,
-				unlimited: trafic['traffic_unlimited']
-			};
+		this.props.getTraffic(id);
 
-			this.setState({
-				isLoaded: true,
-				trafic: trafic
-			});
-		});
+		// getTraffic(id).then(trafic => {
+		// 	trafic = {
+		// 		used:      trafic['traffic_used']      ? trafic['traffic_used']     :0,
+		// 		start:     trafic['traffic_start']     ? trafic['traffic_start']    :0,
+		// 		limit:     trafic['traffic_limit']     ? trafic['traffic_limit']    :0,
+		// 		remaining: trafic['traffic_remaining'] ? trafic['traffic_remaining']:0,
+		// 		unlimited: trafic['traffic_unlimited']
+		// 	};
+		//
+		// 	this.setState({
+		// 		isLoaded: true,
+		// 		trafic: trafic
+		// 	});
+		// });
 	}
 
 	tabSwitcher(tab: string) {
@@ -76,8 +96,9 @@ class SubscriberRowOpened extends React.Component<Parent, State> {
 	}
 
 	render() {
-		if(!this.state.isOpened) return <div className="table_row_content is-loading" />;
-		if(!this.state.isLoaded) return <div className="table_row_content is-loading"><Spinner width="65" height="65" strokeWidth="6" /></div>;
+		if( Object.keys(this.state.trafic).length === 0) return (
+			<div className="table_row_content is-loading"><Spinner width="65" height="65" strokeWidth="6" /></div>
+		);
 
 		return (
 			<div className="table_row_content">
@@ -95,16 +116,16 @@ class SubscriberRowOpened extends React.Component<Parent, State> {
 
 		switch (this.state.tab) {
 			case 'sessions':
-				content =  <SubscriberSessions subscriber={this.state.subscriber}/>;
+				content =  <SubscriberSessions data={this.props.data}/>;
 				break;
 			case 'devices':
-				content =  <SubscriberDevices subscriber={this.state.subscriber}/>;
+				content =  <SubscriberDevices data={this.props.data}/>;
 				break;
 			case 'purchases':
-				content =  <SubscriberPurchases subscriber={this.state.subscriber}/>;
+				content =  <SubscriberPurchases data={this.props.data}/>;
 				break;
 			case 'social':
-				content =  <SubscriberSocial  subscriber={this.state.subscriber}/>;
+				content =  <SubscriberSocial data={this.props.data}/>;
 				break;
 		}
 
@@ -139,18 +160,18 @@ class SubscriberRowOpened extends React.Component<Parent, State> {
 					{contentButtons}
 				</div>
 				<div className="subscriber_manage">
-					<SubscriberModify subscriber={this.state.subscriber} />
-					<SubscriberSetLimit subscriber={this.state.subscriber} />
-					<SubscriberChangeStatus subscriber={this.state.subscriber} />
+					<SubscriberModify data={this.props.data} />
+					<SubscriberSetLimit data={this.props.data} />
+					<SubscriberChangeStatus data={this.props.data} />
 				</div>
 			</div>
 		);
 	}
 
 	renderTrafic() {
-		let free = (this.state.subscriber.purchases.length===0);
+		let free = (this.props.data.purchases.length===0);
 
-		if(this.state.trafic.unlimited) {
+		if(this.state.trafic.traffic_unlimited) {
 			return (
 				<div className="subscriber_traffic">
 					<table>
@@ -177,24 +198,24 @@ class SubscriberRowOpened extends React.Component<Parent, State> {
 			<div className="subscriber_traffic">
 				<table>
 					<thead>
-					<tr>
-						<th>Traffic unlimited</th>
-						<th>Traffic start</th>
-						<th>Traffic used</th>
-						<th>Traffix remaining</th>
-						<th>Traffic limit</th>
-						<th>Purchases</th>
-					</tr>
+						<tr>
+							<th>Traffic unlimited</th>
+							<th>Traffic start</th>
+							<th>Traffic used</th>
+							<th>Traffix remaining</th>
+							<th>Traffic limit</th>
+							<th>Purchases</th>
+						</tr>
 					</thead>
 					<tbody>
-					<tr>
-						<td>false</td>
-						<td>{dateString(this.state.trafic.start)} </td>
-						<td>{byteConvert(this.state.trafic.used)}</td>
-						<td>{byteConvert(this.state.trafic.remaining)}</td>
-						<td>{byteConvert(this.state.trafic.limit)}</td>
-						<td><span className={(free ? 'table_disable' : 'table_enable')}>{(free ? 'Free' : 'Not free')}</span></td>
-					</tr>
+						<tr>
+							<td>false</td>
+							<td>{dateString(this.state.trafic.start)} </td>
+							<td>{byteConvert(this.state.trafic.used)}</td>
+							<td>{byteConvert(this.state.trafic.remaining)}</td>
+							<td>{byteConvert(this.state.trafic.limit)}</td>
+							<td><span className={(free ? 'table_disable' : 'table_enable')}>{(free ? 'Free' : 'Not free')}</span></td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
@@ -202,4 +223,11 @@ class SubscriberRowOpened extends React.Component<Parent, State> {
 	}
 }
 
-export default SubscriberRowOpened;
+export default connect<any, any, Props>(
+	state => ({
+		subscriber: state.subscriber
+	}),
+	({
+		getTraffic: actions.getTraffic
+	})
+)(SubscriberRowOpened);
