@@ -1,5 +1,7 @@
 export class projectsModel {
-	list: any;
+  list?: any;
+  selectedProject?: {};
+  loading?: boolean
 }
 
 export type IPojects = projectsModel;

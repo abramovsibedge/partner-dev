@@ -10,11 +10,20 @@ export const loadProjects = () => {
 };
 
 export const loadProjectItem = (id: string) => {
-	const countriesRequest = config.host + 'portal/project/countries?access_token=' + config.firebaseToken+ '&publickey=' + id;
-	const countries = axios(countriesRequest, { method: 'POST' }).then(response => response.data);
+	const countriesRequest = config.host + 'portal/project/countries?access_token=' + config.firebaseToken()+ '&publickey=' + id;
+	const countries = axios(countriesRequest, { method: 'POST' })
+      .then(response => response.data)
+      .catch(error => {
+        console.log(error);
+      });
 
-	const emailsRequest = config.host + 'portal/project/access?access_token=' + config.firebaseToken + '&publickey=' + id;
-	const emails = axios(emailsRequest).then(response => response.data);
+  const emailsRequest = config.host + 'portal/project/access?access_token=' + config.firebaseToken() + '&publickey=' + id;
+
+	const emails = axios(emailsRequest)
+      .then(response => response.data)
+      .catch(error => {
+        console.log(error);
+      });
 
 	const combinedData = {"countries":{},"emails":{}};
 

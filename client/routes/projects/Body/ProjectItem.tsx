@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as update from 'immutability-helper';
 import Modal from 'react-modal';
+import { connect } from 'react-redux';
 import * as classNames from 'classnames';
 
 import '../../../static/scss/components/modal.scss';
@@ -82,11 +83,12 @@ class ProjectItem extends React.Component<Props, State> {
 	}
 
 	openProject(id: string) {
-		this.setState(update(this.state, {
+    this.setState(update(this.state, {
 			selectedProjectId: {$set: id}
 		}));
 
 		loadProjectItem(id).then(result => {
+		  console.log('result', result);
 			this.setState(update(this.state, {
 				selectedProjectId: {$set: id},
 				selectedProject: {$set: result}
@@ -439,4 +441,11 @@ class ProjectItem extends React.Component<Props, State> {
 	}
 }
 
-export default ProjectItem;
+export default connect<{}, {}, Props>(
+    state => ({
+
+    }),
+    ({
+
+    })
+)(ProjectItem);

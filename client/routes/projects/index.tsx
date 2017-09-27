@@ -1,8 +1,7 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import * as update from 'immutability-helper';
-import {storageHelper} from '../../utils';
-
-const storage = new storageHelper;
+import { hashHistory } from 'react-router';
 
 import Dashboard from '../../components/dashboard';
 import DashboardHeader from '../../components/dashboard/dashboardHeader';
@@ -11,44 +10,33 @@ import Header from './Header';
 import Body from './Body';
 import {AuthMessage} from '../auth/messages';
 
-import {loadProjects} from '../../functions/projects';
-import {check} from '../../functions/auth';
+import { getProjects } from '../../reducers/projects/actions';
+import {
+  checkAuth
+} from '../../utils';
 
 import '../../static/scss/routes/projects.scss';
 
-interface State {
-	loading: boolean,
-	projects: any
+interface Props {
+  projects: any;
+  loadProjects: () => void;
+  loading: boolean;
 }
+interface State {}
 
-export class Projects extends React.Component<{}, State> {
+class Projects extends React.Component<Props, State> {
 	constructor(props: any) {
 		super(props);
-
-		this.state = {
-			loading: true,
-			projects: []
-		}
+		this.state = {}
 	}
 
 	componentDidMount() {
-		loadProjects()
-			.then((result) => {
-				if (result.result !== "OK") {
-					if (result.result === "NOT_AUTHORIZED") {
-						console.log( 123 );
-						// storage.remove('tokens');
-					}
-				}
-
-				this.setState(update(this.state, {
-					projects: {$set: result.projects},
-					loading: {$set: false},
-				}));
-			})
-			.catch((error) => {
-				console.log( error );
-			})
+    if (!checkAuth()) {
+      hashHistory.push('/auth/signin');
+      return false;
+    } else {
+      this.props.loadProjects();
+    }
 	}
 
 	reloadProjects = () => {
@@ -59,19 +47,29 @@ export class Projects extends React.Component<{}, State> {
 
 	render() {
 		const {
-			loading,
-			projects
-		} = this.state;
+      loading,
+      projects
+		} = this.props;
 
-		return (<div>
-				{!check() ? <AuthMessage isSigned={!check()} /> : <Dashboard current="projects">
-					<DashboardHeader>
-						<Header onUpdate={() => this.reloadProjects()} />
-					</DashboardHeader>
-					{loading && <Loading />}
-					{!loading && <Body projects={projects} onUpdate={() => this.reloadProjects()} />}
-				</Dashboard>}
-			</div>
+		return (
+			<Dashboard current="projects">
+				<DashboardHeader>
+					<Header onUpdate={() => this.reloadProjects()} />
+				</DashboardHeader>
+				{loading && <Loading />}
+				{!loading && <Body projects={projects} onUpdate={() => this.reloadProjects()} />}
+			</Dashboard>
 		);
 	}
 }
+
+
+export default connect(
+    state => ({
+      projects: state.projects.list,
+      loading: state.projects.loading,
+    }),
+    ({
+      loadProjects: getProjects,
+    })
+)(Projects);

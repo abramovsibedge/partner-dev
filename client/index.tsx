@@ -20,8 +20,7 @@ const logger = createLogger({duration: true});
 const persistedstate = loadState();
 
 const store: Store<any> = createStore(
-	rootReducer,
-    persistedstate,
+	rootReducer, persistedstate,
 	applyMiddleware(promiseMiddleware(
         {
             promiseTypeSuffixes: ['LOADING', 'SUCCESS', 'ERROR']
