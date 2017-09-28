@@ -40,6 +40,8 @@ interface Props {
 	project: any
   getProject: (id: string) => void
   selectedProject: {}
+  changeVisibility: (project: string, country: string, visibility: boolean) => void
+  status_set_visibility: boolean
 }
 
 interface State {
@@ -47,7 +49,6 @@ interface State {
 	addUserModalState: boolean
 	addUserObject: object
 	deleteUserModalState: boolean
-	loading: boolean
 	selectedProjectId: string
 	selectedProject: object
 	selectedProjectTab: string
@@ -66,12 +67,22 @@ class ProjectItem extends React.Component<Props, State> {
 				message: ''
 			},
 			deleteUserModalState: false,
-			loading: true,
 			selectedProjectId: '',
 			selectedProject: {},
-			selectedProjectTab: 'vpn-servers'
+			selectedProjectTab: 'vpn-servers',
 		}
 	}
+
+	componentWillReceiveProps(nextProps: any) {
+    if (nextProps.selectedProject
+      && nextProps.selectedProject["countries"]
+      && nextProps.selectedProject["emails"]
+      && nextProps.selectedProject["id"] == this.props.project.publickey
+    ) {
+      this.setState({selectedProject: nextProps.selectedProject});
+    }
+
+  }
 
 	showDeleteProject(value: boolean) {
 		this.setState(update(this.state, {
@@ -109,14 +120,7 @@ class ProjectItem extends React.Component<Props, State> {
 	}
 
 	setVisibility(project: string, country: string, visibility: boolean) {
-		setVisibility(project, country, visibility).then(() => {
-			loadProjectItem(project).then(result => {
-				this.setState(update(this.state, {
-					selectedProjectId: {$set: project},
-					selectedProject: {$set: result}
-				}));
-			})
-		});
+	  this.props.changeVisibility(project, country, visibility);
 	}
 
 	showAddUser(value: boolean) {
@@ -201,10 +205,10 @@ class ProjectItem extends React.Component<Props, State> {
 			addUserObject,
 			addUserModalState,
 			deleteUserModalState,
+      selectedProject
 		} = this.state;
 		const {
       project,
-      selectedProject
     } = this.props;
 
 		return (
@@ -223,9 +227,11 @@ class ProjectItem extends React.Component<Props, State> {
 				<Button type="button" className="project_close" onClick={() => this.closeProject()}>
 					<IconClose width="24" height="24"/>
 				</Button>
-				<div className={classNames("table_row_content", Object.keys(selectedProject).length === 0 && "is-loading")}>
+
+        <div className={classNames("table_row_content", Object.keys(selectedProject).length === 0 && "is-loading")}>
+
 					{selectedProjectId === project.publickey && Object.keys(selectedProject).length === 0
-					&& <Spinner width="65" height="65" strokeWidth="6"/>}
+          && <Spinner width="65" height="65" strokeWidth="6"/>}
 
 					{selectedProjectId === project.publickey && Object.keys(selectedProject).length > 0
 					&& <div className="project_pane_content">
@@ -434,6 +440,7 @@ class ProjectItem extends React.Component<Props, State> {
 						</div>
 					</div>}
 				</div>
+
 			</div>
 		);
 	}
@@ -441,9 +448,12 @@ class ProjectItem extends React.Component<Props, State> {
 
 export default connect<any,any, any>(
     state => ({
-      selectedProject: state.projects.selectedProject
+      selectedProject: state.projects.selectedProject,
+      status_set_visibility: state.projects.status_set_visibility,
+      loadingProject: state.projects.loadingProject,
     }),
     ({
-      getProject: actions.getProject
+      getProject: actions.getProject,
+      changeVisibility: actions.changeVisibility,
     })
 )(ProjectItem);

@@ -6,7 +6,8 @@ import * as types from './constants';
 const initialState: IPojects = <projectsModel>{
   list: [],
   loading: true,
-  selectedProject: {}
+  selectedProject: {},
+  status_set_visibility: false,
 };
 
 export default handleActions<any>({
@@ -34,10 +35,26 @@ export default handleActions<any>({
     return {
       ...state,
       selectedProject: action.payload,
-      loading: false
     };
   },
 
-  
+  [`${types.SET_VISIBILITY}_LOADING`] : (state: IPojects, action: Action<string>) : IPojects => {
+    return {
+      ...state,
+      status_set_visibility: false,
+    };
+  },
+  [`${types.SET_VISIBILITY}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
+    return {
+      ...state,
+      status_set_visibility: true,
+    };
+  },
+    [`${types.SET_VISIBILITY}_ERROR`] : (state: IPojects, action: Action<string>) : IPojects => {
+  return {
+    ...state,
+    status_set_visibility: false,
+  };
+},
 
 }, initialState);

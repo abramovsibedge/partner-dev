@@ -25,17 +25,15 @@ export const loadProjects = () => {
         return false;
 			}
 
-      return error;
+      throw (error.message);
 		});
 };
 
 export const loadProjectItem = (id: string) => {
-  console.log('id', id);
   const countriesRequest = config.host + 'portal/project/countries?access_token=' + config.firebaseToken()+ '&publickey=' + id;
   const countries = axios(countriesRequest, { method: 'POST' })
       .then(response => response.data)
       .catch(error => {
-        console.log('1', error);
         throw (error.message);
       });
 
@@ -44,7 +42,6 @@ export const loadProjectItem = (id: string) => {
   const emails = axios(emailsRequest)
       .then(response => response.data)
       .catch(error => {
-        console.log('2', error);
         throw (error.message);
       });
 
@@ -53,10 +50,27 @@ export const loadProjectItem = (id: string) => {
   return Promise.all([countries, emails]).then(result => {
     combinedData["countries"] = result[0];
     combinedData["emails"] = result[1];
-    console.log(combinedData);
+    combinedData["id"] = id;
     return combinedData;
   });
 }
+
+
+export const setVisibility = (project: string, country: string, visibility: boolean) => {
+  let request:string = config.host + 'portal/project/country?access_token=' + config.firebaseToken();
+  request += '&publickey=' + project;
+  request += '&country=' + country;
+  request += '&visibility=' + visibility;
+
+  return axios(request, { method: 'PUT' })
+      .then(response => {
+        console.log('response', response);
+        response.data
+      })
+      .catch((error: any) => {
+        throw (error.message);
+      });
+};
 
 
 export const getProjects = ReduxActions.createAction<any, projectsModel>(
@@ -68,3 +82,9 @@ export const getProject = ReduxActions.createAction<any, string>(
     types.LOAD_PROJECT,
     (id: string) => loadProjectItem(id)
 );
+
+export const changeVisibility = ReduxActions.createAction<any, string, string, boolean>(
+    types.SET_VISIBILITY,
+    (project: string, country: string, visibility: boolean) => setVisibility(project, country, visibility)
+);
+

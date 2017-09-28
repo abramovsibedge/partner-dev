@@ -21,6 +21,7 @@ interface Props {
   projects: any;
   loadProjects: () => void;
   loading: boolean;
+  status_set_visibility: boolean;
 }
 interface State {}
 
