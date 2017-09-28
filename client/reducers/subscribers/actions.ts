@@ -1,4 +1,8 @@
 import * as firebase from 'firebase';
+
+import {Action, ActionCreator, Dispatch} from 'redux';
+import {ThunkAction} from 'redux-thunk';
+
 import * as ReduxActions from "redux-actions";
 import * as types from './constants';
 
@@ -8,7 +12,7 @@ const storage = new storageHelper;
 import axios from 'axios';
 import config from '../../config';
 
-import { subscribersModel } from './model';
+import { IState, subscribersModel } from './model';
 
 const logIn = async function(project: any) {
 	let request: string = config.host + 'partner/login?access_token=' + config.firebaseToken();
@@ -109,6 +113,53 @@ const addSubscriber = ReduxActions.createAction<any, any>(
 	types.ADD_SUBSCRIBER,
 	(data: any) => addNewSubscriber(data)
 );
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+
+
+// let test = async () => {
+// 	console.log(123213);
+// };
+//
+//
+// const reduxAction: ActionCreator<Action> = (text: string) => {
+//   return {
+//     type: 'qqq',
+//     text
+//   };
+// };
+//
+// const asyncThinkAction: ActionCreator<
+//   ThunkAction<Promise<Action>, IState, void>
+//   > = () => {
+//   return async (dispatch: Dispatch<IState>): Promise<Action> => {
+//     try {
+//       const text = await test();
+//       return dispatch({
+//         type: 'qqq',
+//         text
+//       });
+//     } catch (e) {}
+//   };
+// };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export {
 	getLicenses,
