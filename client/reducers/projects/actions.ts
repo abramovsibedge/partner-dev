@@ -71,7 +71,7 @@ const setVisibility = (project: string, country: string, visibility: boolean) =>
 };
 
 const deletePr = (item: object) => {
-  let request:string = config.host + 'portal/project?access_token=' + config.firebaseToken;
+  let request:string = config.host + 'portal/project?access_token=' + config.firebaseToken();
   request += '&publickey=' + item['publickey'];
   request += '&privatekey=' + item['privatekey'];
 
@@ -79,7 +79,7 @@ const deletePr = (item: object) => {
 };
 
 const addUser = (project: string, email: string) => {
-  let request:string = config.host + 'portal/project/access?access_token=' + config.firebaseToken;
+  let request:string = config.host + 'portal/project/access?access_token=' + config.firebaseToken();
   request += '&publickey=' + project;
   request += '&email=' + email;
 
@@ -87,7 +87,7 @@ const addUser = (project: string, email: string) => {
 };
 
 const deleteUser = (project: string, email: string) => {
-  let request:string = config.host + 'portal/project/access?access_token=' + config.firebaseToken;
+  let request:string = config.host + 'portal/project/access?access_token=' + config.firebaseToken();
   request += '&publickey=' + project;
   request += '&email=' + email;
 
@@ -95,7 +95,7 @@ const deleteUser = (project: string, email: string) => {
 };
 
 const addProject = (data: object) => {
-  let request:string = config.host + 'portal/project?access_token=' + config.firebaseToken;
+  let request:string = config.host + 'portal/project?access_token=' + config.firebaseToken();
   request += '&publickey=' + data['public_key'];
   request += '&privatekey=' + data['private_key'];
   request += '&description=' + data['description'];

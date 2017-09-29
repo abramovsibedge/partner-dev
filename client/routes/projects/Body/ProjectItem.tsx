@@ -438,7 +438,7 @@ class ProjectItem extends React.Component<Props, State> {
 	}
 }
 
-export default connect<any,any, any>(
+export default connect<any, any, any>(
     state => ({
       selectedProject: state.projects.selectedProject,
       update_project: state.projects.update_project
