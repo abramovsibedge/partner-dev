@@ -17,7 +17,8 @@ interface State {
 	loaded: boolean,
 	page: string,
 	navigation: string,
-	article: any
+	article: any,
+	iframe: boolean
 }
 
 export class Article extends React.Component<{}, State> {
@@ -28,7 +29,8 @@ export class Article extends React.Component<{}, State> {
 			loaded: false,
 			page: '',
 			navigation: '',
-			article: {}
+			article: {},
+			iframe: false
 		};
 	}
 
@@ -46,6 +48,14 @@ export class Article extends React.Component<{}, State> {
 	}
 
 	loadArticle(article: any) {
+		if(article.iframe) {
+			return this.setState({
+				loaded: true,
+				page: article.url,
+				iframe: true,
+				article: article
+			});
+		}
 		getArticle(article.url).then((content: string) => {
 			let [page, navigation] = this.parseContent(content)
 
@@ -57,13 +67,6 @@ export class Article extends React.Component<{}, State> {
 			});
 		});
 	}
-
-	/*
-	heading: (test, level, callback):string => {
-				let result:string = 'test';
-				return result;
-			},
-	 */
 
 	parseContent(content: string) {
 		marked.setOptions({
@@ -114,13 +117,25 @@ export class Article extends React.Component<{}, State> {
 			);
 		}
 
+		let content = [];
+
+		if(this.state.navigation !== '') {
+			content.push(<div key="articleNavigation" className="articleNavigation" dangerouslySetInnerHTML={{__html: this.state.navigation}} />);
+		}
+
+		if(this.state.iframe) {
+			content.push(<iframe key="articleContent" id="articleContent" src={this.state.page} className={'articleContent iframe'}></iframe>);
+		}
+		else {
+			content.push(<div key="articleContent" className={'articleContent'} dangerouslySetInnerHTML={{__html: this.state.page}} />);
+		}
+
 		return (
 			<div id="docs">
 				<Header type="article" filters={this.state.article}/>
 				<div id="body">
 					<div className="articlePage">
-						<div className="articleNavigation" dangerouslySetInnerHTML={{__html: this.state.navigation}} />
-						<div className="articleContent" dangerouslySetInnerHTML={{__html: this.state.page}} />
+						{content}
 					</div>
 				</div>
 				<Footer/>
