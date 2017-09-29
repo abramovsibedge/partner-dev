@@ -1,3 +1,7 @@
 export const LOAD_PROJECTS = 'LOAD_PROJECTS';
 export const LOAD_PROJECT = 'LOAD_PROJECT';
 export const SET_VISIBILITY = 'SET_VISIBILITY';
+export const DELETE_PROJECT = 'DELETE_PROJECT';
+export const ADD_USER = 'ADD_USER';
+export const DELETE_USER = 'DELETE_USER';
+export const CREATE_PROJECT = 'CREATE_PROJECT';

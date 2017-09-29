@@ -10,7 +10,7 @@ import Header from './Header';
 import Body from './Body';
 import {AuthMessage} from '../auth/messages';
 
-import { getProjects } from '../../reducers/projects/actions';
+import * as actions from '../../reducers/projects/actions';
 import {
   checkAuth
 } from '../../utils';
@@ -21,7 +21,6 @@ interface Props {
   projects: any;
   loadProjects: () => void;
   loading: boolean;
-  status_set_visibility: boolean;
 }
 interface State {}
 
@@ -49,7 +48,7 @@ class Projects extends React.Component<Props, State> {
 	render() {
 		const {
       loading,
-      projects
+      projects,
 		} = this.props;
 		return (
 			<Dashboard current="projects">
@@ -57,7 +56,11 @@ class Projects extends React.Component<Props, State> {
 					<Header onUpdate={() => this.reloadProjects()} />
 				</DashboardHeader>
 				{loading && <Loading />}
-				{!loading && <Body projects={projects} onUpdate={() => this.reloadProjects()} />}
+				{!loading && <Body
+						projects={projects}
+						onUpdate={() => this.reloadProjects()}
+
+				/>}
 			</Dashboard>
 		);
 	}
@@ -70,6 +73,6 @@ export default connect(
       loading: state.projects.loading,
     }),
     ({
-      loadProjects: getProjects,
+      loadProjects: actions.getProjects,
     })
 )(Projects);

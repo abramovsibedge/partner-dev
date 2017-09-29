@@ -37,11 +37,14 @@ import * as actions from '../../../reducers/projects/actions';
 
 interface Props {
 	onUpdate: () => void
-	project: any
+  deleteProject: (item: object) => void
   getProject: (id: string) => void
-  selectedProject: {}
   changeVisibility: (project: string, country: string, visibility: boolean) => void
-  status_set_visibility: boolean
+  addUserProject: (project: string, email: string) => void
+  delettUserProject: (project: string, email: string) => void
+	project: any
+  selectedProject: {}
+  update_project: boolean
 }
 
 interface State {
@@ -49,7 +52,8 @@ interface State {
 	addUserModalState: boolean
 	addUserObject: object
 	deleteUserModalState: boolean
-	selectedProjectId: string
+	selectedProjectId: string,
+  selectedProjectForUpdate: string,
 	selectedProject: object
 	selectedProjectTab: string
 }
@@ -68,12 +72,24 @@ class ProjectItem extends React.Component<Props, State> {
 			},
 			deleteUserModalState: false,
 			selectedProjectId: '',
+      selectedProjectForUpdate: '',
 			selectedProject: {},
 			selectedProjectTab: 'vpn-servers',
 		}
 	}
 
 	componentWillReceiveProps(nextProps: any) {
+		if (nextProps.update_project &&
+				this.state.selectedProjectId &&
+				this.state.selectedProjectId==this.state.selectedProjectForUpdate)
+		{
+			this.setState({
+				selectedProjectForUpdate: '',
+        addUserObject: {validationState: true, message: ''}
+			});
+
+      this.props.getProject(this.state.selectedProjectId);
+		}
     if (nextProps.selectedProject
       && nextProps.selectedProject["countries"]
       && nextProps.selectedProject["emails"]
@@ -81,7 +97,6 @@ class ProjectItem extends React.Component<Props, State> {
     ) {
       this.setState({selectedProject: nextProps.selectedProject});
     }
-
   }
 
 	showDeleteProject(value: boolean) {
@@ -91,12 +106,8 @@ class ProjectItem extends React.Component<Props, State> {
 	}
 
 	deleteProjectConfirm(project: any) {
-		deleteProject(project).then((result) => {
-			this.setState(update(this.state, {
-				deleteProjectModalState: {$set: false},
-				loading: {$set: true},
-			}), () => this.props.onUpdate());
-		});
+    this.setState({selectedProjectForUpdate: this.state.selectedProjectId});
+		this.props.deleteProject(project);
 	}
 
 	openProject(id: string) {
@@ -120,6 +131,7 @@ class ProjectItem extends React.Component<Props, State> {
 	}
 
 	setVisibility(project: string, country: string, visibility: boolean) {
+		this.setState({selectedProjectForUpdate: this.state.selectedProjectId});
 	  this.props.changeVisibility(project, country, visibility);
 	}
 
@@ -136,6 +148,7 @@ class ProjectItem extends React.Component<Props, State> {
 	}
 
 	addUserSubmit(project: string) {
+
 		const $t = this;
 		const $state = $t.state;
 		let state: boolean = true;
@@ -160,22 +173,8 @@ class ProjectItem extends React.Component<Props, State> {
 
 		if (!state && message) return false;
 
-		addUser(project, $state.addUserObject['email']).then(() => {
-			$t.setState(update($state, {
-				addUserObject: {
-					validationState: {$set: true},
-					message: {$set: ''}
-				}
-			}), () => {
-				loadProjectItem(project).then(result => {
-					this.setState(update($state, {
-						selectedProjectId: {$set: project},
-						selectedProject: {$set: result},
-						addUserModalState: {$set: false}
-					}));
-				})
-			});
-		});
+    this.setState({selectedProjectForUpdate: this.state.selectedProjectId});
+		this.props.addUserProject(project, $state.addUserObject['email']);
 	}
 
 	showDeleteUser(value: boolean) {
@@ -185,15 +184,8 @@ class ProjectItem extends React.Component<Props, State> {
 	}
 
 	deleteUserConfirm(project: string, email: string) {
-		deleteUser(project, email).then(() => {
-			loadProjectItem(project).then(result => {
-				this.setState(update(this.state, {
-					selectedProjectId: {$set: project},
-					selectedProject: {$set: result},
-					deleteUserModalState: {$set: false}
-				}));
-			})
-		});
+    this.setState({selectedProjectForUpdate: this.state.selectedProjectId});
+		this.props.delettUserProject(project, email);
 	}
 
 
@@ -449,11 +441,13 @@ class ProjectItem extends React.Component<Props, State> {
 export default connect<any,any, any>(
     state => ({
       selectedProject: state.projects.selectedProject,
-      status_set_visibility: state.projects.status_set_visibility,
-      loadingProject: state.projects.loadingProject,
+      update_project: state.projects.update_project
     }),
     ({
       getProject: actions.getProject,
       changeVisibility: actions.changeVisibility,
+      deleteProject: actions.deleteProject,
+      addUserProject: actions.addUserProject,
+      delettUserProject: actions.delettUserProject,
     })
 )(ProjectItem);

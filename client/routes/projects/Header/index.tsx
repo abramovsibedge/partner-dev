@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Modal from 'react-modal';
 import * as update from 'immutability-helper';
+import { connect } from 'react-redux';
 
 import {
 	IconPlus,
@@ -15,12 +16,16 @@ import {
 } from '../../../components/form';
 import {Button} from '../../../components/button';
 
+import * as actions from '../../../reducers/projects/actions';
+
 import {
 	addProject
 } from '../../../functions/projects';
 
 interface Props {
 	onUpdate: () => void
+  createProjectResult: boolean
+  createProject: (data: object)=> void
 }
 
 interface State {
@@ -55,7 +60,12 @@ class Header extends React.Component<Props, State> {
 			}],
 		}
 	}
-
+  //createProjectResult
+  componentWillReceiveProps(nextProps: any) {
+	  if (nextProps.createProjectResult && nextProps.createProjectResult != this.props.createProjectResult) {
+	    this.props.onUpdate();
+    }
+  }
 	showAddProject = (value: boolean) => {
 		this.setState(update(this.state, {
 			addProjectModalState: {$set: value},
@@ -88,31 +98,8 @@ class Header extends React.Component<Props, State> {
 
 		if (!state && message) return false;
 
-		addProject($state.addProjectObject)
-			.then((response) => {
-				if (response.result !== "OK") {
-					throw response.error;
-				}
+    this.props.createProject($state.addProjectObject);
 
-				$t.setState(update($state, {
-					addProjectObject: {
-						public_key: {$set: ''},
-						private_key: {$set: ''},
-						project_type: {$set: ''},
-						description: {$set: ''},
-						validationState: {$set: true},
-						message: {$set: ''}
-					},
-					addProjectModalState: {$set: false}
-				}), () => this.props.onUpdate());
-			})
-			.catch((error) => {
-				$t.setState(update($state, {
-					addProjectObject: {
-						message: {$set: error.toString()}
-					}
-				}));
-			});
 	};
 
 	render() {
@@ -190,4 +177,11 @@ class Header extends React.Component<Props, State> {
 	}
 }
 
-export default Header;
+export default connect<any,any, any>(
+    state => ({
+      createProjectResult: state.projects.createProjectResult
+    }),
+    ({
+      createProject: actions.createProject
+    })
+)(Header);

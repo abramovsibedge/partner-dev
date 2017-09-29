@@ -26,7 +26,7 @@ const store: Store<any> = createStore(
 		{
 				promiseTypeSuffixes: ['LOADING', 'SUCCESS', 'ERROR']
 		}
-	), thunk, logger)
+	), thunk)
 );
 
 render((

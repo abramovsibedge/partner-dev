@@ -29,7 +29,7 @@ export const loadProjects = () => {
 		});
 };
 
-export const loadProjectItem = (id: string) => {
+const loadProjectItem = (id: string) => {
   const countriesRequest = config.host + 'portal/project/countries?access_token=' + config.firebaseToken()+ '&publickey=' + id;
   const countries = axios(countriesRequest, { method: 'POST' })
       .then(response => response.data)
@@ -55,8 +55,7 @@ export const loadProjectItem = (id: string) => {
   });
 }
 
-
-export const setVisibility = (project: string, country: string, visibility: boolean) => {
+const setVisibility = (project: string, country: string, visibility: boolean) => {
   let request:string = config.host + 'portal/project/country?access_token=' + config.firebaseToken();
   request += '&publickey=' + project;
   request += '&country=' + country;
@@ -64,7 +63,6 @@ export const setVisibility = (project: string, country: string, visibility: bool
 
   return axios(request, { method: 'PUT' })
       .then(response => {
-        console.log('response', response);
         response.data
       })
       .catch((error: any) => {
@@ -72,6 +70,41 @@ export const setVisibility = (project: string, country: string, visibility: bool
       });
 };
 
+const deletePr = (item: object) => {
+  let request:string = config.host + 'portal/project?access_token=' + config.firebaseToken;
+  request += '&publickey=' + item['publickey'];
+  request += '&privatekey=' + item['privatekey'];
+
+  return axios(request, { method: 'DELETE' }).then(response => response.data)
+};
+
+const addUser = (project: string, email: string) => {
+  let request:string = config.host + 'portal/project/access?access_token=' + config.firebaseToken;
+  request += '&publickey=' + project;
+  request += '&email=' + email;
+
+  return axios(request, { method: 'POST' }).then(response => response.data)
+};
+
+const deleteUser = (project: string, email: string) => {
+  let request:string = config.host + 'portal/project/access?access_token=' + config.firebaseToken;
+  request += '&publickey=' + project;
+  request += '&email=' + email;
+
+  return axios(request, { method: 'DELETE' }).then(response => response.data)
+};
+
+const addProject = (data: object) => {
+  let request:string = config.host + 'portal/project?access_token=' + config.firebaseToken;
+  request += '&publickey=' + data['public_key'];
+  request += '&privatekey=' + data['private_key'];
+  request += '&description=' + data['description'];
+  request += '&project_type=' + data['project_type'];
+
+  return axios(request, { method: 'POST' }).then(response => response.data)
+};
+
+// ____________________________>>
 
 export const getProjects = ReduxActions.createAction<any, projectsModel>(
     types.LOAD_PROJECTS,
@@ -88,3 +121,23 @@ export const changeVisibility = ReduxActions.createAction<any, string, string, b
     (project: string, country: string, visibility: boolean) => setVisibility(project, country, visibility)
 );
 
+export const deleteProject = ReduxActions.createAction<any, object>(
+    types.DELETE_PROJECT,
+    (item: object) => deletePr(item)
+);
+
+export const addUserProject = ReduxActions.createAction<any, string, string>(
+    types.ADD_USER,
+    (project: string, email: string) => addUser(project, email)
+);
+
+
+export const delettUserProject = ReduxActions.createAction<any, string, string>(
+    types.DELETE_USER,
+    (project: string, email: string) => deleteUser(project, email)
+);
+
+export const createProject = ReduxActions.createAction<any, object>(
+    types.CREATE_PROJECT,
+    (data: object) => addProject(data)
+);
