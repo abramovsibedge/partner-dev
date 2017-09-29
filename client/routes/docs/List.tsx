@@ -85,9 +85,9 @@ export class List extends React.Component<{}, State> {
 	}
 
 	openArticle(article: any) {
-		if(article.href && article.href === "true") {
+		/*if(article.href && article.href === "true") {
 			return window.open(article.url);
-		}
+		}*/
 
 		let title = article.title.replace(/[^A-Za-z0-9_-]/g, '').toLocaleLowerCase();
 

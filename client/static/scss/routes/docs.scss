@@ -217,6 +217,13 @@
         margin-left: 400px;
         background: #fff;
 
+        &.iframe {
+          width:100%;
+          min-height: 1300px;
+          margin-left: 0;
+          padding: 0;
+        }
+
         h1, h2, h3 {
           color: #2c3e7d;
         }
