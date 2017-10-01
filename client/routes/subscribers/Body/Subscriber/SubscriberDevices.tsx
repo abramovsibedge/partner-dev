@@ -1,14 +1,9 @@
 import * as React from 'react';
 import Modal from 'react-modal';
-import Loading from '../../Loading';
 import { connect } from 'react-redux';
 import * as actions from '../../../../reducers/subscriber/actions';
 
-import {
-	getDevices,
-	deleteDevice,
-	dateString
-} from '../../../../functions/subscribers';
+import { dateString } from '../../../../utils';
 
 import {
 	IconClose,
@@ -17,16 +12,15 @@ import {
 import {Button} from '../../../../components/button';
 
 interface Props {
-	subscriber?: any
 	data: any,
+	subscriber?: any
 	deleteDevice?: (id: any, params: any) => void
+	loadingState?: any
+	getDevices?: (data: any) => void
 }
 
 interface State {
-	subscriber: any,
-	devices: any,
-	showModal: boolean,
-	loaded: boolean
+	showModal: boolean
 }
 
 class SubscriberDevices extends React.Component<Props, State> {
@@ -34,62 +28,8 @@ class SubscriberDevices extends React.Component<Props, State> {
 		super(props);
 
 		this.state = {
-			subscriber: props.data,
-			loaded: false,
-			devices: [],
 			showModal: false
 		};
-	}
-
-	componentDidMount() {
-		this.getDevices();
-	}
-
-	// componentWillReceiveProps(props: any) {
-	// 	this.setState({
-	// 		subscriber: props.data,
-	// 		loaded: false
-	// 	});
-	//
-	// 	this.getDevices();
-	// }
-
-	getDevices() {
-		this.setState({
-			loaded: true,
-			devices: this.props.subscriber.devices
-		});
-
-		// getDevices(this.state.subscriber.id).then((response) => {
-		// 	/*response.devices = [
-		// 		{
-		// 			type: "Mobile",
-		// 			device_id: 1359,
-		// 			name: "Test mobile 1",
-		// 			registration_time: 1504011677525,
-		// 			connection_time: 1504111677525
-		// 		},
-		// 		{
-		// 			type: "Mobile 2",
-		// 			device_id: 18654,
-		// 			name: "Test mobile 2",
-		// 			registration_time: 1503011677525,
-		// 			connection_time: 1503111677525
-		// 		},
-		// 		{
-		// 			type: "Mobile",
-		// 			device_id: 135987,
-		// 			name: "Test mobile 3",
-		// 			registration_time: 1502011677525,
-		// 			connection_time: 1502111677525
-		// 		}
-		// 	]; */
-		//
-		// 	this.setState({
-		// 		loaded: true,
-		// 		devices: response.devices
-		// 	});
-		// });
 	}
 
 	showModal(state: boolean) {
@@ -99,42 +39,22 @@ class SubscriberDevices extends React.Component<Props, State> {
 	}
 
 	deletePurchase(id: number) {
-		this.setState({
-			loaded: false,
-			showModal: false
-		});
-
-		this.props.deleteDevice(this.props.data.id, id);
-
-		// deleteDevice(this.state.subscriber.id, id).then(() => {
-		// 	this.getDevices();
-		// });
+		this.props.loadingState(true)
+			.then(() => {
+				this.props.deleteDevice(this.props.data.id, id);
+			})
+			.then(() => {
+				this.props.getDevices(id)
+			});
 	}
 
 	render() {
-		if(!this.state.loaded) {
-			return (
-				<div id="devices" className="subscriber_tab subscriber_tab-active">
-					<div className="subscriber_tab_content">
-						<div className="subscriber_tabs_empty"><Loading/></div>
-					</div>
-				</div>
-			);
-		}
-
-		if(this.state.devices.length === 0) {
-			return (
-				<div id="devices" className="subscriber_tab subscriber_tab-active">
-					<div className="subscriber_tab_content">
-						<div className="subscriber_tabs_empty"><p>Subscriber has no devices.</p></div>
-					</div>
-				</div>
-			);
-		}
+		const { subscriber } = this.props;
 
 		let content = [];
-		for(let k in this.state.devices) {
-			let device = this.state.devices[k];
+
+		for(let k in subscriber.devices) {
+			let device = subscriber.devices[k];
 
 			content.push(
 				<div className="table_row" key={k}>
@@ -202,7 +122,7 @@ class SubscriberDevices extends React.Component<Props, State> {
 								<td style={{width: '19.5%'}}>Device type</td>
 								<td style={{width: '22%'}}>Registration time</td>
 								<td style={{width: '22%'}}>Connection time</td>
-								<td style={{width: '6.5%'}}></td>
+								<td style={{width: '6.5%'}}>&nbsp;</td>
 							</tr>
 							</tbody>
 						</table>
@@ -216,13 +136,13 @@ class SubscriberDevices extends React.Component<Props, State> {
 	}
 }
 
-// export default SubscriberDevices;
-
 export default connect<any, any, Props>(
 	state => ({
 		subscriber: state.subscriber
 	}),
 	({
-		deleteDevice: actions.deleteDevice
+		deleteDevice: actions.deleteDevice,
+		loadingState: actions.loadingState,
+		getDevices: actions.getDevices
 	})
 )(SubscriberDevices);

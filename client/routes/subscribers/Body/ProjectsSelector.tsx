@@ -2,23 +2,20 @@ import * as React from 'react';
 import * as update from 'immutability-helper';
 import { connect } from 'react-redux';
 
-import * as model from '../../../reducers/subscribers/model';
 import * as actions from '../../../reducers/subscribers/actions';
 
-import {
-	Select
-} from '../../../components/form';
+import { Select } from '../../../components/form';
 
 interface Props {
-	projects: any,
-	subscribers: model.subscribersModel,
-	setActiveProject: (data: any) => void
+	activeProject: any;
+	projects: any;
+	loadingState: any
+	setActiveProject: any
+	getSubscribers: (data: any) => void
 }
 
 interface State {
 	projectsList: any
-	activeProject: number
-	loaded: boolean
 }
 
 class ProjectsSelector extends React.Component<Props, State> {
@@ -26,20 +23,18 @@ class ProjectsSelector extends React.Component<Props, State> {
 		super();
 
 		this.state = {
-			projectsList: null,
-			activeProject: null,
-			loaded: false
+			projectsList: null
 		};
 	}
 
-	componentWillReceiveProps(nextprops: any) {
-		if (nextprops.projects.list.length > 0) {
-			this.setState(update(this.state, {
-				projectsList: {$set: this.getProjectsList(nextprops.projects['list'])},
-				activeProject: {$set: nextprops.subscribers['activeProject']},
-				loaded: {$set: true}
-			}));
+	componentWillMount() {
+		if (!this.props.activeProject) {
+			this.setActiveProject(0);
 		}
+
+		this.setState(update(this.state, {
+			projectsList: {$set: this.getProjectsList(this.props.projects['list'])}
+		}));
 	}
 
 	getProjectsList = (projects: any) => {
@@ -68,32 +63,40 @@ class ProjectsSelector extends React.Component<Props, State> {
 		return active;
 	};
 
+	setActiveProject = (value: any) => {
+		this.props.loadingState(true)
+			.then(() => this.props.setActiveProject(value))
+			.then(() => this.props.getSubscribers(this.props.projects['list'][this.props.activeProject]));
+
+	};
+
 	render() {
+		const { projectsList } = this.state;
+		const { activeProject } = this.props;
+
 		return (
-			<header className="layout_head">
-				<div className="layout_head_content">
-					<h1 className="layout_h1">
-						Subscribers
-						{this.state.loaded &&
-							<Select
-								value={this.state.projectsList[this.state.activeProject].value}
-								options={this.state.projectsList}
-								onChange={(e) => this.props.setActiveProject(this.getRowId(this.props.projects['list'], e.target.value))} >
-								Projects
-							</Select>}
-					</h1>
-				</div>
-			</header>
+			<div>
+				{projectsList[activeProject] && <Select
+					value={projectsList[activeProject].value}
+					options={projectsList}
+					onChange={(e) => this.setActiveProject(this.getRowId(this.props.projects['list'], e.target.value))} >
+					Projects
+				</Select>}
+			</div>
 		);
 	}
 }
 
 export default connect(
 	state => ({
-		projects: state.projects,
-		subscribers: state.subscribers
+		activeProject: state.subscribers.activeProject,
+		projects: state.projects
 	}),
 	({
-		setActiveProject: actions.setActiveProject
+		loadingState: actions.loadingState,
+		setActiveProject: actions.setActiveProject,
+		getSubscribers:  actions.getSubscribers
 	})
 )(ProjectsSelector);
+
+

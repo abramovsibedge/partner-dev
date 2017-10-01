@@ -1,7 +1,9 @@
 export class projectsModel {
+	loading?: boolean;
+
+
   list?: any;
   selectedProject?: {};
-  loading?: boolean;
   update_project: boolean;
   createProjectResult: boolean;
 }

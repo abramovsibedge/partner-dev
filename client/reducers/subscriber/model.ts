@@ -1,7 +1,10 @@
 export class subscriberModel {
+	subscriberLoading?: boolean
+	traffic?: any
+	devices?: any
+
 	data?: any;
 	sessions?: any;
-	devices?: any
 	purchases?: any
 }
 

@@ -4,9 +4,10 @@ import { projectsModel, IPojects } from './model';
 import * as types from './constants';
 
 const initialState: IPojects = <projectsModel>{
+	loading: true,
+	selectedProject: 0,
+
   list: [],
-  loading: true,
-  selectedProject: {},
   update_project: false,
   createProjectResult: false
 };
@@ -22,6 +23,7 @@ export default handleActions<any>({
     return {
       ...state,
       list: action.payload['projects'],
+			selectedProject: 0,
       loading: false
     };
   },

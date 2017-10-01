@@ -43,8 +43,6 @@ export const loadLicenses = () => {
 	}
 };
 
-export const setProject = (project: any) => project;
-
 export const loadSubscribers = async (project: any) => {
 	let restToken = await logIn(project);
 
@@ -89,9 +87,18 @@ export const addNewSubscriber = (data: any) => {
 		.catch(error => error)
 };
 
-const getLicenses = ReduxActions.createAction<any, subscribersModel>(
-	types.LOAD_LICENSES,
-	() => loadLicenses()
+const loadingState: ActionCreator<ThunkAction<Promise<Action>, IState, void>> = (value: boolean) => {
+	return async (dispatch: Dispatch<IState>): Promise<Action> => {
+		return dispatch({
+			type: types.SET_LOADING_STATUS,
+			value
+		});
+	};
+};
+
+const setActiveProject = ReduxActions.createAction<any, number>(
+	types.SET_ACTIVE_PROJECT,
+	(project: any) => project
 );
 
 const getSubscribers = ReduxActions.createAction<any, any, string>(
@@ -99,20 +106,45 @@ const getSubscribers = ReduxActions.createAction<any, any, string>(
 	(project: any) => loadSubscribers(project)
 );
 
+const setActiveSubscriber = ReduxActions.createAction<any, any, string>(
+	types.SET_ACTIVE_SUBSCRIBER,
+	(subscriber: any) => subscriber
+);
+
+
+
+
+
+
+
+
+
+
+const getLicenses = ReduxActions.createAction<any, subscribersModel>(
+	types.LOAD_LICENSES,
+	() => loadLicenses()
+);
+
+
+
 const searchSubscriber = ReduxActions.createAction<any, string, string>(
 	types.SEARCH_SUBSCRIBERS,
 	(type: string, value: string) => findSubscribers(type, value)
 );
 
-const setActiveProject = ReduxActions.createAction<any, number>(
-	types.SET_ACTIVE_PROJECT,
-	(project: any) => setProject(project)
-);
+
 
 const addSubscriber = ReduxActions.createAction<any, any>(
 	types.ADD_SUBSCRIBER,
 	(data: any) => addNewSubscriber(data)
 );
+
+
+
+
+
+
+
 
 /* ------------------------------------------------------------------------------------------------------------------ */
 
@@ -162,9 +194,14 @@ const addSubscriber = ReduxActions.createAction<any, any>(
 
 
 export {
-	getLicenses,
-	getSubscribers,
-	searchSubscriber,
+	loadingState,
 	setActiveProject,
+	getSubscribers,
+	setActiveSubscriber,
+
+
+
+	getLicenses,
+	searchSubscriber,
 	addSubscriber
 }

@@ -4,7 +4,11 @@ import { subscribersModel, IState } from './model';
 import * as types from './constants';
 
 const initialState: IState = <subscribersModel>{
+	subscribersLoading: true,
 	activeProject: null,
+	activeSubscriber: null,
+
+
 	list: [],
 	licenses: [],
 	addSubscriberStatus: null,
@@ -12,6 +16,12 @@ const initialState: IState = <subscribersModel>{
 };
 
 export default handleActions<any>({
+	[`${types.SET_LOADING_STATUS}`] : (state: IState, action: Action<string>) : IState => {
+		return {
+			...state,
+			subscribersLoading: action['value']
+		};
+	},
 	[`${types.SET_ACTIVE_PROJECT}`] : (state: IState, action: Action<string>) : IState => {
 		return {
 			...state,
@@ -21,10 +31,22 @@ export default handleActions<any>({
 	[`${types.LOAD_SUBSCRIBERS}_SUCCESS`] : (state: IState, action: Action<string>) : IState => {
 		return {
 			...state,
+			subscribersLoading: false,
 			list: action.payload['subscribers'],
 			addSubscriberStatus: null
 		}
 	},
+	[`${types.SET_ACTIVE_SUBSCRIBER}`] : (state: IState, action: Action<string>) : IState => {
+		return {
+			...state,
+			activeSubscriber: action.payload
+		}
+	},
+
+
+
+
+
 	[`${types.SEARCH_SUBSCRIBERS}_SUCCESS`] : (state: IState, action: Action<string>) : IState => {
 		return {
 			...state,
@@ -41,5 +63,9 @@ export default handleActions<any>({
 		return {
 			addSubscriberStatus: action.payload
 		};
-	}
+	},
+
+
+
+
 }, initialState);

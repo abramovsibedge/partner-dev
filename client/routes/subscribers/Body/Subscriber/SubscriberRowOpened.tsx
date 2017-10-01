@@ -1,17 +1,15 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as update from 'immutability-helper';
 
-import * as model from '../../../../reducers/subscriber/model';
+import * as classNames from 'classnames';
 import * as actions from '../../../../reducers/subscriber/actions';
 
 import Spinner from '../../../../components/spinner';
 
 import {
-	getTraffic,
 	dateString,
 	byteConvert
-} from '../../../../functions/subscribers';
+} from '../../../../utils';
 
 import SubscriberModify       from './SubscriberModify';
 import SubscriberSocial       from './SubscriberSocial';
@@ -23,16 +21,16 @@ import SubscriberChangeStatus from './SubscriberChangeStatus';
 
 
 interface Props {
-	getTraffic?: (data: any) => void
-	data: any
+	loading?: boolean
 	subscriber?: any
+	loadingState?: any
+	getTraffic?: (data: any) => void
+	getDevices?: (data: any) => void
+	data: any
 }
 
 interface State {
-	tab: string,
-	trafic: any,
-	isLoaded: boolean,
-	subscriber: any
+	tab: string
 }
 
 class SubscriberRowOpened extends React.Component<Props, State> {
@@ -40,55 +38,22 @@ class SubscriberRowOpened extends React.Component<Props, State> {
 		super(props);
 
 		this.state = {
-			tab: 'sessions',
-			trafic: {},
-			isLoaded: false,
-			subscriber: {}
+			tab: 'sessions'
 		};
-
-		// if(props.isOpened) this.loadInfo(props.subscriber.id);
 	}
 
 	componentWillMount() {
 		this.loadInfo(this.props.data.id);
 	}
 
-	componentWillReceiveProps(nextprops: any) {
-		if (Object.keys(this.state.trafic).length === 0) {
-			this.loadInfo(this.props.data.id)
-		}
-
-		if (nextprops.subscriber.data) {
-			this.setState(update(this.state, {
-				trafic: {$set: nextprops.subscriber.data}
-			}));
-		}
-
-		// console.log( nextprops );
-		// this.setState({
-		// 	isOpened: nextprops.isOpened
-		// });
-		//
-		// if(props.isOpened) this.loadInfo(props.id);
-	}
-
 	loadInfo(id: number) {
-		this.props.getTraffic(id);
-
-		// getTraffic(id).then(trafic => {
-		// 	trafic = {
-		// 		used:      trafic['traffic_used']      ? trafic['traffic_used']     :0,
-		// 		start:     trafic['traffic_start']     ? trafic['traffic_start']    :0,
-		// 		limit:     trafic['traffic_limit']     ? trafic['traffic_limit']    :0,
-		// 		remaining: trafic['traffic_remaining'] ? trafic['traffic_remaining']:0,
-		// 		unlimited: trafic['traffic_unlimited']
-		// 	};
-		//
-		// 	this.setState({
-		// 		isLoaded: true,
-		// 		trafic: trafic
-		// 	});
-		// });
+		this.props.loadingState(true)
+			.then(() => {
+				this.props.getDevices(id)
+			})
+			.then(() => {
+				this.props.getTraffic(id)
+			});
 	}
 
 	tabSwitcher(tab: string) {
@@ -96,17 +61,16 @@ class SubscriberRowOpened extends React.Component<Props, State> {
 	}
 
 	render() {
-		if( Object.keys(this.state.trafic).length === 0) return (
-			<div className="table_row_content is-loading"><Spinner width="65" height="65" strokeWidth="6" /></div>
-		);
+		const { loading } = this.props;
 
 		return (
-			<div className="table_row_content">
-				<div className="subscriber_pane_content">
+			<div className={classNames('table_row_content', loading && 'is-loading')}>
+				{loading && <Spinner width="65" height="65" strokeWidth="6" />}
+				{!loading && <div className="subscriber_pane_content">
 					{this.renderTrafic()}
 					{this.renderButtons()}
 					{this.renderContent()}
-				</div>
+				</div>}
 			</div>
 		);
 	}
@@ -169,9 +133,14 @@ class SubscriberRowOpened extends React.Component<Props, State> {
 	}
 
 	renderTrafic() {
-		let free = (this.props.data.purchases.length===0);
+		const {
+			data,
+			subscriber
+		} = this.props;
 
-		if(this.state.trafic.traffic_unlimited) {
+		let free = (data.purchases.length === 0);
+
+		if(subscriber.traffic.traffic_unlimited) {
 			return (
 				<div className="subscriber_traffic">
 					<table>
@@ -210,10 +179,10 @@ class SubscriberRowOpened extends React.Component<Props, State> {
 					<tbody>
 						<tr>
 							<td>false</td>
-							<td>{dateString(this.state.trafic.start)} </td>
-							<td>{byteConvert(this.state.trafic.used)}</td>
-							<td>{byteConvert(this.state.trafic.remaining)}</td>
-							<td>{byteConvert(this.state.trafic.limit)}</td>
+							<td>{dateString(subscriber.traffic.start)} </td>
+							<td>{byteConvert(subscriber.traffic.used)}</td>
+							<td>{byteConvert(subscriber.traffic.remaining)}</td>
+							<td>{byteConvert(subscriber.traffic.limit)}</td>
 							<td><span className={(free ? 'table_disable' : 'table_enable')}>{(free ? 'Free' : 'Not free')}</span></td>
 						</tr>
 					</tbody>
@@ -225,9 +194,12 @@ class SubscriberRowOpened extends React.Component<Props, State> {
 
 export default connect<any, any, Props>(
 	state => ({
+		loading: state.subscriber.subscriberLoading,
 		subscriber: state.subscriber
 	}),
 	({
-		getTraffic: actions.getTraffic
+		loadingState: actions.loadingState,
+		getTraffic: actions.getTraffic,
+		getDevices: actions.getDevices
 	})
 )(SubscriberRowOpened);

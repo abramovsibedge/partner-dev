@@ -7,12 +7,10 @@ import DashboardHeader from '../../../components/dashboard/dashboardHeader';
 export default class Header extends React.Component <{}, {}> {
 	render() {
 		return (
-			<DashboardHeader>
-				<div className="subscriber_filter">
-					<SearchSubscriber />
-					<AddSubscriber />
-				</div>
-			</DashboardHeader>
+			<div className="subscriber_filter">
+				<SearchSubscriber />
+				<AddSubscriber />
+			</div>
 		);
 	}
 }

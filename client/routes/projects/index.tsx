@@ -3,31 +3,27 @@ import { connect } from 'react-redux';
 import * as update from 'immutability-helper';
 import { hashHistory } from 'react-router';
 
+import Loading from './Loading';
 import Dashboard from '../../components/dashboard';
 import DashboardHeader from '../../components/dashboard/dashboardHeader';
-import Loading from './Loading';
 import Header from './Header';
 import Body from './Body';
-import {AuthMessage} from '../auth/messages';
 
 import * as actions from '../../reducers/projects/actions';
-import {
-  checkAuth
-} from '../../utils';
+import { checkAuth } from '../../utils';
 
 import '../../static/scss/routes/projects.scss';
 
 interface Props {
+	loading: boolean;
+
   projects: any;
   loadProjects: () => void;
-  loading: boolean;
 }
-interface State {}
 
-class Projects extends React.Component<Props, State> {
+class Projects extends React.Component<Props, {}> {
 	constructor(props: any) {
 		super(props);
-		this.state = {}
 	}
 
 	componentDidMount() {
@@ -50,22 +46,17 @@ class Projects extends React.Component<Props, State> {
       loading,
       projects,
 		} = this.props;
+
 		return (
 			<Dashboard current="projects">
 				<DashboardHeader>
 					<Header onUpdate={() => this.reloadProjects()} />
 				</DashboardHeader>
-				{loading && <Loading />}
-				{!loading && <Body
-						projects={projects}
-						onUpdate={() => this.reloadProjects()}
-
-				/>}
+				{loading ? <Loading /> : <Body projects={projects} onUpdate={() => this.reloadProjects()} />}
 			</Dashboard>
 		);
 	}
 }
-
 
 export default connect(
     state => ({

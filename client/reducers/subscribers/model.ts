@@ -1,6 +1,11 @@
 export class subscribersModel {
-	activeProject?: any;
+	subscribersLoading?: boolean;
 	list?: any;
+	activeProject?: any;
+	activeSubscriber?: any;
+
+
+
 	licenses?: any;
 	addSubscriberStatus?: any;
 }

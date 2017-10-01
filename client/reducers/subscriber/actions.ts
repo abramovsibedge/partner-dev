@@ -2,14 +2,28 @@ import * as firebase from 'firebase';
 import * as ReduxActions from "redux-actions";
 import * as types from './constants';
 
+
+import {Action, ActionCreator, Dispatch} from 'redux';
+import {ThunkAction} from 'redux-thunk';
+
 import {storageHelper} from '../../utils';
 const storage = new storageHelper;
 
 import axios from 'axios';
 import config from '../../config';
 
+import { IState, subscriberModel } from './model';
+
 export const loadTraffic = (id: any) => {
 	let request: string = config.host + 'partner/subscribers/' + id + '/traffic?access_token=' + config.restToken;
+
+	return axios.get(request)
+		.then(response => response.data)
+		.catch(error => error);
+};
+
+export const loadDevices = (id: any) => {
+	let request: string = config.host + 'partner/subscribers/' + id + '/devices?access_token=' + config.restToken;
 
 	return axios.get(request)
 		.then(response => response.data)
@@ -49,13 +63,6 @@ export const loadSessions = (id: any, params: any) => {
 		.then(response => response);
 };
 
-export const loadDevices = (id: any) => {
-	let request: string = config.host + 'partner/subscribers/' + id + '/devices?access_token=' + config.restToken;
-
-	return axios.get(request)
-		.then(response => response);
-};
-
 export const removeDevice = (id: any, params: any) => {
 	let request: string = config.host + 'partner/subscribers/' + id + '/devices/' + params + '?access_token=' + config.restToken;
 
@@ -77,10 +84,24 @@ export const removePurchase = (id: any, params: any) => {
 		.then(response => response);
 };
 
+const loadingState: ActionCreator<ThunkAction<Promise<Action>, IState, void>> = (value: boolean) => {
+	return async (dispatch: Dispatch<IState>): Promise<Action> => {
+		return dispatch({
+			type: types.SUBSCRIBER_LOADING_STATUS,
+			value
+		});
+	};
+};
+
 
 const getTraffic = ReduxActions.createAction<any, any>(
 	types.LOAD_TRAFFIC,
 	(id: any) => loadTraffic(id)
+);
+
+const getDevices = ReduxActions.createAction<any, any>(
+	types.GET_DEVICES,
+	(id: any) => loadDevices(id)
 );
 
 const modifySubscriber = ReduxActions.createAction<any, any, any>(
@@ -96,11 +117,6 @@ const setLimit = ReduxActions.createAction<any, any, any>(
 const getSessions = ReduxActions.createAction<any, any, any>(
 	types.GET_SESSIONS,
 	(id: any, data: any) => loadSessions(id, data)
-);
-
-const getDevices = ReduxActions.createAction<any, any, any>(
-	types.GET_DEVICES,
-	(id: any) => loadDevices(id)
 );
 
 const deleteDevice = ReduxActions.createAction<any, any, any>(
@@ -119,6 +135,10 @@ const deletePurchase = ReduxActions.createAction<any, any, any>(
 );
 
 export {
+	loadingState,
+
+
+
   getTraffic,
 	modifySubscriber,
 	setLimit,

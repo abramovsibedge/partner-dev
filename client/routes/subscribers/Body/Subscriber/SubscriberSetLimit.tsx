@@ -31,7 +31,7 @@ interface State {
 	subscriber: any,
 	showModal: boolean,
 	modalObject: object,
-};
+}
 
 class SubscriberSetLimit extends React.Component<Props, State> {
 	constructor(props: any) {
@@ -101,25 +101,6 @@ class SubscriberSetLimit extends React.Component<Props, State> {
 			traffic_limit: this.state.modalObject['limit'].value,
 			reset: (this.state.modalObject['reset']?true:false)
 		})
-
-		// modifyTraffic(this.state.subscriber.id, {traffic_limit: this.state.modalObject['limit'].value, reset: (this.state.modalObject['reset']?true:false)}).then((response) => {
-		// 	if(response.result !== 'OK') {
-		// 		// @todo handle error
-		// 		return;
-		// 	}
-		//
-		// 	this.setState({
-		// 		modalObject: {
-		// 			limit: {
-		// 				value: '',
-		// 				valid: true
-		// 			},
-		// 			message: ''
-		// 		}
-		// 	});
-		//
-		// 	// Signal.dispatch('subscriberModified', {id: this.state.subscriber.id});
-		// });
 	}
 
 	inputHandler(value: string, stateItem: string) {

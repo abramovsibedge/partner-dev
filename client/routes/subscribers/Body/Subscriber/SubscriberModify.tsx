@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as update from 'immutability-helper';
 
 import Modal from 'react-modal';
 import * as actions from '../../../../reducers/subscriber/actions';
-import Signal from '../../../../functions/Signal';
 
 import {
 	IconLock
@@ -18,14 +16,11 @@ import {
 	Select
 } from '../../../../components/form';
 
-import {
-	getLicences,
-	modifySubscriber
-} from '../../../../functions/subscribers';
-
 interface Props {
 	data: any
 	modifySubscriber?: (id: any, data: any) => void
+	loadingState?: any
+	getTraffic?: (data: any) => void
 }
 
 interface State {
@@ -64,45 +59,17 @@ class SubscriberModify extends React.Component<Props, State> {
 		};
 	}
 
-	componentDidMount() {
-	}
-
 	componentWillReceiveProps(props: any) {
-		console.log( props );
 		this.fetchLicence(props.subscribers.licenses);
-
-		// this.setState({
-		// 	subscriber: props.subscriber,
-		// 	modalObject: {
-		// 		extref: {
-		// 			value: props.subscriber.extref,
-		// 			valid: true,
-		// 			check: new RegExp('^\\w+$')
-		// 		},
-		// 		licence: {
-		// 			value: props.subscriber.bundle.id,
-		// 			valid: true,
-		// 			check: new RegExp('^[0-9]+$')
-		// 		},
-		// 		name: {
-		// 			value: props.subscriber.name,
-		// 			valid: true,
-		// 			check: new RegExp('^\\w+$')
-		// 		},
-		// 		message: ''
-		// 	}
-		// });
 	}
 
 	fetchLicence(licenses: any) {
 		let licenceList = [];
 		for(let k in licenses) {
-			licenceList.push(
-				{
-					value: licenses[k].id,
-					label: licenses[k].name
-				}
-			);
+			licenceList.push({
+				value: licenses[k].id,
+				label: licenses[k].name
+			});
 		}
 
 		this.setState({licencesList: licenceList});
@@ -139,41 +106,13 @@ class SubscriberModify extends React.Component<Props, State> {
 			license_id: object['licence'].value,
 		};
 
-		this.props.modifySubscriber(this.state.subscriber.id, subscriber);
-
-		// modifySubscriber(this.state.subscriber.id, subscriber).then((response) => {
-		// 	if(response.result !== 'OK') {
-		// 		// @todo handle error
-		// 		return;
-		// 	}
-		//
-		// 	this.setState({
-		// 		showModal: false,
-		// 		modalObject: {
-		// 			extref: {
-		// 				value: subscriber.extref,
-		// 				valid: true,
-		// 				check: new RegExp('^\\w+$')
-		// 			},
-		// 			licence: {
-		// 				value: subscriber['licence_id'],
-		// 				valid: true,
-		// 				check: new RegExp('^[0-9]+$')
-		// 			},
-		// 			name: {
-		// 				value: subscriber.name,
-		// 				valid: true,
-		// 				check: new RegExp('^\\w+$')
-		// 			},
-		// 			message: ''
-		// 		}
-		// 	});
-		//
-		// 	this.showModal(false);
-		//
-		//
-		// 	// Signal.dispatch('subscriberModified', {id: this.state.subscriber.id});
-		// });
+		this.props.loadingState(true)
+			.then(() => {
+				this.props.modifySubscriber(this.state.subscriber.id, subscriber);
+			})
+			.then(() => {
+				this.props.getTraffic(this.state.subscriber.id)
+			});
 	}
 
 	inputHandler(value: string, stateItem: string) {
@@ -184,15 +123,19 @@ class SubscriberModify extends React.Component<Props, State> {
 	}
 
 	render() {
+		const {
+			showModal,
+			modalObject
+		} = this.state;
+
 		return (
 			<div className="subscriber_manage-button">
-				<Button type="button" className="subscriber_manage_item subscriber_manage_item-enable"
-								onClick={() => this.showModal(true)}>
+				<Button type="button" className="subscriber_manage_item subscriber_manage_item-enable" onClick={() => this.showModal(true)}>
 					<IconLock width="24" height="24"/>
 					<span>Modify subscriber</span>
 				</Button>
 				<Modal
-					isOpen={this.state.showModal}
+					isOpen={showModal}
 					className={{base: 'modal_inner'}}
 					overlayClassName={{base: 'modal_outer'}}
 					contentLabel="test">
@@ -200,21 +143,21 @@ class SubscriberModify extends React.Component<Props, State> {
 						<h2>Modify subscriber</h2>
 					</div>
 					<Form submit={() => this.submitForm()} className="modal_form">
-						<div className="modal_error">{this.state.modalObject['message']}</div>
+						<div className="modal_error">{modalObject['message']}</div>
 						<div className="modal_content">
 							<FormRow>
 								<Input
 									type="text"
 									label="Username"
-									value={this.state.modalObject['name'].value}
-									notValid={!this.state.modalObject['name'].valid}
+									value={modalObject['name'].value}
+									notValid={!modalObject['name'].valid}
 									onChange={(e) => this.inputHandler(e.target.value, 'name')}>
 								</Input>
 							</FormRow>
 							<FormRow>
 								<Select
-									value={this.state.modalObject['licence'].value}
-									notValid={!this.state.modalObject['licence'].valid}
+									value={modalObject['licence'].value}
+									notValid={!modalObject['licence'].valid}
 									options={this.state.licencesList}
 									onChange={(e) => this.inputHandler(e.target.value, 'licence')}>
 									Licence
@@ -224,8 +167,8 @@ class SubscriberModify extends React.Component<Props, State> {
 								<Input
 									type="text"
 									label="Extref"
-									value={this.state.modalObject['extref'].value}
-									notValid={!this.state.modalObject['extref'].valid}
+									value={modalObject['extref'].value}
+									notValid={!modalObject['extref'].valid}
 									onChange={(e) => this.inputHandler(e.target.value, 'extref')}>
 								</Input>
 							</FormRow>
@@ -247,6 +190,8 @@ export default connect<any, any, Props>(
 		subscriber: state.subscriber
 	}),
 	({
-		modifySubscriber: actions.modifySubscriber
+		modifySubscriber: actions.modifySubscriber,
+		loadingState: actions.loadingState,
+		getTraffic: actions.getTraffic
 	})
 )(SubscriberModify);

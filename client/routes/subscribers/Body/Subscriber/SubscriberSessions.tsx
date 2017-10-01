@@ -12,11 +12,9 @@ import {
 } from '../../../../components/icons'
 
 import {
-	getSessions,
 	dateString,
-	byteConvert,
-	getDevices
-} from '../../../../functions/subscribers';
+	byteConvert
+} from '../../../../utils';
 
 interface Props {
 	data: any
@@ -55,40 +53,6 @@ class SubscriberSessions extends React.Component<Props, State> {
 		};
 	}
 
-	componentWillMount() {
-		this.props.getDevices(this.props.data.id);
-
-		// getDevices(this.state.subscriber.id).then((response) => {
-		// 	/*response.devices = [
-		// 		{
-		// 			type: "Mobile",
-		// 			device_id: 1359,
-		// 			name: "Test mobile 1",
-		// 			registration_time: 1504011677525,
-		// 			connection_time: 1504111677525
-		// 		},
-		// 		{
-		// 			type: "Mobile 2",
-		// 			device_id: 18654,
-		// 			name: "Test mobile 2",
-		// 			registration_time: 1503011677525,
-		// 			connection_time: 1503111677525
-		// 		},
-		// 		{
-		// 			type: "Mobile",
-		// 			device_id: 135987,
-		// 			name: "Test mobile 3",
-		// 			registration_time: 1502011677525,
-		// 			connection_time: 1502111677525
-		// 		}
-		// 	];*/
-		//
-		// 	this.setState({
-		// 		devices: response.devices
-		// 	});
-		// });
-	}
-
 	componentWillReceiveProps(nextprop: any) {
 		this.setState({
 			devices: nextprop.subscriber.devices,
@@ -103,59 +67,6 @@ class SubscriberSessions extends React.Component<Props, State> {
 		this.setState({loaded: false});
 
 		this.props.getSessions(this.props.data.id, {start_time: this.time.from[0], end_time: this.time.till[0]});
-
-		// getSessions(this.state.subscriber.id, {start_time: this.time.from[0], end_time: this.time.till[0]}).then(response => {
-		// 	/*response.sessions = [
-		// 		{
-		// 			"user_id": 123,
-		// 			"device_id": "123213",
-		// 			"server": "asdkasd",
-		// 			"start_time": 123761723123,
-		// 			"end_time": 123762723123,
-		// 			"client_address": "asdasdasljdk",
-		// 			"internal_address": "lakidssa;ld;s'ad",
-		// 			"tx": 12323388,
-		// 			"rx": 6863513
-		// 		},
-		// 		{
-		// 			"user_id": 123,
-		// 			"device_id": "123213",
-		// 			"server": "asdkasd",
-		// 			"start_time": 123761723123,
-		// 			"end_time": 123762723123,
-		// 			"client_address": "asdasdasljdk",
-		// 			"internal_address": "lakidssa;ld;s'ad",
-		// 			"tx": 867432,
-		// 			"rx": 16565232
-		// 		},
-		// 		{
-		// 			"user_id": 123,
-		// 			"device_id": "123213",
-		// 			"server": "asdkasd",
-		// 			"start_time": 123761723123,
-		// 			"end_time": 123762723123,
-		// 			"client_address": "asdasdasljdk",
-		// 			"internal_address": "lakidssa;ld;s'ad",
-		// 			"tx": 1561321321,
-		// 			"rx": 6874321
-		// 		}
-		// 	];*/
-		//
-		// 	let tx = 0, rx = 0;
-		//
-		// 	for(let k in response.sessions) {
-		// 		tx += response.sessions[k].tx;
-		// 		rx += response.sessions[k].rx;
-		// 	}
-		//
-		// 	this.setState({
-		// 		loaded: true,
-		// 		sessions: response.sessions,
-		// 		tx: tx,
-		// 		rx: rx,
-		// 		size: response.sessions.length
-		// 	});
-		// });
 	}
 
 	render() {
@@ -299,8 +210,11 @@ class SubscriberSessions extends React.Component<Props, State> {
 		let devices = [
 			<div className="device" key="all" onClick={() => this.changeDevice(0)}>All Devices</div>
 		];
+
 		for(let k in this.state.devices) {
-			devices.push(<div key={this.state.devices[k].device_id} className="device" onClick={() => this.changeDevice(this.state.devices[k])}>{this.state.devices[k].name}</div>);
+			devices.push(<div key={this.state.devices[k].device_id} className="device" onClick={() => this.changeDevice(this.state.devices[k])}>
+				{this.state.devices[k].device_id}
+			</div>);
 		}
 
 		return (
@@ -318,14 +232,11 @@ class SubscriberSessions extends React.Component<Props, State> {
 	}
 }
 
-// export default SubscriberSessions;
-
 export default connect<any, any, Props>(
 	state => ({
 		subscriber: state.subscriber
 	}),
 	({
-		getSessions: actions.getSessions,
-		getDevices: actions.getDevices
+		getSessions: actions.getSessions
 	})
 )(SubscriberSessions);
