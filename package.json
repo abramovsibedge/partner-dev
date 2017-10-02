@@ -4,7 +4,8 @@
   "scripts": {
     "clean": "rimraf build",
     "start": "webpack-dev-server --config webpack.config.dev.js --debug --devtool eval --colors --inline --content-base public --port 3000",
-    "build": "npm run clean && webpack --config webpack.config.build.js"
+    "build": "npm run clean && webpack --config webpack.config.build.js",
+    "deploy": "npm run clean && npm run build && firebase deploy"
   },
   "dependencies": {
     "@types/classnames": "^2.2.2",

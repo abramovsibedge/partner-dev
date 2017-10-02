@@ -3,6 +3,7 @@ import Modal from 'react-modal';
 import * as update from 'immutability-helper';
 import {storageHelper} from '../../utils';
 import {Link} from 'react-router';
+import * as firebase from 'firebase';
 
 const storage = new storageHelper;
 

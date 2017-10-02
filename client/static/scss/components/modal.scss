@@ -1,6 +1,6 @@
 @import "../vars/vars";
 
-.modal {
+:root .modal {
   &_outer {
     position: fixed;
     z-index: 10000;
