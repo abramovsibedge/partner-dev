@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Route, IndexRoute, Redirect} from 'react-router';
+import {Route, IndexRoute} from 'react-router';
 
 import {App} from './routes/app';
 import {Main} from './routes/main/';
@@ -12,7 +12,6 @@ import CreateProject from './routes/projects/CreateProject';
 import Subscribers from './routes/subscribers/';
 import {NotFound} from './routes/404/';
 import {firebaseInit} from '../client/functions/firebaseInit';
-
 import {List} from './routes/docs/List';
 import {Article} from './routes/docs/Article';
 
@@ -24,7 +23,7 @@ export const routes = (
 		<Route path='createproject' component={CreateProject} />
 		<Route path='subscribers' component={Subscribers} />
 
-		<Route path='docs'   component={List} />
+		<Route path='docs' component={List} />
 		<Route path='docs/*' component={Article} />
 
 		<Route path='auth' component={Auth}>

@@ -8,7 +8,7 @@ import * as actions from '../../../../reducers/subscribers/actions';
 import SubscriberRowOpened from './SubscriberRowOpened';
 
 import { dateString } from '../../../../utils';
-import { IconClose } from '../../../../components/icons';
+import { IconPlay } from '../../../../components/icons';
 import { Button } from '../../../../components/button';
 
 interface Props {
@@ -88,7 +88,7 @@ class SubscriberRow extends React.Component<Props, State> {
 				</div>
 				{isOpened &&
 					<Button type="button" className="subscriber_close" onClick={() => setActiveSubscriber(null)}>
-						<IconClose width="24" height="24"/>
+						<IconPlay width="24" height="24"/>
 					</Button>}
 
 				{isOpened && <SubscriberRowOpened data={subscriber} />}

@@ -18,12 +18,13 @@
     display: none;
     width: 34px;
     height: 34px;
-    padding: 4px;
-    border: 1px solid $palette-white;
+    padding: 4px 4px 4px 5px;
+    border: none;
     border-radius: 100%;
-    background: $palette-brand;
+    background-color: darken($palette-brand, 20%);
     svg {
       display: block;
+      transform: rotate(-180deg);
       fill: $palette-white;
     }
     @at-root {
@@ -38,17 +39,20 @@
   &_pane_content {
     position: relative;
     z-index: 2;
-    padding: 28px 26px 24px;
+    padding: 0 26px 24px;
     color: $x-palette-gray;
   }
   &_traffic {
-    padding-bottom: 24px;
-    border-bottom: 1px solid darken( $palette-white, 5% );
+    position: relative;
+    padding: 30px 0 24px;
+    color: $palette-white;
     table {
+      position: relative;
+      z-index: 1;
       width: 100%;
       th {
         padding-bottom: 4px;
-        color: $x-palette-gray_1;
+        color: rgba($palette-white, .6);
         font-size: 12px;
         font-weight: 300;
         letter-spacing: -0.2px;
@@ -58,17 +62,30 @@
         letter-spacing: -0.2px;
       }
     }
+
+    &:after {
+      content: '';
+      position: absolute;
+      z-index: 0;
+      top: 0;
+      left: -31px;
+      right: -31px;
+      bottom: 0;
+      background: $palette-brand;
+    }
+    &:before {
+      content: '';
+      position: absolute;
+      z-index: 2;
+      top: 5px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba($palette-black, .1);
+    }
   }
   &_buttons {
-    display: flex;
-    align-items: center;
-    margin-top: 24px;
-
-    .subscriber_manage {
-      .subscriber_manage-button {
-        float: left;
-      }
-    }
+    margin-top: 9px;
   }
   &_tabs {
     &_item {
@@ -108,7 +125,11 @@
     }
   }
   &_manage {
-    margin-left: auto;
+    display: flex;
+    justify-content: flex-end;
+    border-bottom: 1px solid rgba($palette-black, .05);
+    padding-bottom: 9px;
+    margin-bottom: 24px;
     &_item {
       padding: 12px;
       background: none;

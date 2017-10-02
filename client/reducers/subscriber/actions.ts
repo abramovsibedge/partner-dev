@@ -12,10 +12,10 @@ const storage = new storageHelper;
 import axios from 'axios';
 import config from '../../config';
 
-import { IState, subscriberModel } from './model';
+import { IState } from './model';
 
 export const loadTraffic = (id: any) => {
-	let request: string = config.host + 'partner/subscribers/' + id + '/traffic?access_token=' + config.restToken;
+	let request: string = config.host + 'partner/subscribers/' + id + '/traffic?access_token=' + config.restToken();
 
 	return axios.get(request)
 		.then(response => response.data)
@@ -23,7 +23,7 @@ export const loadTraffic = (id: any) => {
 };
 
 export const loadDevices = (id: any) => {
-	let request: string = config.host + 'partner/subscribers/' + id + '/devices?access_token=' + config.restToken;
+	let request: string = config.host + 'partner/subscribers/' + id + '/devices?access_token=' + config.restToken();
 
 	return axios.get(request)
 		.then(response => response.data)
@@ -31,7 +31,7 @@ export const loadDevices = (id: any) => {
 };
 
 const changeSubscriber = async (id: any, params: any) => {
-	let request: string = config.host + 'partner/subscribers/' + id + '?access_token=' + config.restToken;
+	let request: string = config.host + 'partner/subscribers/' + id + '?access_token=' + config.restToken();
 
 	for(let k in params) {
 		request += '&'+k+'='+params[k];
@@ -41,7 +41,7 @@ const changeSubscriber = async (id: any, params: any) => {
 };
 
 const changeLimit = async (type: string, id: any, params: any) => {
-	let request:string = config.host + 'partner/subscribers/' + id + '/traffic?access_token=' + config.restToken;
+	let request:string = config.host + 'partner/subscribers/' + id + '/traffic?access_token=' + config.restToken();
 
 	if (type === 'update') {
 		for(let k in params) {
@@ -55,7 +55,7 @@ const changeLimit = async (type: string, id: any, params: any) => {
 };
 
 export const loadSessions = (id: any, params: any) => {
-	let request: string = config.host + 'partner/subscribers/' + id + '/sessions?access_token=' + config.restToken;
+	let request: string = config.host + 'partner/subscribers/' + id + '/sessions?access_token=' + config.restToken();
 
 	for(let k in params) {
 		request += '&'+k+'='+params[k];
@@ -66,21 +66,21 @@ export const loadSessions = (id: any, params: any) => {
 };
 
 export const removeDevice = (id: any, params: any) => {
-	let request: string = config.host + 'partner/subscribers/' + id + '/devices/' + params + '?access_token=' + config.restToken;
+	let request: string = config.host + 'partner/subscribers/' + id + '/devices/' + params + '?access_token=' + config.restToken();
 
 	return axios.delete(request)
 		.then(response => response);
 };
 
 export const loadPurchases = (id: any) => {
-	let request: string = config.host + 'partner/subscribers/' + id + '/purchase?access_token=' + config.restToken;
+	let request: string = config.host + 'partner/subscribers/' + id + '/purchase?access_token=' + config.restToken();
 
 	return axios.get(request)
 		.then(response => response);
 };
 
 const removePurchase = async (id: any, params: any) => {
-	let request: string = config.host + 'partner/subscribers/' + id + '/purchase?access_token=' + config.restToken + '&purchase_id='+params;
+	let request: string = config.host + 'partner/subscribers/' + id + '/purchase?access_token=' + config.restToken() + '&purchase_id='+params;
 
 	return axios.delete(request)
 		.then(response => response);
@@ -155,9 +155,6 @@ const deletePurchase: ActionCreator<ThunkAction<Promise<Action>, IState, void>> 
 
 export {
 	loadingState,
-
-
-
   getTraffic,
 	modifySubscriber,
 	setLimit,

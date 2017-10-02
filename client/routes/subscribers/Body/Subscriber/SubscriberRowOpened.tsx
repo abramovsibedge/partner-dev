@@ -119,13 +119,13 @@ class SubscriberRowOpened extends React.Component<Props, State> {
 
 		return (
 			<div className="subscriber_buttons">
-				<div>
-					{contentButtons}
-				</div>
 				<div className="subscriber_manage">
 					<SubscriberModify data={this.props.data} />
 					<SubscriberSetLimit data={this.props.data} />
 					<SubscriberChangeStatus data={this.props.data} />
+				</div>
+				<div className="subscriber_tabs">
+					{contentButtons}
 				</div>
 			</div>
 		);

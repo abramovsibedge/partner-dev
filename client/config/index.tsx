@@ -10,6 +10,8 @@ export default {
 	firebaseKey: ' AIzaSyBjJGXAQW9wuT7O1_bHMoLPaT6YSM1ELGU',
 	firebaseAuthDomain: 'web-portal-for-partners.firebaseapp.com',
 	firebasedatabaseURL: 'https://web-portal-for-partners.firebaseio.com',
-	restToken: storage.get('rest') && JSON.parse(storage.get('rest')).restToken,
+	restToken() {
+		return storage.get('rest') ? JSON.parse(storage.get('rest')).restToken : null;
+	},
 	authState: null
 };
