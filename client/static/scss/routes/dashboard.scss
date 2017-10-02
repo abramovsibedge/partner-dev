@@ -39,6 +39,7 @@
     margin-right: 20px;
     &_link {
       color: $palette-brand;
+      cursor: pointer;
     }
   }
   &_links {
@@ -106,7 +107,8 @@
   width: $x-size-content_width;
   margin: 0 auto 180px;
   align-self: stretch;
-  &.is-loading {
+  &.is-loading,
+  .is-loading {
     display: flex;
     align-items: center;
     justify-content: center;

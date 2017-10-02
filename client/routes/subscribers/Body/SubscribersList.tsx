@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import * as classNames from 'classnames';
 
-import Loader from '../Loading';
+import Spinner from '../../../components/spinner';
 
 interface Props {
 	loading: boolean
@@ -22,8 +23,8 @@ class SubscribersList extends React.Component<Props, {}> {
 		} = this.props;
 
 		return (
-			<div className="layout_content">
-				{loading && <Loader />}
+			<div className={classNames('layout_content', loading && 'is-loading')}>
+				{loading && <Spinner width="65" height="65" strokeWidth="6"/>}
 				{!loading &&
 					<div className="table main_table">
 						<div className="table_head">

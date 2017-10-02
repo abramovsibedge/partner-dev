@@ -12,7 +12,6 @@ export default handleActions<any>({
         return {statusAuth: false, errorMessages: ''};
     },
     [`${types.ACTIONS_SIGNIN}_SUCCESS`] : (state: IState, action: Action<string>) : IState => {
-      console.log('action', action);
     	return {statusAuth: true, errorMessages: ''};
     },
     [`${types.ACTIONS_SIGNIN}_ERROR`] : (state: IState, action: Action<string>) : IState => {

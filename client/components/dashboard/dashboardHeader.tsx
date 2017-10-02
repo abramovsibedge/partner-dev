@@ -4,7 +4,6 @@ import * as update from 'immutability-helper';
 import {storageHelper} from '../../utils';
 import {Link} from 'react-router';
 
-
 const storage = new storageHelper;
 
 import {
@@ -12,12 +11,11 @@ import {
 	IconDocs,
 	IconQuestion
 } from '../../components/icons'
-import {logOut} from '../../functions/auth';
-import {Button} from '../../components/button';
+import { Button } from '../button';
 
 interface State {
 	logoutModalState: boolean,
-    username: string
+	username: string
 }
 
 class DashboardHeader extends React.Component<{}, State> {
@@ -36,10 +34,17 @@ class DashboardHeader extends React.Component<{}, State> {
 		}));
 	}
 
+	logOut() {
+		storage.remove('firebase');
+		storage.remove('rest');
+		storage.remove('username');
+		window.location.replace("#/auth/signin");
+	}
+
 	render() {
 		const {
 			logoutModalState,
-            username
+			username
 		} = this.state;
 
 		return (
@@ -52,7 +57,7 @@ class DashboardHeader extends React.Component<{}, State> {
 							</a>
 						</div>
 						<div className="header_logout">
-							Hello {username}! <a href="#" className="header_logout_link" onClick={() => this.showLogout(true)}>Logout</a>
+							Hello {username}! <span className="header_logout_link" onClick={() => this.showLogout(true)}>Logout</span>
 							<Modal
 								isOpen={logoutModalState}
 								className={{base: 'modal_inner'}}
@@ -66,7 +71,7 @@ class DashboardHeader extends React.Component<{}, State> {
 									<button className="modal_btn modal_btn-reset" type="button" onClick={() => this.showLogout(false)}>
 										Cancel
 									</button>
-									<button className="modal_btn modal_btn-submit" type="button" onClick={() => logOut()}>
+									<button className="modal_btn modal_btn-submit" type="button" onClick={() => this.logOut()}>
 										Logout
 									</button>
 								</div>

@@ -42,15 +42,11 @@ export default handleActions<any>({
 			activeSubscriber: action.payload
 		}
 	},
-
-
-
-
-
 	[`${types.SEARCH_SUBSCRIBERS}_SUCCESS`] : (state: IState, action: Action<string>) : IState => {
 		return {
 			...state,
-			list: action.payload
+			list: action.payload,
+			subscribersLoading: false
 		}
 	},
 	[`${types.LOAD_LICENSES}_SUCCESS`] : (state: IState, action: Action<string>) : IState => {
@@ -60,12 +56,21 @@ export default handleActions<any>({
 		}
 	},
 	[`${types.ADD_SUBSCRIBER}_SUCCESS`] : (state: IState, action: Action<string>) : IState => {
+		console.log( action );
+
 		return {
+			...state,
 			addSubscriberStatus: action.payload
 		};
 	},
+	[`${types.ADD_SUBSCRIBER}_LOADING`] : (state: IState, action: Action<string>) : IState => {
+		console.log( action );
 
+		return {};
+	},
+	[`${types.ADD_SUBSCRIBER}_ERROR`] : (state: IState, action: Action<string>) : IState => {
+		console.log( action );
 
-
-
+		return {};
+	}
 }, initialState);

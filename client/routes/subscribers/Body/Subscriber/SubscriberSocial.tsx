@@ -4,21 +4,12 @@ interface Props {
 	data: any
 }
 
-interface State {
-	subscriber: any
-};
-
-class SubscriberSocial extends React.Component<Props, State> {
+class SubscriberSocial extends React.Component<Props, {}> {
 	constructor(props: any) {
 		super(props);
-
-		this.state = {
-			subscriber: props.data
-		};
 	}
 
 	render() {
-
 		let content = [
 			<div className="table_row" key='extref'>
 				<div className="table_row_wrapper">
@@ -26,13 +17,13 @@ class SubscriberSocial extends React.Component<Props, State> {
 						<div className="table_cell_content">Extref</div>
 					</div>
 					<div className="table_cell" style={{width: '80%'}}>
-						<div className="table_cell_content">{this.state.subscriber.extref}</div>
+						<div className="table_cell_content">{this.props.data.extref}</div>
 					</div>
 				</div>
 			</div>
 		];
 
-		for(let k in this.state.subscriber.social) {
+		for(let k in this.props.data.social) {
 			content.push(
 				<div className="table_row" key={k}>
 					<div className="table_row_wrapper">
@@ -40,7 +31,7 @@ class SubscriberSocial extends React.Component<Props, State> {
 							<div className="table_cell_content">{k}</div>
 						</div>
 						<div className="table_cell" style={{width: '80%'}}>
-							<div className="table_cell_content">{this.state.subscriber.social[k]}</div>
+							<div className="table_cell_content">{this.props.data.social[k]}</div>
 						</div>
 					</div>
 				</div>

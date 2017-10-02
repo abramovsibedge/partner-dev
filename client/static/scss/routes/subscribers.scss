@@ -32,6 +32,9 @@
       }
     }
   }
+  &_selector {
+    margin-left: auto;
+  }
   &_pane_content {
     position: relative;
     z-index: 2;

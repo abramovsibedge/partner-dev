@@ -12,8 +12,6 @@ import { getProjects } from '../../reducers/projects/actions';
 import * as actions from '../../reducers/subscribers/actions';
 import { checkAuth } from '../../utils'
 
-import '../../static/scss/components/modal.scss';
-import '../../static/scss/components/table.scss';
 import '../../static/scss/routes/subscribers.scss';
 
 interface Props {

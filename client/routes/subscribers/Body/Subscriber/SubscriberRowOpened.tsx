@@ -19,7 +19,6 @@ import SubscriberSessions     from './SubscriberSessions';
 import SubscriberPurchases    from './SubscriberPurchases';
 import SubscriberChangeStatus from './SubscriberChangeStatus';
 
-
 interface Props {
 	loading?: boolean
 	subscriber?: any
@@ -179,10 +178,10 @@ class SubscriberRowOpened extends React.Component<Props, State> {
 					<tbody>
 						<tr>
 							<td>false</td>
-							<td>{dateString(subscriber.traffic.start)} </td>
-							<td>{byteConvert(subscriber.traffic.used)}</td>
-							<td>{byteConvert(subscriber.traffic.remaining)}</td>
-							<td>{byteConvert(subscriber.traffic.limit)}</td>
+							<td>{dateString(subscriber.traffic.traffic_start)} </td>
+							<td>{byteConvert(subscriber.traffic.traffic_used)}</td>
+							<td>{byteConvert(subscriber.traffic.traffic_remaining)}</td>
+							<td>{byteConvert(subscriber.traffic.traffic_limit)}</td>
 							<td><span className={(free ? 'table_disable' : 'table_enable')}>{(free ? 'Free' : 'Not free')}</span></td>
 						</tr>
 					</tbody>

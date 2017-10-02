@@ -1,34 +1,27 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as update from 'immutability-helper';
 import Modal from 'react-modal';
-import Signal from '../../../../functions/Signal';
-import * as actions from '../../../../reducers/subscriber/actions';
+import * as update from 'immutability-helper';
 
-import {
-	IconPen
-} from '../../../../components/icons'
-import {Button} from '../../../../components/button';
+import * as actions from '../../../../reducers/subscriber/actions';
 
 import {
 	Form,
 	FormRow,
 	Input,
-	Checkbox2 as Checkbox
+	Checkbox
 } from '../../../../components/form';
-
-import {
-	deleteTraffic,
-	modifyTraffic
-} from '../../../../functions/subscribers';
+import { IconPen } from '../../../../components/icons'
+import { Button } from '../../../../components/button';
 
 interface Props {
 	data: any
-	setLimit?: (id: any, data: any) => void
+	setLimit?: any
+	loadingState?: any
+	getTraffic?: (data: any) => void
 }
 
 interface State {
-	subscriber: any,
 	showModal: boolean,
 	modalObject: object,
 }
@@ -38,7 +31,6 @@ class SubscriberSetLimit extends React.Component<Props, State> {
 		super(props);
 
 		this.state = {
-			subscriber: props.subscriber,
 			showModal: false,
 			modalObject: {
 				limit: {
@@ -55,7 +47,7 @@ class SubscriberSetLimit extends React.Component<Props, State> {
 	}
 
 	showModal(state: boolean) {
-		this.setState({showModal: state});
+		this.setState(update(this.state, {showModal: {$set: state}}));
 	}
 
 	submitForm() {
@@ -80,54 +72,66 @@ class SubscriberSetLimit extends React.Component<Props, State> {
 
 		if(!valid) {
 			object['message'] = 'Fill in the highlighted fields.';
-			return this.setState({modalObject: object});
+			return this.setState(update(this.state, {
+				modalObject: {$set: object}
+			}));
 		}
 
-		if(this.state.modalObject['unlimited']) {
-			return deleteTraffic(this.state.subscriber.id).then((response) => {
-				if(response.result !== 'OK') {
-					// @todo handle error
-					return;
-				}
+		let type: string = this.state.modalObject['unlimited'] ? 'delete' : 'update';
 
-				this.showModal(false);
-				Signal.dispatch('subscriberModified', {id: this.state.subscriber.id});
+		this.props.loadingState(true)
+			.then(() => {
+				this.props.setLimit(type, this.props.data.id, {
+					traffic_limit: this.state.modalObject['limit'].value,
+					reset: !!this.state.modalObject['reset']
+				}).then(() => this.props.getTraffic(this.props.data.id));
+			})
+			.then(() => {
+				this.setState(update(this.state, {
+					modalObject: {
+						limit: {
+							value: '',
+							valid: true
+						},
+						message: ''
+					},
+					showModal: {$set: false}
+				}));
 			});
-		}
-
-		this.showModal(false);
-
-		this.props.setLimit(this.props.data.id, {
-			traffic_limit: this.state.modalObject['limit'].value,
-			reset: (this.state.modalObject['reset']?true:false)
-		})
 	}
 
 	inputHandler(value: string, stateItem: string) {
 		let newState = this.state.modalObject;
 		newState[stateItem].value = value;
 
-		this.setState({modalObject: newState});
+		this.setState(update(this.state, {
+			modalObject: {$set: newState}
+		}));
 	}
 
 	setVisibility(key: string) {
 		let newState  = this.state.modalObject;
 		newState[key] = !newState[key];
-		this.setState({
-			modalObject: newState
-		});
+
+		this.setState(update(this.state, {
+			modalObject: {$set: newState}
+		}));
 	}
 
 	render() {
+		const {
+			showModal,
+			modalObject
+		} = this.state;
+
 		return (
 			<div className="subscriber_manage-button">
-				<Button type="button" className="subscriber_manage_item subscriber_manage_item-enable"
-								onClick={() => this.showModal(true)}>
+				<Button type="button" className="subscriber_manage_item subscriber_manage_item-enable" onClick={() => this.showModal(true)}>
 					<IconPen width="24" height="24"/>
 					<span>Set limit</span>
 				</Button>
 				<Modal
-					isOpen={this.state.showModal}
+					isOpen={showModal}
 					className={{base: 'modal_inner'}}
 					overlayClassName={{base: 'modal_outer'}}
 					contentLabel="test">
@@ -135,30 +139,28 @@ class SubscriberSetLimit extends React.Component<Props, State> {
 						<h2>Set limit</h2>
 					</div>
 					<Form submit={() => this.submitForm()} className="modal_form">
-						<div className="modal_error">{this.state.modalObject['message']}</div>
+						<div className="modal_error">{modalObject['message']}</div>
 						<div className="modal_content">
 							<FormRow>
 								<Input
 									type="text"
 									label="Limit"
-									value={this.state.modalObject['limit'].value}
-									notValid={!this.state.modalObject['limit'].valid}
+									value={modalObject['limit'].value}
+									notValid={!modalObject['limit'].valid}
 									onChange={(e) => this.inputHandler(e.target.value, 'limit')}>
 								</Input>
 							</FormRow>
 							<FormRow>
 								<Checkbox
 									className="subscriber_edit_checkbox"
-									checked={this.state.modalObject['reset']}
-									label="Trafic reset"
-									onChange={() => this.setVisibility('reset')}>&nbsp;</Checkbox>
+									checked={modalObject['reset']}
+									onChange={() => this.setVisibility('reset')}>Trafic reset</Checkbox>
 							</FormRow>
 							<FormRow>
 								<Checkbox
 									className="subscriber_edit_checkbox"
-									checked={this.state.modalObject['unlimited']}
-									label="Set traffic unlimited"
-									onChange={(a) => this.setVisibility('unlimited')}>&nbsp;</Checkbox>
+									checked={modalObject['unlimited']}
+									onChange={(a) => this.setVisibility('unlimited')}>Set traffic unlimited</Checkbox>
 							</FormRow>
 						</div>
 						<div className="modal_footer">
@@ -173,11 +175,10 @@ class SubscriberSetLimit extends React.Component<Props, State> {
 }
 
 export default connect<any, any, Props>(
-	state => ({
-		subscribers: state.subscribers,
-		subscriber: state.subscriber
-	}),
+	state => ({}),
 	({
-		setLimit: actions.setLimit
+		setLimit: actions.setLimit,
+		loadingState: actions.loadingState,
+		getTraffic: actions.getTraffic
 	})
 )(SubscriberSetLimit);

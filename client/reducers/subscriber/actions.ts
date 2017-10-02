@@ -30,26 +30,28 @@ export const loadDevices = (id: any) => {
 		.catch(error => error);
 };
 
-export const changeSubscriber = (id: any, params: any) => {
+const changeSubscriber = async (id: any, params: any) => {
 	let request: string = config.host + 'partner/subscribers/' + id + '?access_token=' + config.restToken;
 
 	for(let k in params) {
 		request += '&'+k+'='+params[k];
 	}
 
-	return axios.put(request)
-		.then(response => response);
+	return axios.put(request).then(response => response);
 };
 
-export const changeLimit = (id: any, params: any) => {
+const changeLimit = async (type: string, id: any, params: any) => {
 	let request:string = config.host + 'partner/subscribers/' + id + '/traffic?access_token=' + config.restToken;
 
-	for(let k in params) {
-		request += '&'+k+'='+params[k];
+	if (type === 'update') {
+		for(let k in params) {
+			request += '&'+k+'='+params[k];
+		}
+
+		return axios.post(request).then(response => response);
 	}
 
-	return axios.post(request)
-		.then(response => response);
+	return axios.delete(request).then(response => response);
 };
 
 export const loadSessions = (id: any, params: any) => {
@@ -77,7 +79,7 @@ export const loadPurchases = (id: any) => {
 		.then(response => response);
 };
 
-export const removePurchase = (id: any, params: any) => {
+const removePurchase = async (id: any, params: any) => {
 	let request: string = config.host + 'partner/subscribers/' + id + '/purchase?access_token=' + config.restToken + '&purchase_id='+params;
 
 	return axios.delete(request)
@@ -93,6 +95,27 @@ const loadingState: ActionCreator<ThunkAction<Promise<Action>, IState, void>> = 
 	};
 };
 
+const setLimit: ActionCreator<ThunkAction<Promise<Action>, IState, void>> = (type: string, id: any, data: any) => {
+	return async (dispatch: Dispatch<IState>): Promise<Action> => {
+		let result = await changeLimit(type, id, data);
+
+		return dispatch({
+			type: types.SET_LIMIT,
+			result
+		});
+	};
+};
+
+const modifySubscriber: ActionCreator<ThunkAction<Promise<Action>, IState, void>> = (id: any, data: any) => {
+	return async (dispatch: Dispatch<IState>): Promise<Action> => {
+		let result = await changeSubscriber(id, data);
+
+		return dispatch({
+			type: types.MODIFY_SUBSCRIBER,
+			result
+		});
+	};
+};
 
 const getTraffic = ReduxActions.createAction<any, any>(
 	types.LOAD_TRAFFIC,
@@ -102,16 +125,6 @@ const getTraffic = ReduxActions.createAction<any, any>(
 const getDevices = ReduxActions.createAction<any, any>(
 	types.GET_DEVICES,
 	(id: any) => loadDevices(id)
-);
-
-const modifySubscriber = ReduxActions.createAction<any, any, any>(
-	types.MODIFY_SUBSCRIBER,
-	(id: any, data: any) => changeSubscriber(id, data)
-);
-
-const setLimit = ReduxActions.createAction<any, any, any>(
-	types.SET_LIMIT,
-	(id: any, data: any) => changeLimit(id, data)
 );
 
 const getSessions = ReduxActions.createAction<any, any, any>(
@@ -129,10 +142,16 @@ const getPurchases = ReduxActions.createAction<any, any, any>(
 	(id: any) => loadPurchases(id)
 );
 
-const deletePurchase = ReduxActions.createAction<any, any, any>(
-	types.GET_PURCHASES,
-	(id: any, params: any) => removePurchase(id, params)
-);
+const deletePurchase: ActionCreator<ThunkAction<Promise<Action>, IState, void>> = (id: any, params: any) => {
+	return async (dispatch: Dispatch<IState>): Promise<Action> => {
+		let result = await removePurchase(id, params);
+
+		return dispatch({
+			type: types.GET_PURCHASES,
+			result
+		});
+	};
+};
 
 export {
 	loadingState,
