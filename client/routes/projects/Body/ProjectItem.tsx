@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 
 import * as actions from '../../../reducers/projects/actions';
 
-import {
-  Resume
-} from '../../../components/icons'
+// import {
+//   Resume
+// } from '../../../components/icons'
 import {
 	Button
 } from '../../../components/button'
@@ -58,7 +58,7 @@ class ProjectItem extends React.Component<Props, State> {
 					<div className="top-info">
 						<div className="avatar">
 							<div className="img">
-								<img src={require('../../../static/media/def-icon.png')} alt="def" />
+								{/*<img src={require('../../../static/media/def-icon.png')} alt="def" />*/}
 							</div>
 							{
 								(statusEdit) ?
@@ -114,7 +114,7 @@ class ProjectItem extends React.Component<Props, State> {
 							</div>
               :
 							<div className="more-info">
-								<Resume width="25px" height="25px" fill="#36c75a"/>
+								{/*<Resume width="25px" height="25px" fill="#36c75a"/>*/}
 								<p>View project</p>
 							</div>
         }

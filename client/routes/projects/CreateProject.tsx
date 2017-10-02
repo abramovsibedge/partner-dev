@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import Dashboard from '../../components/dashboard';
 import DashboardHeader from '../../components/dashboard/dashboardHeader';
-import Create from '../projects/Body/Create';
+// import Create from '../projects/Body/Create';
 import Header from './Header';
 
 import '../../static/scss/routes/projects.scss';
@@ -22,7 +22,7 @@ class CreateProject extends React.Component<Props, {}> {
 					<DashboardHeader>
 						<Header />
 					</DashboardHeader>
-         	<Create  />
+         	{/*<Create  />*/}
 				</Dashboard>
 		);
 	}
