@@ -20,11 +20,11 @@ module.exports = {
   },
 
   resolve: {
-      extensions: ['.ts', '.tsx', '.js', '.jsx'],
-      modules: [
-          path.join(__dirname, "client"),
-          "node_modules"
-      ]
+		extensions: ['.ts', '.tsx', '.js', '.jsx'],
+		modules: [
+			path.join(__dirname, "client"),
+			"node_modules"
+		]
   },
 
   plugins: [
@@ -45,9 +45,9 @@ module.exports = {
   module: {
     rules: [
       {
-          test: /\.ts(x?)$/,
-          exclude: [/node_modules/, /public/],
-          loader: "babel-loader!eslint-loader!ts-loader"
+				test: /\.ts(x?)$/,
+				exclude: [/node_modules/, /public/],
+				loader: "babel-loader!eslint-loader!ts-loader"
       },
       {
         test: /\.js$/,
