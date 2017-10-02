@@ -20,7 +20,7 @@ interface Parent {
 
 interface State {
 	type: string,
-	isSigned: boolean,
+	isSigned: any,
 	filters: any
 }
 
