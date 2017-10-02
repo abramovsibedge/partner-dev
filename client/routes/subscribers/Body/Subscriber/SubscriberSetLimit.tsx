@@ -9,7 +9,7 @@ import {
 	Form,
 	FormRow,
 	Input,
-	Checkbox2 as Checkbox
+	Checkbox
 } from '../../../../components/form';
 import { IconPen } from '../../../../components/icons'
 import { Button } from '../../../../components/button';
@@ -154,15 +154,13 @@ class SubscriberSetLimit extends React.Component<Props, State> {
 								<Checkbox
 									className="subscriber_edit_checkbox"
 									checked={modalObject['reset']}
-									label="Trafic reset"
-									onChange={() => this.setVisibility('reset')}>&nbsp;</Checkbox>
+									onChange={() => this.setVisibility('reset')}>Trafic reset</Checkbox>
 							</FormRow>
 							<FormRow>
 								<Checkbox
 									className="subscriber_edit_checkbox"
 									checked={modalObject['unlimited']}
-									label="Set traffic unlimited"
-									onChange={(a) => this.setVisibility('unlimited')}>&nbsp;</Checkbox>
+									onChange={(a) => this.setVisibility('unlimited')}>Set traffic unlimited</Checkbox>
 							</FormRow>
 						</div>
 						<div className="modal_footer">

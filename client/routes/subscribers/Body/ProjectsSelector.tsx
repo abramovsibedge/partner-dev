@@ -75,7 +75,7 @@ class ProjectsSelector extends React.Component<Props, State> {
 		const { activeProject } = this.props;
 
 		return (
-			<div>
+			<div className="subscriber_selector">
 				{projectsList[activeProject] && <Select
 					value={projectsList[activeProject].value}
 					options={projectsList}

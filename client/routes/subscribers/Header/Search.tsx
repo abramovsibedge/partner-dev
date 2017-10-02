@@ -3,7 +3,6 @@ import * as classNames from 'classnames';
 import * as update from 'immutability-helper';
 import { connect } from 'react-redux';
 
-import * as model from '../../../reducers/subscribers/model';
 import * as actions from '../../../reducers/subscribers/actions';
 
 import { Button } from '../../../components/button';

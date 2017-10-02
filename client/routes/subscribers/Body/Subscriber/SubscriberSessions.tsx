@@ -3,7 +3,6 @@ import Loading from '../../Loading';
 import {Button} from "../../../../components/button/index";
 import Calendar from "./Calendar";
 import { connect } from 'react-redux';
-import * as model from '../../../../reducers/subscriber/model';
 import * as actions from '../../../../reducers/subscriber/actions';
 
 import {
@@ -18,7 +17,7 @@ import {
 
 interface Props {
 	data: any
-	subscriber?: model.subscriberModel
+	subscriber?: any
 	getSessions?: (id: any, data: any) => void
 	getDevices?: (data: any) => void
 }
@@ -113,7 +112,10 @@ class SubscriberSessions extends React.Component<Props, State> {
 			return (
 				<div className="subscriber_tabs_content sessions_content">
 					<div className="subscriber_tabs_empty sessions_empty">
-						<p>Subscriber has no sessions from <span>All Devices</span> between<br /><span>{this.time.from[1]} - {this.time.till[1]}<span></span></span></p>
+						<p>
+							Subscriber has no sessions from <span>All Devices</span> between<br />
+							<span>{this.time.from[1]} - {this.time.till[1]}</span>
+						</p>
 					</div>
 				</div>
 			);
@@ -184,7 +186,11 @@ class SubscriberSessions extends React.Component<Props, State> {
 					{content}
 				</div>
 				<div className="subscriber_tabs_empty sessions_empty">
-					<p>Subscriber has {this.state.size} sessions from <span>{this.state.activeDevice===0?'All Devices':this.state.activeDevice.name}</span> between<br /><span>{this.time.from[1]} - {this.time.till[1]}<span></span></span></p>
+					<p>
+						Subscriber has {this.state.size} sessions from
+						<span>{this.state.activeDevice===0?'All Devices':this.state.activeDevice.name}</span> between<br />
+						<span>{this.time.from[1]} - {this.time.till[1]}</span>
+					</p>
 					<p><a href="#" className="js-sessions-other-range">Try different time range</a></p>
 				</div>
 			</div>

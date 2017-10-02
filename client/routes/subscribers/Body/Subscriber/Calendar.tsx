@@ -3,11 +3,7 @@ import * as DayPicker from 'react-day-picker';
 import {Button} from "../../../../components/button/index";
 import ReactInputMask from 'react-input-mask';
 
-import Signal from '../../../../functions/signal';
-
-import {
-	Checkbox2 as Checkbox
-} from '../../../../components/form';
+import { Checkbox } from '../../../../components/form';
 
 import {
 	IconClock,
@@ -320,8 +316,7 @@ class Calendar extends React.Component<Parent, State> {
 								<Checkbox
 									className="subscriber_edit_checkbox"
 									checked={false}
-									label="Active sessions"
-									onChange={() => {}}>&nbsp;</Checkbox>
+									onChange={() => {}}>Active sessions</Checkbox>
 							</div>
 							<div className="calendar_dropdown_item item2">
 								<span onClick={() => this.showToday()}>Today</span>
@@ -339,8 +334,7 @@ class Calendar extends React.Component<Parent, State> {
 								<Checkbox
 									className="subscriber_edit_checkbox"
 									checked={this.state.customTime}
-									label="Specific time range"
-									onChange={() => this.setState({customTime: !this.state.customTime})}>&nbsp;</Checkbox>
+									onChange={() => this.setState({customTime: !this.state.customTime})}>Specific time range</Checkbox>
 							</div>
 							<div className="calendar_dropdown_item item2">
 								<span onClick={() => this.showYesterday()}>Yesterday</span>
