@@ -48,32 +48,10 @@ export class Main extends React.Component<{}, State> {
 							</a>
 							<ul className="menu">
 								<li className="menu_item docslink">
-									<span className="menu_link">
+									<a href="/docs" className="menu_link">
 										<IconDocs width="24" height="24"/>
 										<span>Docs</span>
-									</span>
-									<div className="docslink_drop">
-										<ul className="docslink_list">
-											<li className="docslink_item">
-												<Link className="docslink_link" to="docs/proxy_sdk_android">Proxy SDK for Android</Link>
-											</li>
-											<li className="docslink_item">
-												<Link className="docslink_link" to="docs/proxy_sdk_ios">Proxy SDK for iOS</Link>
-											</li>
-											<li className="docslink_item">
-												<Link className="docslink_link" to="docs/vpn_sdk_android_openvpn">VPN SDK for Android (OpenVPN)</Link>
-											</li>
-											<li className="docslink_item">
-												<Link className="docslink_link" to="docs/vpn_sdk_ios_ipsec" target="_blank">VPN SDK for iOS (IPsec)</Link>
-											</li>
-											<li className="docslink_item">
-												<a className="docslink_link" href="http://backend.northghost.com/doc/partner/index.html" target="_blank">Partner API</a>
-											</li>
-											<li className="docslink_item">
-												<a className="docslink_link" href="https://backend.northghost.com/doc/user/index.html" target="_blank">User API</a>
-											</li>
-										</ul>
-									</div>
+									</a>
 								</li>
 								<li className="menu_item">
 									<a className="menu_link" href="mailto:platformpartners@anchorfree.com">

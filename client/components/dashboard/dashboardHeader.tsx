@@ -82,29 +82,10 @@ class DashboardHeader extends React.Component<{}, State> {
 						</div>
 						<div className="header_links">
 							<div className="header_links_content">
-								<span className="header_links_link">
+								<Link className="header_links_link" to="docs">
 									<IconDocs width="24" height="24"/>
 									<span>Docs</span>
-								</span>
-								<div className="header_links_drop">
-									<ul className="header_links_list">
-										<li>
-											<Link className="header_links_list_link" to="/docs/proxy_sdk_android">Proxy
-												SDK for Android</Link></li>
-										<li>
-											<Link className="header_links_list_link" to="/docs/proxy_sdk_ios">Proxy
-												SDK for iOS</Link></li>
-										<li>
-											<Link className="header_links_list_link" to="/docs/vpn_sdk_android_openvpn">VPN SDK for Android (OpenVPN)</Link></li>
-										<li>
-											<Link className="header_links_list_link" to="/docs/vpn_sdk_ios_ipsec">VPN
-												SDK for iOS (IPsec)</Link></li>
-										<li>
-											<a className="header_links_list_link" href="http://backend.northghost.com/doc/partner/index.html" target="_blank">Partner API</a></li>
-										<li>
-											<a className="header_links_list_link" href="https://backend.northghost.com/doc/user/index.html" target="_blank">User API</a></li>
-									</ul>
-								</div>
+								</Link>
 							</div>
 							<div className="header_links_content">
 								<a className="header_links_link" href="mailto:platformpartners@anchorfree.com">

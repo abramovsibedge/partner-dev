@@ -13,6 +13,9 @@ import {
 
 
 
+import UsersAuthentication from './UsersAuthentication';
+import Payments from './Payments';
+
 interface Props {
 	project: any
 }

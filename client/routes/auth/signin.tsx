@@ -136,7 +136,7 @@ class Signin extends React.Component<Props, State> {
 					</div>
 
 					<div className="form_row register_actions">
-						<Button type="submit" className="register_submit">Sign Up</Button>
+						<Button type="submit" className="register_submit">Sign In</Button>
 					</div>
 				</Form>
 			</div>
