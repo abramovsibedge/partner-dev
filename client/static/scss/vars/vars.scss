@@ -7,6 +7,7 @@ Colors vars
 $palette-white: white;
 $palette-black: black;
 $palette-red: red;
+$green: #36c75a;
 
 $x-palette-dark: #242b33;
 $x-palette-gray: #333333;
@@ -40,6 +41,7 @@ $label-light: $x-palette-gray_1;
 $label-dark: lighten( $palette-white, 40% );
 $table-cell-light: #f5f4f2;
 $table-cell-dark: #3e4651;
+$block-cell-dark: #3e4651;
 
 // brand color
 $palette-brand: #3f9beb;

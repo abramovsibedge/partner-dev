@@ -1,61 +1,24 @@
 import * as React from 'react';
-import * as update from 'immutability-helper';
-import Modal from 'react-modal';
 import { connect } from 'react-redux';
-import * as classNames from 'classnames';
-
-import '../../../static/scss/components/modal.scss';
-import '../../../static/scss/components/table.scss';
-
-import {
-	loadProjectItem,
-	deleteProject,
-	addUser,
-	deleteUser,
-	setVisibility
-} from '../../../functions/projects';
-
-import {
-	IconPlus,
-	IconClose,
-	IconDelete
-} from '../../../components/icons'
-
-import Spinner from '../../../components/spinner';
-
-import {
-	Form,
-	FormRow,
-	Input,
-	Checkbox
-} from '../../../components/form';
-import {Button} from '../../../components/button';
-import {emailValidation} from '../../../utils';
-
 
 import * as actions from '../../../reducers/projects/actions';
 
+import {
+  Resume
+} from '../../../components/icons'
+import {
+	Button
+} from '../../../components/button'
+
+
+
+
 interface Props {
-	onUpdate: () => void
-  deleteProject: (item: object) => void
-  getProject: (id: string) => void
-  changeVisibility: (project: string, country: string, visibility: boolean) => void
-  addUserProject: (project: string, email: string) => void
-  delettUserProject: (project: string, email: string) => void
 	project: any
-  selectedProject: {}
-  update_project: boolean
 }
 
 interface State {
-	deleteProjectModalState: boolean
-	addUserModalState: boolean
-	addUserObject: object
-	deleteUserModalState: boolean
-	selectedProjectId: string,
-  selectedProjectForUpdate: string,
-	selectedProject: object
-	selectedProjectTab: string
+	statusEdit: boolean
 }
 
 class ProjectItem extends React.Component<Props, State> {
@@ -63,376 +26,98 @@ class ProjectItem extends React.Component<Props, State> {
 		super(props);
 
 		this.state = {
-			deleteProjectModalState: false,
-			addUserModalState: false,
-			addUserObject: {
-				email: '',
-				validationState: true,
-				message: ''
-			},
-			deleteUserModalState: false,
-			selectedProjectId: '',
-      selectedProjectForUpdate: '',
-			selectedProject: {},
-			selectedProjectTab: 'vpn-servers',
+      statusEdit: false
 		}
 	}
-
+	changeStatusEdit() {
+		this.setState({
+      statusEdit: !this.state.statusEdit
+		})
+	}
 	componentWillReceiveProps(nextProps: any) {
-		if (nextProps.update_project &&
-				this.state.selectedProjectId &&
-				this.state.selectedProjectId==this.state.selectedProjectForUpdate)
-		{
-			this.setState({
-				selectedProjectForUpdate: '',
-        addUserObject: {validationState: true, message: ''}
-			});
 
-      this.props.getProject(this.state.selectedProjectId);
-		}
-    if (nextProps.selectedProject
-      && nextProps.selectedProject["countries"]
-      && nextProps.selectedProject["emails"]
-      && nextProps.selectedProject["id"] == this.props.project.publickey
-    ) {
-      this.setState({selectedProject: nextProps.selectedProject});
-    }
-  }
-
-	showDeleteProject(value: boolean) {
-		this.setState(update(this.state, {
-			deleteProjectModalState: {$set: value},
-		}));
 	}
-
-	deleteProjectConfirm(project: any) {
-    this.setState({selectedProjectForUpdate: this.state.selectedProjectId});
-		this.props.deleteProject(project);
-	}
-
-	openProject(id: string) {
-    this.setState(update(this.state, {
-			selectedProjectId: {$set: id}
-		}));
-    this.props.getProject(id);
-	}
-
-	closeProject() {
-		this.setState(update(this.state, {
-			selectedProject: {$set: {}},
-			selectedProjectId: {$set: ''}
-		}));
-	}
-
-	tabSwitcher(tab: string) {
-		this.setState(update(this.state, {
-			selectedProjectTab: {$set: tab}
-		}));
-	}
-
-	setVisibility(project: string, country: string, visibility: boolean) {
-		this.setState({selectedProjectForUpdate: this.state.selectedProjectId});
-	  this.props.changeVisibility(project, country, visibility);
-	}
-
-	showAddUser(value: boolean) {
-		this.setState(update(this.state, {
-			addUserModalState: {$set: value},
-		}));
-	}
-
-	addUserHandler(value: string, stateItem: string) {
-		let newState = {};
-		newState['addUserObject'] = {[stateItem]: {$set: value}};
-		this.setState(update(this.state, newState));
-	}
-
-	addUserSubmit(project: string) {
-
-		const $t = this;
-		const $state = $t.state;
-		let state: boolean = true;
-		let message: string = '';
-
-		if (!$state.addUserObject['email']) {
-			state = false;
-			message += 'Fill in the highlighted fields.';
-		}
-
-		if (!emailValidation($state.addUserObject['email'])) {
-			state = false;
-			message += 'Email not valid.'
-		}
-
-		$t.setState(update($state, {
-			addUserObject: {
-				validationState: {$set: false},
-				message: {$set: message}
-			}
-		}));
-
-		if (!state && message) return false;
-
-    this.setState({selectedProjectForUpdate: this.state.selectedProjectId});
-		this.props.addUserProject(project, $state.addUserObject['email']);
-	}
-
-	showDeleteUser(value: boolean) {
-		this.setState(update(this.state, {
-			deleteUserModalState: {$set: value},
-		}));
-	}
-
-	deleteUserConfirm(project: string, email: string) {
-    this.setState({selectedProjectForUpdate: this.state.selectedProjectId});
-		this.props.delettUserProject(project, email);
-	}
-
 
 	render() {
-		const {
-			selectedProjectId,
-			deleteProjectModalState,
-			selectedProjectTab,
-			addUserObject,
-			addUserModalState,
-			deleteUserModalState,
-      selectedProject
+		const{
+      statusEdit
 		} = this.state;
 		const {
       project,
     } = this.props;
 
 		return (
-			<div className={classNames("table_row", selectedProjectId === project.publickey && "table_row_open")}>
-				<div className="table_row_wrapper" onClick={() => !project.deleteTaskCode && this.openProject(project.publickey)}>
-					<div className="table_cell" style={{width: '30%'}}>
-						<div className="table_cell_content">{project.publickey}</div>
-					</div>
-					<div className="table_cell" style={{width: '50%'}}>
-						<div className="table_cell_content">{project.description}</div>
-					</div>
-					<div className="table_cell" style={{width: '20%'}}>
-						<div className="table_cell_content">{project.deleteTaskCode && <span className="table_label table_label-red">Deleted</span>}</div>
-					</div>
-				</div>
-				<Button type="button" className="project_close" onClick={() => this.closeProject()}>
-					<IconClose width="24" height="24"/>
-				</Button>
-
-        <div className={classNames("table_row_content", Object.keys(selectedProject).length === 0 && "is-loading")}>
-
-					{selectedProjectId === project.publickey && Object.keys(selectedProject).length === 0
-          && <Spinner width="65" height="65" strokeWidth="6"/>}
-
-					{selectedProjectId === project.publickey && Object.keys(selectedProject).length > 0
-					&& <div className="project_pane_content">
-						<div className="project_traffic">
-							<table>
-								<thead>
-								<tr>
-									<th>Private Key</th>
-									<th>URL</th>
-								</tr>
-								</thead>
-								<tbody>
-								<tr>
-									<td>{project.privatekey}</td>
-									<td>https://backend.northghost.com</td>
-								</tr>
-								</tbody>
-							</table>
-						</div>
-						<div className="project_buttons">
-							<div>
-								<button
-									className={classNames("project_tabs_item", selectedProjectTab === "vpn-servers" && "project_tabs_item-active")}
-									onClick={() => this.tabSwitcher("vpn-servers")} type="button">VPN Servers
-								</button>
-								<button
-									className={classNames("project_tabs_item", selectedProjectTab === "access" && "project_tabs_item-active")}
-									onClick={() => this.tabSwitcher("access")} type="button">Access
-								</button>
+			<div className="item-block">
+				<div className="content">
+          {
+            (statusEdit) ?
+								<div></div>
+								:
+								<div className="link-edit" onClick={() => {this.changeStatusEdit()}}>Edit</div>
+          }
+					<div className="top-info">
+						<div className="avatar">
+							<div className="img">
+								<img src={require('../../../static/media/def-icon.png')} alt="def" />
 							</div>
-							<div className="project_manage">
-								<Button type="button" className="project_manage_item project_manage_item-disable"
-												onClick={() => this.showDeleteProject(true)}>
-									<IconDelete width="24" height="24"/>
-									<span>Delete project</span>
-								</Button>
-								<Modal
-									isOpen={deleteProjectModalState}
-									className={{base: 'modal_inner'}}
-									overlayClassName={{base: 'modal_outer'}}
-									contentLabel="test">
-									<div className="modal_header">
-										<h2>Delete project</h2>
-									</div>
-									<div className="modal_content is-text-center">Do you really want to delete project?</div>
-									<div className="modal_footer">
-										<button className="modal_btn modal_btn-reset" type="button"
-														onClick={() => this.showDeleteProject(false)}>Cancel
-										</button>
-										<button className="modal_btn modal_btn-submit" type="button"
-														onClick={() => this.deleteProjectConfirm(project)}>Delete project
-										</button>
-									</div>
-									<Button type="button" className="modal_close"
-													onClick={() => this.showDeleteProject(false)}>
-										<IconClose width="24" height="24"/>
-									</Button>
-								</Modal>
-							</div>
-						</div>
-						<div className="project_content">
-							{selectedProjectTab === "vpn-servers" && <div>
-								{selectedProject['countries'].countries.length === 0 &&
-								<div className="project_tabs_empty">
-									<p>Project has no countries.</p>
-								</div>}
-
-								{selectedProject['countries'].countries.length > 0 && <div className="table inner_table">
-									<div className="table_head">
-										<table>
-											<tbody>
-											<tr>
-												<td style={{width: '25%'}}>Country</td>
-												<td style={{width: '65%'}}>Protocols</td>
-												<td style={{width: '10%'}}>Visibility</td>
-											</tr>
-											</tbody>
-										</table>
-									</div>
-									<div className="table_body">
-										{selectedProject['countries'].countries.map((country: any, index: number) => {
-											return <div key={index} className="table_row">
-												<div className="table_row_wrapper">
-													<div className="table_cell" style={{width: '25%'}}>
-														<div className="table_cell_content">{country.country}</div>
-													</div>
-													<div className="table_cell" style={{width: '65%'}}>
-														<div className="table_cell_content">{country.protocols}</div>
-													</div>
-													<div className="table_cell" style={{width: '10%'}}>
-														<div className="table_cell_content country_visibility">
-															<Checkbox
-																className="project_edit_checkbox"
-																checked={country.visibility}
-																onChange={() => this.setVisibility(project.publickey, country.country, !country.visibility)}>&nbsp;</Checkbox>
-														</div>
-													</div>
-												</div>
-											</div>
-										})}
-									</div>
-								</div>}
-							</div>}
-
-							{selectedProjectTab === "access" && <div>
-								<div className="user_new">
-									<Button type="button" className="user_new_btn is-transparent"
-													onClick={() => this.showAddUser(true)}>
-										<IconPlus width="24" height="24"/>
-										<span>Add access email</span>
-									</Button>
-									<Modal
-										isOpen={addUserModalState}
-										className={{base: 'modal_inner'}}
-										overlayClassName={{base: 'modal_outer'}}
-										contentLabel="test">
-										<div className="modal_header">
-											<h2>Create user</h2>
+							{
+								(statusEdit) ?
+										<div className="action-img">
+											<p className="name-action-img">App icon</p>
+											<p>Upload app icon</p>
 										</div>
-										<Form submit={() => this.addUserSubmit(project.publickey)} className="modal_form">
-											<div className="modal_error">{addUserObject['message']}</div>
-											<div className="modal_content">
-												<FormRow>
-													<Input
-														type="email"
-														label="User email"
-														value={addUserObject['email']}
-														notValid={!addUserObject['validationState'] && !addUserObject['email']}
-														onChange={(e) => this.addUserHandler(e.target.value, 'email')}>
-													</Input>
-												</FormRow>
-											</div>
-											<div className="modal_footer">
-												<button className="modal_btn modal_btn-reset" type="button"
-																onClick={() => this.showAddUser(false)}>Cancel
-												</button>
-												<button className="modal_btn modal_btn-submit" type="submit">Create user</button>
-											</div>
-										</Form>
-										<Button type="button" className="modal_close" onClick={() => this.showAddUser(false)}>
-											<IconClose width="24" height="24"/>
-										</Button>
-									</Modal>
-								</div>
-								{selectedProject['emails'].usersMail.length === 0 && <div className="project_tabs_empty">
-									<p>Project has no users.</p>
-								</div>}
-
-								{selectedProject['emails'].usersMail.length > 0 && <div className="table inner_table">
-									<div className="table_head">
-										<table>
-											<tbody>
-											<tr>
-												<td style={{width: '50%'}}>User</td>
-												<td style={{width: '50%'}}>&nbsp;</td>
-											</tr>
-											</tbody>
-										</table>
-									</div>
-									<div className="table_body">
-										{selectedProject['emails'].usersMail.map((email: any, index: number) => {
-											return <div key={index} className="table_row">
-												<div className="table_row_wrapper">
-													<div className="table_cell" style={{width: '50%'}}>
-														<div className="table_cell_content">{email}</div>
-													</div>
-													<div className="table_cell" style={{width: '50%'}}>
-														<div className="table_cell_content user_delete">
-															<Button type="button" className="user_delete_btn is-transparent"
-																			onClick={() => this.showDeleteUser(true)}>
-																<IconClose width="24" height="24"/>
-															</Button>
-															<Modal
-																isOpen={deleteUserModalState}
-																className={{base: 'modal_inner'}}
-																overlayClassName={{base: 'modal_outer'}}
-																contentLabel="test">
-																<div className="modal_header">
-																	<h2>Delete user</h2>
-																</div>
-																<div className="modal_content is-text-center">Do you really want to delete
-																	user?
-																</div>
-																<div className="modal_footer">
-																	<button className="modal_btn modal_btn-reset" type="button"
-																					onClick={() => this.showDeleteUser(false)}>Cancel
-																	</button>
-																	<button className="modal_btn modal_btn-submit" type="button"
-																					onClick={() => this.deleteUserConfirm(project.publickey, email)}>
-																		Delete user
-																	</button>
-																</div>
-																<Button type="button" className="modal_close"
-																				onClick={() => this.showDeleteUser(false)}>
-																	<IconClose width="24" height="24"/>
-																</Button>
-															</Modal>
-														</div>
-													</div>
-												</div>
-											</div>
-										})}
-									</div>
-								</div>}
-							</div>}
+										:
+										<div></div>
+							}
 						</div>
-					</div>}
-				</div>
+						<p className="name">
+              {project.publickey}
+						</p>
+            {
+              (statusEdit) ?
+									<div></div>
+                  :
+									<div className="description">
+                    {project.description}
+									</div>
+            }
+					</div>
+					<div className={(statusEdit) ? "block-item-info edit" : "block-item-info"}>
+            {
+              (statusEdit) ?
+									<div className="description-change">
+										<p className="name-description-change">Description</p>
+										<textarea>
+											{project.description}
+										</textarea>
+									</div>
+                  :
+									<div className="item-info">
+										<p className="name-item-info">URL</p>
+										<p>https://backend.northghost.com</p>
+									</div>
+            }
 
+
+					</div>
+
+				</div>
+        {
+          (statusEdit) ?
+							<div className="more-info edit">
+								<div className="close" onClick={() => {this.changeStatusEdit()}}>Cancel</div>
+								<Button
+										type="button"
+										className="green-button"
+										children="Save edits"
+								/>
+							</div>
+              :
+							<div className="more-info">
+								<Resume width="25px" height="25px" fill="#36c75a"/>
+								<p>View project</p>
+							</div>
+        }
 			</div>
 		);
 	}
@@ -440,14 +125,7 @@ class ProjectItem extends React.Component<Props, State> {
 
 export default connect<any, any, any>(
     state => ({
-      selectedProject: state.projects.selectedProject,
-      update_project: state.projects.update_project
     }),
     ({
-      getProject: actions.getProject,
-      changeVisibility: actions.changeVisibility,
-      deleteProject: actions.deleteProject,
-      addUserProject: actions.addUserProject,
-      delettUserProject: actions.delettUserProject,
     })
 )(ProjectItem);

@@ -8,6 +8,7 @@ import Reset from './routes/auth/reset';
 import Signin from './routes/auth/signin';
 import Signup from './routes/auth/signup';
 import Projects from './routes/projects/';
+import CreateProject from './routes/projects/CreateProject';
 import Subscribers from './routes/subscribers/';
 import {NotFound} from './routes/404/';
 import {firebaseInit} from '../client/functions/firebaseInit';
@@ -22,6 +23,7 @@ export const routes = (
 		<IndexRoute component={Main}/>
 
 		<Route path='projects' component={Projects} />
+		<Route path='createproject' component={CreateProject} />
 		<Route path='subscribers' component={Subscribers} />
 
 		<Route path='docs/proxy_sdk_android' component={DocsProxyAndroid} />
