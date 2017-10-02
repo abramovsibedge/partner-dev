@@ -18,12 +18,8 @@ import {
 } from '../../components/icons';
 import {emailValidation} from '../../utils';
 
-// for redux
 import * as model from '../../reducers/signup/model';
 import * as actions from '../../reducers/signup/actions';
-
-import {signUp} from '../../functions/auth';
-
 
 interface Props {
 	signUpModelStatus: model.SignUpModelStatus;
@@ -101,18 +97,18 @@ class Signup extends React.Component<Props, State> {
 		}
 	}
 
-    componentWillReceiveProps(nextProps:any) {
-        if (!nextProps.signUpModelStatus.statusSignUp) {
-            this.setState(update(this.state, {
-                message: {$set: nextProps.signUpModelStatus.errorMessages}
-            }));
-        }
-        else {
-            this.setState(update(this.state, {
+	componentWillReceiveProps(nextProps:any) {
+		if (!nextProps.signUpModelStatus.statusSignUp) {
+			this.setState(update(this.state, {
+				message: {$set: nextProps.signUpModelStatus.errorMessages}
+			}));
+		}
+		else {
+			this.setState(update(this.state, {
 				success: {$set: true}
 			}));
-        }
-    }
+		}
+	}
 
 	private submitHandler() {
 		const $t = this;
@@ -149,7 +145,6 @@ class Signup extends React.Component<Props, State> {
 		if (!state && message) return false;
 
 		this.props.actionSignUp($state);
-
 	}
 
 	private changeHandler(value: string, stateItem: string) {
@@ -176,19 +171,17 @@ class Signup extends React.Component<Props, State> {
 			success
 		} = this.state;
 
-
 		return (
 			<div className="register_content register_signup">
 				<div className="register_logo">
-					<img className="register_logo_img" src={require('../../static/media/poweredbyhss_light.svg')}
-							 alt="Partners Portal Logo" width="auto" height="32"/>
+					<img className="register_logo_img" src={require('../../static/media/poweredbyhss_light.svg')} alt="Partners Portal Logo" width="auto" height="32"/>
 				</div>
 				{success && <div className="register_success">
 					<p>A confirmation letter was sent to the specified mailbox.<br/>Please confirm your account in order to start
 						using the application</p>
 					<div className="register_success_actions">
-						<a href="/auth/signin">Sign in</a>
-						<a href="/">Main page</a>
+						<Link to="auth/signin">Sign in</Link>
+						<Link to="/">Main page</Link>
 					</div>
 				</div>}
 				{!success && <Form submit={() => this.submitHandler()}>
@@ -290,8 +283,7 @@ class Signup extends React.Component<Props, State> {
 							notValid={!valid && !tos}
 							checked={tos}
 							onChange={(e) => this.changeHandler(e.target.checked, 'tos')}>
-							I agree with <a target="_blank"
-															href="/docs/AnchorFree_Self_Service_Developer_Platform_Terms_of_Service.pdf">TOS</a>
+							I agree with <a target="_blank" href="/docs/AnchorFree_Self_Service_Developer_Platform_Terms_of_Service.pdf">TOS</a>
 						</Checkbox>
 					</FormRow>
 
@@ -305,10 +297,10 @@ class Signup extends React.Component<Props, State> {
 }
 
 export default connect(
-    state => ({
-        signUpModelStatus: state.signup
-    }),
-    ({
-        actionSignUp: actions.actionSignUp
-    })
+	state => ({
+		signUpModelStatus: state.signup
+	}),
+	({
+		actionSignUp: actions.actionSignUp
+	})
 )(Signup);

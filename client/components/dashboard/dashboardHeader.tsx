@@ -34,12 +34,12 @@ class DashboardHeader extends React.Component<{}, State> {
 		}));
 	}
 
-	logOut() {
+	logOut = () => firebase.auth().signOut().then(() => {
 		storage.remove('firebase');
 		storage.remove('rest');
 		storage.remove('username');
 		window.location.replace("#/auth/signin");
-	}
+	});
 
 	render() {
 		const {

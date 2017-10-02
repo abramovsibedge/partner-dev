@@ -15,8 +15,6 @@ import {emailValidation} from '../../utils';
 import * as model from '../../reducers/reset/model';
 import * as actions from '../../reducers/reset/actions';
 
-import {reset} from '../../functions/auth';
-
 interface State {
 	email: string
 	valid: boolean
@@ -41,20 +39,18 @@ class Reset extends React.Component<Props, State> {
 		}
 	}
 
-    componentWillReceiveProps(nextProps:any) {
-        if (!nextProps.resetModelStatus.statusReset) {
-
-            this.setState(update(this.state, {
-                message: {$set: nextProps.resetModelStatus.errorMessages}
-            }));
-
-        }
-        else {
-            this.setState(update(this.state, {
-                success: {$set: true}
-            }));
-        }
-    }
+	componentWillReceiveProps(nextProps:any) {
+		if (!nextProps.resetModelStatus.statusReset) {
+			this.setState(update(this.state, {
+					message: {$set: nextProps.resetModelStatus.errorMessages}
+			}));
+		}
+		else {
+			this.setState(update(this.state, {
+					success: {$set: true}
+			}));
+		}
+	}
 
 	private submitHandler() {
 		const $t = this;
@@ -98,14 +94,13 @@ class Reset extends React.Component<Props, State> {
 		return (
 			<div className="register_content register_signip">
 				<div className="register_logo">
-					<img className="register_logo_img" src={require('../../static/media/poweredbyhss_light.svg')}
-							 alt="Partners Portal Logo" width="auto" height="32"/>
+					<img className="register_logo_img" src={require('../../static/media/poweredbyhss_light.svg')} alt="Partners Portal Logo" width="auto" height="32"/>
 				</div>
 				{success && <div className="register_success">
 					<p>Reset link sended to your email.</p>
 					<div className="register_success_actions">
-						<a href="/auth/signin">Sign in</a>
-						<a href="/">Main page</a>
+						<Link to="auth/signin">Sign in</Link>
+						<Link to="/">Main page</Link>
 					</div>
 				</div>}
 
@@ -137,10 +132,10 @@ class Reset extends React.Component<Props, State> {
 }
 
 export default connect(
-    state => ({
-        resetModelStatus: state.reset
-    }),
-    ({
-        actionReset: actions.actionReset
-    })
+	state => ({
+		resetModelStatus: state.reset
+	}),
+	({
+		actionReset: actions.actionReset
+	})
 )(Reset);

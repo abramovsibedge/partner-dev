@@ -1,8 +1,9 @@
 import * as React from 'react';
 import {Link} from 'react-router';
-import {
-	logOut
-} from '../../functions/auth';
+
+import {storageHelper} from '../../utils';
+const storage = new storageHelper;
+
 import {
 	IconDocs,
 	IconQuestion
@@ -24,6 +25,13 @@ export class Main extends React.Component<{}, State> {
 			isSigned: checkAuth(),
 		}
 	}
+
+	logOut = () => firebase.auth().signOut().then(() => {
+		storage.remove('firebase');
+		storage.remove('rest');
+		storage.remove('username');
+		window.location.replace("#/auth/signin");
+	});
 
 	render() {
 		const {
@@ -87,7 +95,7 @@ export class Main extends React.Component<{}, State> {
 									<Link className="auth_link auth_link-active" to="projects">Dashboard</Link>
 								</li>
 								<li className="auth_item">
-									<Link className="auth_link" to="#" onClick={logOut}>Logout</Link>
+									<Link className="auth_link" to="#" onClick={() => this.logOut()}>Logout</Link>
 								</li>
 							</ul>}
 						</div>
