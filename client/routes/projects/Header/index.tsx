@@ -2,6 +2,7 @@ import * as React from 'react';
 import Modal from 'react-modal';
 import * as update from 'immutability-helper';
 import { connect } from 'react-redux';
+import {Link} from 'react-router';
 
 import {
 	IconPlus,
@@ -111,10 +112,11 @@ class Header extends React.Component<Props, State> {
 
 		return (
 			<div>
-				<Button type="submit" className="is-transparent" onClick={() => this.showAddProject(true)}>
+				<Link to="createproject" className="button is-transparent">
 					<IconPlus width="24" height="24"/>
 					<span>Add project</span>
-				</Button>
+				</Link>
+
 				<Modal
 					isOpen={addProjectModalState}
 					className={{base: 'modal_inner'}}
@@ -172,6 +174,7 @@ class Header extends React.Component<Props, State> {
 						<IconClose width="24" height="24"/>
 					</Button>
 				</Modal>
+
 			</div>
 		);
 	}

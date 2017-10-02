@@ -3,7 +3,7 @@ import * as update from 'immutability-helper';
 import * as classNames from 'classnames';
 
 import ProjectItem from './ProjectItem';
-import '../../../static/scss/components/list-block.scss';
+import '../../../static/scss/routes/list-block.scss';
 
 interface Props {
 	onUpdate: () => void

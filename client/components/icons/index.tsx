@@ -12,6 +12,7 @@ import { IconCalendar } from './calendar';
 import { IconSearch } from './search';
 import { IconClock } from './clock';
 import { IconPhone } from './phone';
+import { Resume } from './resume';
 
 export {
 	IconPerson,
@@ -27,5 +28,6 @@ export {
 	IconCalendar,
 	IconSearch,
 	IconClock,
-	IconPhone
+	IconPhone,
+  Resume
 };
