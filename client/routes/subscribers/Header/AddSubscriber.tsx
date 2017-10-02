@@ -20,11 +20,13 @@ import {
 import { Button } from '../../../components/button';
 
 interface Props {
-	projects: any
-	subscribers: model.subscribersModel
+	projectsList: any
+	activeProject: any
+	loadingState: any
 	getLicenses: () => void
+	addSubscriber: any
+	subscribers: model.subscribersModel
 	getSubscribers: (data: any) => void
-	addSubscriber: (data: any) => void
 }
 
 interface State {
@@ -73,41 +75,6 @@ class AddSubscriber extends React.Component<Props, State>{
 		}
 
 		this.fetchLicence(nextprops.subscribers.licenses);
-
-		if (nextprops.subscribers.addSubscriberStatus && nextprops.subscribers.addSubscriberStatus['type'] === 'error') {
-			this.setState(update(this.state, {
-				message: {$set: nextprops.subscribers.addSubscriberStatus.reason}
-			}));
-		}
-
-		if (nextprops.subscribers.addSubscriberStatus && nextprops.subscribers.addSubscriberStatus['type'] === 'success') {
-			this.setState({
-				showModal: false,
-				message: null,
-				addObject: {
-					extref: {
-						value: '',
-						valid: true,
-						check: new RegExp('^\\w+$')
-					},
-					licence: {
-						value: '',
-						valid: true,
-						check: new RegExp('^[0-9]+$')
-					},
-					username: {
-						value: '',
-						valid: true,
-						check: new RegExp('^\\w+$')
-					},
-					oauth_token: {
-						value: '',
-						valid: true,
-						check: new RegExp('^\\w+$')
-					}
-				},
-			}, () => this.props.getSubscribers(nextprops.projects.list[nextprops.subscribers.activeProject]));
-		}
 	}
 
 	fetchLicence(list: any) {
@@ -120,11 +87,9 @@ class AddSubscriber extends React.Component<Props, State>{
 			});
 		}
 
-		this.setState(update(
-			this.state, {
-				licencesList: {$set: licenceList}
-			}
-		));
+		this.setState(update(this.state, {
+			licencesList: {$set: licenceList}
+		}));
 	}
 
 	showAddSubscriber(value: boolean) {
@@ -163,7 +128,25 @@ class AddSubscriber extends React.Component<Props, State>{
 			oauth_token: object['oauth_token'].value
 		};
 
-		this.props.addSubscriber(subscriber);
+		this.props.addSubscriber(subscriber)
+			.then((result: any) => {
+				if (result.result.type === 'error') {
+					this.setState(update(this.state, {
+						message: {$set: result.result.reason}
+					}));
+
+					return false;
+				}
+
+				this.props.loadingState(true)
+					.then(() => {
+						this.setState(update(this.state, {
+							showModal: { $set: false }
+						}),() => {
+							this.props.getSubscribers(this.props.projectsList[this.props.activeProject]);
+						});
+					})
+			});
 	}
 
 	addSubscriberHandler(value: string, stateItem: string) {
@@ -179,6 +162,13 @@ class AddSubscriber extends React.Component<Props, State>{
 	}
 
 	render() {
+		const {
+			showModal,
+			message,
+			addObject,
+			licencesList
+		} = this.state;
+
 		return (
 			<div>
 				<Button type="submit" className="is-transparent" onClick={() => this.showAddSubscriber(true)}>
@@ -186,7 +176,7 @@ class AddSubscriber extends React.Component<Props, State>{
 					<span>Add subscriber</span>
 				</Button>
 				<Modal
-					isOpen={this.state.showModal}
+					isOpen={showModal}
 					className={{base: 'modal_inner'}}
 					overlayClassName={{base: 'modal_outer'}}
 					contentLabel="test">
@@ -194,14 +184,14 @@ class AddSubscriber extends React.Component<Props, State>{
 						<h2>Create subscriber</h2>
 					</div>
 					<Form submit={() => this.addSubscriberSubmit()} className="modal_form">
-						<div className="modal_error">{this.state.message}</div>
+						<div className="modal_error">{message}</div>
 						<div className="modal_content">
 							<FormRow>
 								<Input
 									type="text"
 									label="Username"
-									value={this.state.addObject['username'].value}
-									notValid={!this.state.addObject['username'].valid}
+									value={addObject['username'].value}
+									notValid={!addObject['username'].valid}
 									onChange={(e) => this.addSubscriberHandler(e.target.value, 'username')}>
 								</Input>
 							</FormRow>
@@ -209,16 +199,16 @@ class AddSubscriber extends React.Component<Props, State>{
 								<Input
 									type="text"
 									label="OAuth token"
-									value={this.state.addObject['oauth_token'].value}
-									notValid={!this.state.addObject['oauth_token'].valid}
+									value={addObject['oauth_token'].value}
+									notValid={!addObject['oauth_token'].valid}
 									onChange={(e) => this.addSubscriberHandler(e.target.value, 'oauth_token')}>
 								</Input>
 							</FormRow>
 							<FormRow>
 								<Select
-									value={this.state.addObject['licence'].value}
-									notValid={!this.state.addObject['licence'].valid}
-									options={this.state.licencesList}
+									value={addObject['licence'].value}
+									notValid={!addObject['licence'].valid}
+									options={licencesList}
 									onChange={(e) => this.addSubscriberHandler(e.target.value, 'licence')}>
 									Licence
 								</Select>
@@ -227,8 +217,8 @@ class AddSubscriber extends React.Component<Props, State>{
 								<Input
 									type="text"
 									label="Extref"
-									value={this.state.addObject['extref'].value}
-									notValid={!this.state.addObject['extref'].valid}
+									value={addObject['extref'].value}
+									notValid={!addObject['extref'].valid}
 									onChange={(e) => this.addSubscriberHandler(e.target.value, 'extref')}>
 								</Input>
 							</FormRow>
@@ -249,10 +239,12 @@ class AddSubscriber extends React.Component<Props, State>{
 
 export default connect(
 	state => ({
-		projects: state.projects,
+		projectsList: state.projects.list,
+		activeProject: state.subscribers.activeProject,
 		subscribers: state.subscribers
 	}),
 	({
+		loadingState: actions.loadingState,
 		getLicenses: actions.getLicenses,
 		addSubscriber: actions.addSubscriber,
 		getSubscribers: actions.getSubscribers

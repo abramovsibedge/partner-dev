@@ -19,7 +19,7 @@ import {Button} from '../../../../components/button';
 interface Props {
 	data: any
 	getPurchases?: (data: any) => void
-	deletePurchase?: (id: any, params: any) => void
+	deletePurchase?: any
 }
 
 interface State {
@@ -55,32 +55,7 @@ class SubscriberPurchases extends React.Component<Props, State> {
 	}
 
 	getPurchases() {
-		this.props.getPurchases(this.props.data.id)
-
-		// getPurchases(this.state.subscriber.id).then((response) => {
-		// 	/*response.purchases = [
-		// 		{
-		// 			purchase_id: 123,
-		// 			purchase_type: 'First',
-		// 			purchase_time: 1504011677525
-		// 		},
-		// 		{
-		// 			purchase_id: 2344,
-		// 			purchase_type: 'Second',
-		// 			purchase_time: 1504111677525
-		// 		},
-		// 		{
-		// 			purchase_id: 7567,
-		// 			purchase_type: 'Third',
-		// 			purchase_time: 1504211677525
-		// 		},
-		// 	];*/
-		//
-		// 	this.setState({
-		// 		loaded: true,
-		// 		purchases: response.purchases
-		// 	});
-		// });
+		this.props.getPurchases(this.props.data.id);
 	}
 
 	showModal(state: boolean) {
@@ -95,11 +70,8 @@ class SubscriberPurchases extends React.Component<Props, State> {
 			showModal: false
 		});
 
-		this.props.deletePurchase(this.props.data.id, id);
-
-		// deletePurchase(this.state.subscriber.id, id).then(() => {
-		// 	this.getPurchases();
-		// });
+		this.props.deletePurchase(this.props.data.id, id)
+			.then(() => this.getPurchases());
 	}
 
 	render() {
@@ -143,8 +115,7 @@ class SubscriberPurchases extends React.Component<Props, State> {
 						</div>
 						<div className="table_cell" style={{width: '10%'}}>
 							<div className="table_cell_content">
-								<Button type="button" className="subscriber_manage_item subscriber_manage_item-disable"
-												onClick={() => this.showModal(true)}>
+								<Button type="button" className="subscriber_manage_item subscriber_manage_item-disable" onClick={() => this.showModal(true)}>
 									<IconDelete width="24" height="24"/>
 								</Button>
 								<Modal
@@ -157,15 +128,14 @@ class SubscriberPurchases extends React.Component<Props, State> {
 									</div>
 									<div className="modal_content is-text-center">Do you really want to delete purchase?</div>
 									<div className="modal_footer">
-										<button className="modal_btn modal_btn-reset" type="button"
-														onClick={() => this.showModal(false)}>Cancel
+										<button className="modal_btn modal_btn-reset" type="button" onClick={() => this.showModal(false)}>
+											Cancel
 										</button>
-										<button className="modal_btn modal_btn-submit" type="button"
-														onClick={() => this.deletePurchase(purchase.purchase_id)}>Delete purchase
+										<button className="modal_btn modal_btn-submit" type="button" onClick={() => this.deletePurchase(purchase.purchase_id)}>
+											Delete purchase
 										</button>
 									</div>
-									<Button type="button" className="modal_close"
-													onClick={() => this.showModal(false)}>
+									<Button type="button" className="modal_close" onClick={() => this.showModal(false)}>
 										<IconClose width="24" height="24"/>
 									</Button>
 								</Modal>
@@ -186,7 +156,7 @@ class SubscriberPurchases extends React.Component<Props, State> {
 								<td style={{width: '30%'}}>Purchase ID</td>
 								<td style={{width: '30%'}}>Purchase type</td>
 								<td style={{width: '30%'}}>Check time</td>
-								<td style={{width: '10%'}}></td>
+								<td style={{width: '10%'}}>&nbsp;</td>
 							</tr>
 							</tbody>
 						</table>
@@ -199,8 +169,6 @@ class SubscriberPurchases extends React.Component<Props, State> {
 		);
 	}
 }
-
-// export default SubscriberPurchases;
 
 export default connect<any, any, Props>(
 	state => ({

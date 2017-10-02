@@ -39,7 +39,6 @@ export default handleActions<any>({
 
 
 
-
 	[`${types.GET_SESSIONS}_SUCCESS`] : (state: IState, action: Action<string>) : IState => {
 		return {
 			...state,

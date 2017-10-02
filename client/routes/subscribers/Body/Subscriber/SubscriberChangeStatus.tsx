@@ -1,8 +1,10 @@
 import * as React from 'react';
 import Modal from 'react-modal';
-import Signal from '../../../../functions/Signal';
 import { connect } from 'react-redux';
+import * as update from 'immutability-helper';
+
 import * as actions from '../../../../reducers/subscriber/actions';
+import { getSubscribers } from '../../../../reducers/subscribers/actions';
 
 import {
 	IconClose,
@@ -11,32 +13,27 @@ import {
 } from '../../../../components/icons'
 import {Button} from '../../../../components/button';
 
-import {
-	modifySubscriber
-} from '../../../../functions/subscribers';
-
 interface Props {
 	data: any
-	modifySubscriber?: (id: any, data: any) => void
-};
+	projectsList?: any
+	activeProject?: any
+	modifySubscriber?: any
+	loadingState?: any
+	getTraffic?: (data: any) => void
+	getSubscribers?: any
+}
 
 interface State {
-	showModal: boolean,
-	subscriber: any
-};
+	showModal: boolean
+}
 
 class SubscriberChangeStatus extends React.Component<Props, State> {
 	constructor(props: any) {
 		super(props);
 
 		this.state = {
-			showModal: false,
-			subscriber: props.subscriber
+			showModal: false
 		};
-	}
-
-	componentWillReceiveProps(props: any) {
-		this.setState({subscriber: props.subscriber});
 	}
 
 	showModal(state: boolean) {
@@ -44,32 +41,34 @@ class SubscriberChangeStatus extends React.Component<Props, State> {
 	}
 
 	changeStatus(status: number) {
-		this.setState({showModal: false});
+		this.setState(update(this.state, {
+			showModal: {$set: false}
+		}));
 
-		this.props.modifySubscriber(this.props.data.id, {condition: status});
-		// modifySubscriber(this.state.subscriber.id, {condition: status}).then(response => {
-		// 	if(response.result === 'OK') {
-		// 		Signal.dispatch('subscriberModified', {id: this.state.subscriber.id});
-		// 	}
-		// });
+		this.props.loadingState(true)
+			.then(() => {
+				this.props.modifySubscriber(this.props.data.id, { condition: status })
+					.then(() => {
+						this.props.getSubscribers(this.props.projectsList[this.props.activeProject]);
+						this.props.getTraffic(this.props.data.id);
+					})
+			});
 	}
 
 	render() {
-		let action = (this.state.subscriber.condition===0)?['Disable', 'disable', 1]:['Enable', 'enable', 0];
+		let action = (this.props.data.condition === 0) ? ['Disable', 'disable', 1] : ['Enable', 'enable', 0];
 
 		return (
 			<div className="subscriber_manage-button">
-				{(action[2]===1)?
-					<Button type="button" className="subscriber_manage_item subscriber_manage_item-disable"
-									onClick={() => this.showModal(true)}>
-						<IconDelete width="24" height="24"/>
-						<span>{action[0]} subscriber</span>
-					</Button>:
-					<Button type="button" className="subscriber_manage_item subscriber_manage_item-enable"
-									onClick={() => this.showModal(true)}>
-						<IconPlay width="24" height="24"/>
-						<span>{action[0]} subscriber</span>
-					</Button>}
+				{(action[2] === 1)
+					? <Button type="button" className="subscriber_manage_item subscriber_manage_item-disable" onClick={() => this.showModal(true)}>
+							<IconDelete width="24" height="24"/>
+							<span>{action[0]} subscriber</span>
+						</Button>
+					: <Button type="button" className="subscriber_manage_item subscriber_manage_item-enable" onClick={() => this.showModal(true)}>
+							<IconPlay width="24" height="24"/>
+							<span>{action[0]} subscriber</span>
+						</Button>}
 				<Modal
 					isOpen={this.state.showModal}
 					className={{base: 'modal_inner'}}
@@ -80,15 +79,14 @@ class SubscriberChangeStatus extends React.Component<Props, State> {
 					</div>
 					<div className="modal_content is-text-center">Do you really want to {action[1]} subscriber?</div>
 					<div className="modal_footer">
-						<button className="modal_btn modal_btn-reset" type="button"
-										onClick={() => this.showModal(false)}>Cancel
+						<button className="modal_btn modal_btn-reset" type="button" onClick={() => this.showModal(false)}>
+							Cancel
 						</button>
-						<button className="modal_btn modal_btn-submit" type="button"
-										onClick={() => this.changeStatus(Number(action[2]))}>{action[0]} subscriber
+						<button className="modal_btn modal_btn-submit" type="button" onClick={() => this.changeStatus(Number(action[2]))}>
+							{action[0]} subscriber
 						</button>
 					</div>
-					<Button type="button" className="modal_close"
-									onClick={() => this.showModal(false)}>
+					<Button type="button" className="modal_close" onClick={() => this.showModal(false)}>
 						<IconClose width="24" height="24"/>
 					</Button>
 				</Modal>
@@ -99,10 +97,13 @@ class SubscriberChangeStatus extends React.Component<Props, State> {
 
 export default connect<any, any, Props>(
 	state => ({
-		subscribers: state.subscribers,
-		subscriber: state.subscriber
+		projectsList: state.projects.list,
+		activeProject: state.subscribers.activeProject,
 	}),
 	({
-		modifySubscriber: actions.modifySubscriber
+		modifySubscriber: actions.modifySubscriber,
+		loadingState: actions.loadingState,
+		getTraffic: actions.getTraffic,
+		getSubscribers: getSubscribers
 	})
 )(SubscriberChangeStatus);

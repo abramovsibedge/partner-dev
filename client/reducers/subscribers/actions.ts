@@ -68,7 +68,7 @@ export const findSubscribers = (type: string, value: string) => {
 		});
 };
 
-export const addNewSubscriber = (data: any) => {
+const addNewSubscriber = async (data: any) => {
 	let request:string = config.host + 'partner/subscribers?access_token=' + config.restToken;
 	request += '&extref=' + data['extref'];
 	request += '&username=' + data['username'];
@@ -134,13 +134,19 @@ const searchSubscriber = ReduxActions.createAction<any, string, string>(
 
 
 
-const addSubscriber = ReduxActions.createAction<any, any>(
-	types.ADD_SUBSCRIBER,
-	(data: any) => addNewSubscriber(data)
-);
 
 
 
+const addSubscriber: ActionCreator<ThunkAction<Promise<Action>, IState, void>> = (data: any) => {
+	return async (dispatch: Dispatch<IState>): Promise<Action> => {
+		let result = await addNewSubscriber(data);
+
+		return dispatch({
+			type: types.ADD_SUBSCRIBER,
+			result
+		});
+	};
+};
 
 
 

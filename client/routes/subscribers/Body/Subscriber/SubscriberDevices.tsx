@@ -38,7 +38,7 @@ class SubscriberDevices extends React.Component<Props, State> {
 		});
 	}
 
-	deletePurchase(id: number) {
+	deleteDevice(id: number) {
 		this.props.loadingState(true)
 			.then(() => {
 				this.props.deleteDevice(this.props.data.id, id);
@@ -95,7 +95,7 @@ class SubscriberDevices extends React.Component<Props, State> {
 														onClick={() => this.showModal(false)}>Cancel
 										</button>
 										<button className="modal_btn modal_btn-submit" type="button"
-														onClick={() => this.deletePurchase(device.device_id)}>Delete device
+														onClick={() => this.deleteDevice(device.device_id)}>Delete device
 										</button>
 									</div>
 									<Button type="button" className="modal_close"

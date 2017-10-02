@@ -50,6 +50,8 @@ class Signin extends React.Component<Props, State> {
 	}
 
 	componentWillReceiveProps(nextProps:any) {
+		console.log( nextProps );
+
 		if (!nextProps.signInModel.statusAuth) {
 			this.setState(update(this.state, {
 				message: {$set: nextProps.signInModel.errorMessages}

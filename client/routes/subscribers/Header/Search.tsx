@@ -14,8 +14,9 @@ import {
 } from '../../../components/icons';
 
 interface Props {
-	projects: any
-	subscribers: model.subscribersModel
+	loadingState: any
+	projectsList: any
+	activeProject: any
 	getSubscribers: (data: any) => void
 	searchSubscriber: (type: string, value: string) => void
 }
@@ -48,7 +49,8 @@ class SearchSubscriber extends React.Component<Props, State> {
 			showDrop: { $set: false },
 			searchType: { $set: '' }
 		}), () => {
-			!value && this.props.getSubscribers(this.props.projects.list[this.props.subscribers.activeProject]);
+			!value && this.props.loadingState(true)
+				.then(() => this.props.getSubscribers(this.props.projectsList[this.props.activeProject]))
 		});
 	}
 
@@ -88,12 +90,15 @@ class SearchSubscriber extends React.Component<Props, State> {
 			'devices': 'Device Id'
 		};
 
-		this.setState(update(this.state, {
-			searchType: { $set: searchType[type] },
-			showDrop: { $set: false }
-		}), () => {
-			this.props.searchSubscriber(type, this.state.value);
-		});
+		this.props.loadingState(true)
+			.then(() => {
+				this.setState(update(this.state, {
+					searchType: { $set: searchType[type] },
+					showDrop: { $set: false }
+				}),() => {
+					this.props.searchSubscriber(type, this.state.value);
+				});
+			})
 	}
 
 	render() {
@@ -130,11 +135,21 @@ class SearchSubscriber extends React.Component<Props, State> {
 						{searchType && <b>{searchType}:&nbsp;</b>}{value}
 					</div>}
 					{showDrop && <div className="subscriber_filter_drop">
-						<div className="subscriber_filter_drop_item subscriber_filter_drop_item-active" onClick={() => this.searchFormSubmit(event, 'userId')}>Search by &nbsp;&nbsp;<b>User ID</b></div>
-						<div className="subscriber_filter_drop_item" onClick={() => this.searchFormSubmit(event, 'username')}>Search by &nbsp;&nbsp;<b>User Name</b></div>
-						<div className="subscriber_filter_drop_item" onClick={() => this.searchFormSubmit(event, 'token')}>Search by &nbsp;&nbsp;<b>User Token</b></div>
-						<div className="subscriber_filter_drop_item" onClick={() => this.searchFormSubmit(event, 'extref')}>Search by &nbsp;&nbsp;<b>User Extref</b></div>
-						<div className="subscriber_filter_drop_item" onClick={() => this.searchFormSubmit(event, 'devices')}>Search by &nbsp;&nbsp;<b>Device Id</b></div>
+						<div className="subscriber_filter_drop_item subscriber_filter_drop_item-active" onClick={() => this.searchFormSubmit(event, 'userId')}>
+							Search by &nbsp;&nbsp;<b>User ID</b>
+						</div>
+						<div className="subscriber_filter_drop_item" onClick={() => this.searchFormSubmit(event, 'username')}>
+							Search by &nbsp;&nbsp;<b>User Name</b>
+						</div>
+						<div className="subscriber_filter_drop_item" onClick={() => this.searchFormSubmit(event, 'token')}>
+							Search by &nbsp;&nbsp;<b>User Token</b>
+						</div>
+						<div className="subscriber_filter_drop_item" onClick={() => this.searchFormSubmit(event, 'extref')}>
+							Search by &nbsp;&nbsp;<b>User Extref</b>
+						</div>
+						<div className="subscriber_filter_drop_item" onClick={() => this.searchFormSubmit(event, 'devices')}>
+							Search by &nbsp;&nbsp;<b>Device Id</b>
+						</div>
 					</div>}
 				</form>
 			</div>
@@ -144,10 +159,11 @@ class SearchSubscriber extends React.Component<Props, State> {
 
 export default connect(
 	state => ({
-		projects: state.projects,
-		subscribers: state.subscribers
+		projectsList: state.projects.list,
+		activeProject: state.subscribers.activeProject
 	}),
 	({
+		loadingState: actions.loadingState,
 		getSubscribers: actions.getSubscribers,
 		searchSubscriber: actions.searchSubscriber
 	})

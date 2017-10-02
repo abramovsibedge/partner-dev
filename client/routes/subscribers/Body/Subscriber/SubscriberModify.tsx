@@ -1,13 +1,9 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-
 import Modal from 'react-modal';
-import * as actions from '../../../../reducers/subscriber/actions';
 
-import {
-	IconLock
-} from '../../../../components/icons'
-import {Button} from '../../../../components/button';
+import * as actions from '../../../../reducers/subscriber/actions';
+import { getSubscribers } from '../../../../reducers/subscribers/actions';
 
 import {
 	Form,
@@ -15,16 +11,20 @@ import {
 	Input,
 	Select
 } from '../../../../components/form';
+import { IconLock } from '../../../../components/icons'
+import { Button } from '../../../../components/button';
 
 interface Props {
 	data: any
-	modifySubscriber?: (id: any, data: any) => void
+	projectsList?: any
+	activeProject?: any
+	modifySubscriber?: any
 	loadingState?: any
 	getTraffic?: (data: any) => void
+	getSubscribers?: any
 }
 
 interface State {
-	subscriber: any,
 	showModal: boolean,
 	modalObject: object,
 	licencesList: any,
@@ -35,7 +35,6 @@ class SubscriberModify extends React.Component<Props, State> {
 		super(props);
 
 		this.state = {
-			subscriber: props.data,
 			showModal: false,
 			licencesList: [],
 			modalObject: {
@@ -108,11 +107,12 @@ class SubscriberModify extends React.Component<Props, State> {
 
 		this.props.loadingState(true)
 			.then(() => {
-				this.props.modifySubscriber(this.state.subscriber.id, subscriber);
+				this.props.modifySubscriber(this.props.data.id, subscriber)
+					.then(() => {
+						this.props.getSubscribers(this.props.projectsList[this.props.activeProject]);
+						this.props.getTraffic(this.props.data.id);
+					})
 			})
-			.then(() => {
-				this.props.getTraffic(this.state.subscriber.id)
-			});
 	}
 
 	inputHandler(value: string, stateItem: string) {
@@ -125,7 +125,8 @@ class SubscriberModify extends React.Component<Props, State> {
 	render() {
 		const {
 			showModal,
-			modalObject
+			modalObject,
+			licencesList
 		} = this.state;
 
 		return (
@@ -158,7 +159,7 @@ class SubscriberModify extends React.Component<Props, State> {
 								<Select
 									value={modalObject['licence'].value}
 									notValid={!modalObject['licence'].valid}
-									options={this.state.licencesList}
+									options={licencesList}
 									onChange={(e) => this.inputHandler(e.target.value, 'licence')}>
 									Licence
 								</Select>
@@ -186,12 +187,13 @@ class SubscriberModify extends React.Component<Props, State> {
 
 export default connect<any, any, Props>(
 	state => ({
-		subscribers: state.subscribers,
-		subscriber: state.subscriber
+		projectsList: state.projects.list,
+		activeProject: state.subscribers.activeProject,
 	}),
 	({
 		modifySubscriber: actions.modifySubscriber,
 		loadingState: actions.loadingState,
-		getTraffic: actions.getTraffic
+		getTraffic: actions.getTraffic,
+		getSubscribers: getSubscribers
 	})
 )(SubscriberModify);
