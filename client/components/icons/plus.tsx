@@ -3,17 +3,20 @@ import * as React from 'react';
 interface Props {
 	width: string
 	height: string
+  fill?: string
 }
 
 export class IconPlus extends React.Component<Props, {}> {
 	render() {
 		const {
 			width,
-			height
+			height,
+      fill
 		} = this.props;
 
 		return (
 			<svg
+				fill={fill}
 				height={width}
 				width={height}
 				viewBox="0 0 24 24"

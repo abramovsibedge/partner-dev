@@ -3,17 +3,20 @@ import * as React from 'react';
 interface Props {
 	width: string
 	height: string
+	fill?: string
 }
 
 export class IconPen extends React.Component<Props, {}> {
 	render() {
 		const {
 			width,
-			height
+			height,
+      fill
 		} = this.props;
 
 		return (
 			<svg
+				fill={(fill) ? fill : '#000000'}
 				height={width}
 				width={height}
 				viewBox="0 0 24 24"

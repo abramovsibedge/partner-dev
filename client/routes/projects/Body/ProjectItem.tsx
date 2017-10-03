@@ -2,8 +2,6 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import {Link} from 'react-router';
 
-import * as actions from '../../../reducers/projects/actions';
-
 import {
   Resume
 } from '../../../components/icons/resume'
