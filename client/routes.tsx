@@ -8,6 +8,7 @@ import Reset from './routes/auth/reset';
 import Signin from './routes/auth/signin';
 import Signup from './routes/auth/signup';
 import Projects from './routes/projects/';
+import Project from './routes/project/';
 import CreateProjects from './routes/projects/CreateProject';
 import Subscribers from './routes/subscribers/';
 import {NotFound} from './routes/404/';
@@ -21,7 +22,7 @@ export const routes = (
 
 		<Route path='projects' component={Projects} />
 		<Route path='createproject' component={CreateProjects} />
-		<Route path='project/:key' component={CreateProjects} />
+		<Route path='project/:key' component={Project} />
 
 		<Route path='subscribers' component={Subscribers} />
 

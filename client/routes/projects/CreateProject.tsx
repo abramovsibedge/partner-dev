@@ -25,11 +25,11 @@ class CreateProjects extends React.Component<Props, {}> {
     if (nextProps.createProjectResult && nextProps.createProjectResult != this.props.createProjectResult) {
       hashHistory.push('/projects');
     }
-
   }
+
 	render() {
 		return (
-				<Dashboard current="projects">
+				<Dashboard current="createProject">
 					<DashboardHeader>
 						<Header />
 					</DashboardHeader>
