@@ -1,28 +1,41 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { hashHistory } from 'react-router';
+
+import * as actions from '../../reducers/projects/actions';
 
 import Dashboard from '../../components/dashboard';
 import DashboardHeader from '../../components/dashboard/dashboardHeader';
-// import Create from '../projects/Body/Create';
+import Create from '../projects/Body/Create';
 import Header from './Header';
 
 import '../../static/scss/routes/projects.scss';
 
-interface Props {}
+interface Props {
+  createProjectResult: boolean
+  createProject: (data: object)=> void
+}
 
-class CreateProject extends React.Component<Props, {}> {
+class CreateProjects extends React.Component<Props, {}> {
 	constructor(props: any) {
 		super(props);
 	}
 
-	render() {
+  componentWillReceiveProps(nextProps: any) {
+    if (nextProps.createProjectResult && nextProps.createProjectResult != this.props.createProjectResult) {
+      hashHistory.push('/projects');
+    }
 
+  }
+	render() {
 		return (
 				<Dashboard current="projects">
 					<DashboardHeader>
 						<Header />
 					</DashboardHeader>
-         	{/*<Create  />*/}
+         	<Create
+							createProject={(e:object)=>this.props.createProject(e)}
+					/>
 				</Dashboard>
 		);
 	}
@@ -30,7 +43,9 @@ class CreateProject extends React.Component<Props, {}> {
 
 export default connect(
     state => ({
+      createProjectResult: state.projects.createProjectResult
 		}),
     ({
+      createProject: actions.createProject
     })
-)(CreateProject);
+)(CreateProjects);

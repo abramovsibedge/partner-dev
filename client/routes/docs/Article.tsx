@@ -70,7 +70,7 @@ export class Article extends React.Component<{}, State> {
 
 	parseContent(content: string) {
 		marked.setOptions({
-			highlight: (code) => {
+			highlight: (code:any) => {
 				code = code
 					.replace(/</g, '&#60;')
 					.replace(/>/g, '&#62;');

@@ -163,4 +163,23 @@
 .create-project {
   margin: 144px auto 0;
   width: 384px;
+  text-align: center;
+  .layout_h1 {
+    margin: 0 0 26px 0;
+    letter-spacing: -0.5px;
+  }
+  form {
+    .form_row {
+      margin: 0 0 8px 0;
+      text-align: left;
+    }
+    .button-create {
+      margin: 24px auto;
+      border: none;
+      width: 224px;
+      height: 48px;
+      border-radius: 4px;
+      background-color: $x-palette-gray_3;
+    }
+  }
 }
