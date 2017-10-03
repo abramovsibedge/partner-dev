@@ -21,7 +21,7 @@ interface Props {
   params: any
 }
 interface State {
-	project: object;
+	project: any;
 }
 
 class Project extends React.Component<Props, State> {
@@ -34,7 +34,7 @@ class Project extends React.Component<Props, State> {
 
   componentWillReceiveProps(nextProps: any) {
 		if (nextProps.projects.length>0) {
-			let elem:object = this.findProject(nextProps.projects, this.props.params.key);
+			let elem:any = this.findProject(nextProps.projects, this.props.params.key);
 			this.setState({project: elem});
     }
   }

@@ -1,185 +1,116 @@
 @import "../vars/vars";
 
-.project {
-  &_close {
-    position: absolute;
-    z-index: 100;
-    top: 24px;
-    right: 24px;
-    display: none;
-    width: 34px;
-    height: 34px;
-    padding: 4px;
-    border: 1px solid $palette-white;
-    border-radius: 100%;
-    background: $palette-brand;
-    svg {
-      display: block;
-      fill: $palette-white;
-    }
-    @at-root {
-      .table_row_open {
-        .project_close { display: block; }
-      }
-    }
-  }
-  &_pane_content {
-    position: relative;
-    z-index: 2;
-    padding: 28px 26px 24px;
-    color: $x-palette-gray;
-  }
-  &_traffic {
-    padding-bottom: 24px;
-    border-bottom: 1px solid darken( $palette-white, 5% );
-    table {
-      width: 100%;
-      th {
-        padding-bottom: 4px;
-        color: $x-palette-gray_1;
-        font-size: 12px;
-        font-weight: 300;
-        letter-spacing: -0.2px;
-      }
-      td {
-        font-size: 13px;
-        letter-spacing: -0.2px;
-      }
-    }
-  }
-  &_buttons {
+.project-info {
+  width: 100%;
+  .top {
     display: flex;
-    align-items: center;
-    margin-top: 24px;
-  }
-  &_tabs {
-    &_item {
-      height: 36px;
-      margin-right: 26px;
-      padding: 0;
-      border: 0;
-      border-bottom: 2px solid transparent;
-      outline: none;
-      background: none;
-      font: 13px/38px $font-regular;
-      color: $x-palette-gray_1;
-      cursor: pointer;
-      transition: color .3s ease-in-out;
-      &-active {
-        border-bottom: 2px solid $palette-brand;
-        font: 24px $font-bold;
-        color: $x-palette-gray;
-        letter-spacing: -0.5px;
-        cursor: default;
+    height: 48px;
+    justify-content: space-between;
+    h1 {
+      line-height: 48px;
+    }
+    .left {
+      display: flex;
+      .img {
+        margin: auto 8px auto 0;
+        width: 28px;
+        img {
+          width: 28px;
+          height: 28px;
+        }
       }
     }
-    &_empty {
-      padding-top: 57px;
-      text-align: center;
-      font-size: 13px;
-      line-height: 21px;
-      color: $x-palette-gray_1;
-      span { color: $x-palette-gray; }
-      p:not(:last-child) { margin-bottom: 27px; }
-      a {
-        display: inline-block;
-        margin: 0 15px;
-        text-decoration: none;
-        color: $palette-brand;
+    .right {
+      display: flex;
+      &>div {
+        margin: 0 0 0 29px;
+        display: flex;
+        font: 13px $font-regular;
+        line-height: 48px;
+        color: $x-palette-gray_1;
+        letter-spacing: -0.2px;
+        cursor: pointer;
+        svg {
+          margin: auto 7px auto 0;
+        }
       }
     }
   }
-  &_manage {
-    margin-left: auto;
-    &_item {
-      padding: 12px;
-      background: none;
+  .details {
+    margin: 13px 0 0 0;
+    padding: 0 0 30px 36px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    border-bottom: 1px solid rgba($palette-white, .05);
+    .name {
       font: 13px $font-regular;
+      line-height: 1.54;
       color: $x-palette-gray_1;
-      cursor: pointer;
-      &:hover { color: $palette-brand; }
-      &-disable svg { fill: lighten( $palette-red, 18% ); }
+      letter-spacing: -0.2px;
+    }
+    .description {
+      margin: 0 98px 0 0;
+      width: 243px;
+      font: 13px $font-regular;
+      line-height: 1.54;
+      color: $x-palette-gray_1;
+      letter-spacing: -0.2px;
+    }
+    .private-key {
+      margin: 0 100px 0 0;
     }
   }
-  &_edit_checkbox {
-    position: relative;
-    input[type="checkbox"] {
-      position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0;
-      visibility: hidden;
-      &:checked + label:before {
-        background: $palette-brand url('../../media/check-white.svg') no-repeat center;
-        background-size: 95%;
+  .settings-project {
+    margin: 20px 0 0 0;
+    .top-settings-project {
+      display: flex;
+      justify-content: space-between;
+      .left {
+        display: flex;
+        &>div {
+          margin: 0 24px 0;
+          font: 13px $font-regular;
+          letter-spacing: -0.2px;
+          color: $x-palette-gray_1;
+          cursor: pointer;
+          line-height: 28px;
+          &.active {
+            font: 24px $font-bold;
+            line-height: 28px;
+            letter-spacing: -0.5px;
+            border-bottom: 2px solid $green;
+          }
+        }
+      }
+      .right {
+        display: flex;
+        font: 13px $font-regular;
+        letter-spacing: -0.2px;
+        color: $x-palette-gray_1;
+        line-height: 31px;
+        svg {
+          margin: auto 0 auto;
+        }
+        p {
+          margin: 0 0 0 8px;
+        }
       }
     }
-    label {
-      position: relative;
-      display: inline-block;
-      height: 19px;
-      padding-top: 20px;
-      padding-left: 18px;
-      text-decoration: none;
-      color: $x-palette-gray_1;
-      cursor: pointer;
-      transition: color ease-in-out .3s;
-      &:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 18px;
-        height: 18px;
-        border-radius: 2px;
-        background: rgba( $palette-black, 0.07);
-      }
-    }
-  }
-}
-
-.user_delete {
-  text-align: right;
-  width: 100%;
-  &_btn {
-    display: inline-flex;
-    padding: 4px;
-    width: 34px;
-    height: 34px;
-    border: 1px solid $x-palette-lightred;
-    border-radius: 100%;
-    svg {
-      display: block;
-      fill: $x-palette-lightred;
-    }
-  }
-}
-
-.country_visibility {
-  width: 100%;
-  text-align: center;
-}
-
-.create-project {
-  margin: 144px auto 0;
-  width: 384px;
-  text-align: center;
-  .layout_h1 {
-    margin: 0 0 26px 0;
-    letter-spacing: -0.5px;
-  }
-  form {
-    .form_row {
-      margin: 0 0 8px 0;
-      text-align: left;
-    }
-    .button-create {
-      margin: 24px auto;
-      border: none;
-      width: 224px;
-      height: 48px;
+    .info-settings-project {
+      margin: 16px 0 0 0;
+      background: $block-cell-dark;
       border-radius: 4px;
-      background-color: $x-palette-gray_3;
+      box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.05);
+      width: 100%;
+      header {
+        height: 48px;
+        box-shadow: inset 0 -1px 0 0 $block-cell-dark-border;
+      }
+      .item {
+        height: 74px;
+        box-shadow: inset 0 -1px 0 0 $block-cell-dark-border;
+      }
     }
   }
 }
