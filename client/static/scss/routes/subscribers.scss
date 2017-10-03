@@ -34,7 +34,53 @@
     }
   }
   &_selector {
+    position: relative;
     margin-left: auto;
+
+    &_current {
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      border-radius: 4px;
+      font-size: 13px;
+      letter-spacing: -0.2px;
+      line-height: 48px;
+      cursor: pointer;
+      &-open {
+        background: $table-cell-dark;
+        svg {
+          transform: rotate(-180deg);
+        }
+      }
+      svg {
+        margin-left: 5px;
+        fill: $palette-white;
+      }
+    }
+    &_drop {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      z-index: 1;
+      width: 236px;
+      height: 192px;
+      overflow-y: auto;
+      border-radius: 4px;
+      background: $palette-white;
+    }
+    &_item {
+      line-height: 48px;
+      padding-left: 14px;
+      color: $x-palette-gray;
+      font-size: 13px;
+      letter-spacing: -0.2px;
+      cursor: pointer;
+      &-current,
+      &:hover {
+        color: $palette-white;
+        background: $palette-brand;
+      }
+    }
   }
   &_pane_content {
     position: relative;

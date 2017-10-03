@@ -118,10 +118,10 @@
   }
   &_head {
     position: fixed;
+    z-index: 1000;
     top: $x-size-header_height + 15px;
     left: 0;
     width: 100%;
-    height: $x-size-content_title;
     &_content {
       display: flex;
       align-items: center;
@@ -133,6 +133,6 @@
     font: 24px/29px $font-bold;
   }
   &_content {
-    padding-top: $x-size-header_height + 15px + $x-size-content_title + 10px;
+    padding-top: $x-size-header_height + 40px + $x-size-content_title;
   }
 }
