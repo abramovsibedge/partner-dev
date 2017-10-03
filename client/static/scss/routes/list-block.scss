@@ -120,6 +120,11 @@
       &.edit {
         justify-content: flex-end;
       }
+      a {
+        display: flex;
+        color: $green;
+        text-decoration: none;
+      }
       p {
         font: 13px $font-regular;
         line-height: 24px;

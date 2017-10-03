@@ -1,17 +1,15 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import {Link} from 'react-router';
 
 import * as actions from '../../../reducers/projects/actions';
 
-// import {
-//   Resume
-// } from '../../../components/icons'
+import {
+  Resume
+} from '../../../components/icons/resume'
 import {
 	Button
 } from '../../../components/button'
-
-
-
 
 import UsersAuthentication from './UsersAuthentication';
 import Payments from './Payments';
@@ -61,7 +59,7 @@ class ProjectItem extends React.Component<Props, State> {
 					<div className="top-info">
 						<div className="avatar">
 							<div className="img">
-								{/*<img src={require('../../../static/media/def-icon.png')} alt="def" />*/}
+								<img src={require('../../../static/media/def-icon.png')} alt="def" />
 							</div>
 							{
 								(statusEdit) ?
@@ -117,8 +115,10 @@ class ProjectItem extends React.Component<Props, State> {
 							</div>
               :
 							<div className="more-info">
-								{/*<Resume width="25px" height="25px" fill="#36c75a"/>*/}
-								<p>View project</p>
+								<Link to={"project/"+project.publickey}>
+									<Resume width="25px" height="25px" fill="#36c75a"/>
+									<p>View project</p>
+								</Link>
 							</div>
         }
 			</div>

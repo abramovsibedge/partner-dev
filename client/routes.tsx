@@ -21,6 +21,8 @@ export const routes = (
 
 		<Route path='projects' component={Projects} />
 		<Route path='createproject' component={CreateProjects} />
+		<Route path='project/:key' component={CreateProjects} />
+
 		<Route path='subscribers' component={Subscribers} />
 
 		<Route path='docs' component={List} />
