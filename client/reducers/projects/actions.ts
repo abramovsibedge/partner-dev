@@ -75,7 +75,12 @@ const deletePr = (item: object) => {
   request += '&publickey=' + item['publickey'];
   request += '&privatekey=' + item['privatekey'];
 
-  return axios(request, { method: 'DELETE' }).then(response => response.data)
+  return axios(request, { method: 'DELETE' })
+      .then(response => response.data)
+      .catch((error: any) => {
+        console.log('error.message', error.message);
+        throw (error.message);
+      });
 };
 
 const addUser = (project: string, email: string) => {
