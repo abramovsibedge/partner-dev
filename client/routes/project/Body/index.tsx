@@ -3,7 +3,8 @@ import * as React from 'react';
 import {
 	IconClose,
 	IconPen,
-  IconPlus
+  IconPlus,
+  Flags
 } from '../../../components/icons';
 
 import {
@@ -13,6 +14,7 @@ import {
 
 interface Props {
   project: any
+  selectedProject: any
 }
 
 interface State {
@@ -33,17 +35,62 @@ class Body extends React.Component<Props, State> {
 			blockShow: num
 		})
   }
+  setVisibility(project: string, country: string, visibility: boolean) {
+
+  }
 
 	render() {
 		const {
       blockShow
 		} = this.state;
 		const {
-			project
+			project,
+      selectedProject
 		} = this.props;
 
+		let listCountries = (<div></div>);
+    let listAccess = (<div></div>);
 
-		console.log('project', project);
+    if (selectedProject.countries) {
+    	listCountries = selectedProject.countries.countries.map((e:any, t:any)=>{
+        return (
+						<div className="item cell-blocks" key={t}>
+							<div>
+								<div className="item-country">
+									<Flags type={e.country} />
+									<p>{e.country}</p>
+								</div>
+							</div>
+							<div>
+								<p>{e.protocols.join(', ')}</p>
+							</div>
+							<div>
+								<Checkbox
+										className="project_edit_checkbox"
+										checked={e.visibility}
+										onChange={() => this.setVisibility(project.publickey, e.country, !e.visibility)}>&nbsp;</Checkbox>
+							</div>
+						</div>
+				);
+			});
+      listAccess = selectedProject.emails.usersMail.map((e:any, t:any)=>{
+      	return (
+						<div className="item cell-blocks" key={t}>
+							<div>
+								<p>{e}</p>
+							</div>
+							<div>
+
+							</div>
+							<div>
+								<p className="user-delete">
+									<IconClose width="24px" height="24px" fill="#ef6359" />
+								</p>
+							</div>
+						</div>
+				);
+			});
+    }
 
 		let content = (<h1 className="layout_h1">Project not found</h1>);
 		if (project.publickey) {
@@ -111,23 +158,7 @@ class Body extends React.Component<Props, State> {
 										Visibility
 									</div>
 								</header>
-								<div className="item cell-blocks">
-									<div>
-										<div className="item-country">
-											<img src={require('../../../static/icons/svg/germany.svg')} alt="def" />
-											<p>DE</p>
-										</div>
-									</div>
-									<div>
-										<p>hydra-tcp,openvpn-udp,ipsec-eap-mschapv2,openvpn,ipsec,openvpn-tcp</p>
-									</div>
-									<div>
-										<Checkbox
-												checked={true}
-												className="project_edit_checkbox"
-												onChange={() => {}}>&nbsp;</Checkbox>
-									</div>
-								</div>
+								{listCountries}
 							</div>
 
 							<div className={(blockShow == 2) ? "info-settings-project" : "info-settings-project hidden"}>
@@ -138,23 +169,8 @@ class Body extends React.Component<Props, State> {
 									<div></div>
 									<div></div>
 								</header>
-								<div className="item cell-blocks">
-									<div>
-										<p>0xy9en@gmail.com</p>
-									</div>
-									<div>
-
-									</div>
-									<div>
-										<p className="user-delete">
-											<IconClose width="24px" height="24px" fill="#ef6359" />
-										</p>
-									</div>
-								</div>
+								{listAccess}
 							</div>
-
-
-
 						</div>
 
 					</div>
@@ -163,12 +179,7 @@ class Body extends React.Component<Props, State> {
 
 		return (
 			<section className="layout">
-				<header className="layout_head">
-					<div className="layout_head_content">
 						{content}
-					</div>
-				</header>
-
 			</section>
 		);
 	}

@@ -15,10 +15,13 @@ import { checkAuth } from '../../utils';
 import '../../static/scss/routes/project.scss';
 
 interface Props {
-	loading: boolean;
-  projects: any;
-  loadProjects: () => void;
+	loading: boolean
+  projects: any
   params: any
+  selectedProject: any
+
+  loadProjects: () => void
+  getProject: (id:string) => void
 }
 interface State {
 	project: any;
@@ -33,9 +36,12 @@ class Project extends React.Component<Props, State> {
 	}
 
   componentWillReceiveProps(nextProps: any) {
-		if (nextProps.projects.length>0) {
+	  if (
+		    nextProps.projects.length>0 && !this.state.project.publickey
+    ) {
 			let elem:any = this.findProject(nextProps.projects, this.props.params.key);
 			this.setState({project: elem});
+			this.props.getProject(this.props.params.key);
     }
   }
   findProject(array: Array<any>, value:any) {
@@ -66,14 +72,20 @@ class Project extends React.Component<Props, State> {
     } = this.state;
 		const {
       loading,
+      selectedProject
 		} = this.props;
+
 
 		return (
 			<Dashboard current="project">
 				<DashboardHeader>
 					<Header onUpdate={() => this.reloadProjects()} />
 				</DashboardHeader>
-				{loading ? <Loading /> : <Body project={project} />}
+				{loading ? <Loading /> :
+            <Body
+                selectedProject={selectedProject}
+                project={project} />
+				}
 			</Dashboard>
 		);
 	}
@@ -83,8 +95,10 @@ export default connect(
     state => ({
       projects: state.projects.list,
       loading: state.projects.loading,
+      selectedProject: state.projects.selectedProject,
     }),
     ({
       loadProjects: actions.getProjects,
+      getProject: actions.getProject
     })
 )(Project);
