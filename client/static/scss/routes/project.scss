@@ -73,14 +73,14 @@
           margin: 0 15px 0;
           font: 13px $font-regular;
           letter-spacing: -0.2px;
-          color: $x-palette-gray_1;
+          color: $palette-white;
           cursor: pointer;
           line-height: 28px;
           &.active {
             font: 24px $font-bold;
             line-height: 28px;
             letter-spacing: -0.5px;
-            border-bottom: 2px solid $green;
+            border-bottom: 2px solid $palette-brand;
           }
         }
       }

@@ -92,12 +92,12 @@ class ProjectItem extends React.Component<Props, State> {
 									</div>
                   :
 									<div className="item-info">
-										<p className="name-item-info">URL</p>
-										<p>https://backend.northghost.com</p>
+										<div className="item-private">
+											<p className="item-label">Private Key</p>
+											<p className="item-text">{project.privatekey}</p>
+										</div>
 									</div>
             }
-
-
 					</div>
 
 				</div>
@@ -107,14 +107,14 @@ class ProjectItem extends React.Component<Props, State> {
 								<div className="close" onClick={() => {this.changeStatusEdit()}}>Cancel</div>
 								<Button
 										type="button"
-										className="green-button"
+										className="save-button"
 										children="Save edits"
 								/>
 							</div>
               :
 							<div className="more-info">
 								<Link to={"project/"+project.publickey}>
-									<Resume width="25px" height="25px" fill="#36c75a"/>
+									<Resume width="25px" height="25px"/>
 									<p>View project</p>
 								</Link>
 							</div>

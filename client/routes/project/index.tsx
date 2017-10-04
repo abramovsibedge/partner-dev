@@ -89,7 +89,7 @@ class Project extends React.Component<Props, State> {
 
 
 		return (
-			<Dashboard current="project">
+			<Dashboard current="projects">
 				<DashboardHeader>
 					<Header onUpdate={() => this.reloadProjects()} />
 				</DashboardHeader>

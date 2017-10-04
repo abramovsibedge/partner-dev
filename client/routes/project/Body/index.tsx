@@ -224,7 +224,7 @@ class Body extends React.Component<Props, State> {
 									</div>
 								</div>
 								<div className="right" onClick={()=>this.toggleModal('addUser')}>
-									<IconPlus width="24px" height="24px" fill="#36c75a" />
+									<IconPlus width="24px" height="24px" fill="#3f9beb" />
 									<p>Add access email</p>
 								</div>
 							</div>
