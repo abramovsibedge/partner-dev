@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import * as classNames from 'classnames';
+import * as update from 'immutability-helper';
 
 import Spinner from '../../../components/spinner';
 
@@ -9,12 +10,41 @@ interface Props {
 	subscribersList: any
 }
 
+interface State {
+	stickedTableHead: boolean
+}
+
 import SubscriberRow from './Subscriber/SubscriberRow';
 
-class SubscribersList extends React.Component<Props, {}> {
+class SubscribersList extends React.Component<Props, State> {
 	constructor(props: any) {
 		super(props);
+
+		this.state = {
+			stickedTableHead: false
+		}
 	}
+
+	componentDidMount(){
+		window && window.addEventListener('scroll',this.stickTableHead);
+	}
+
+	componentWillUnmount(){
+		window && window.removeEventListener('scroll',this.stickTableHead);
+	}
+
+	stickTableHead = () => {
+		let {stickedTableHead} = this.state;
+
+		window && window.scrollY > 80 ?
+			!stickedTableHead && this.setState(update(this.state, {
+				stickedTableHead: {$set: true}
+			}))
+			:
+			stickedTableHead && this.setState(update(this.state, {
+				stickedTableHead: {$set: false}
+			}));
+	};
 
 	render() {
 		const {
