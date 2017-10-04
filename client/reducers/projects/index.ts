@@ -9,6 +9,7 @@ const initialState: IPojects = <projectsModel>{
 
   list: [],
   update_project: false,
+  reload_project: false,
   createProjectResult: false
 };
 
@@ -45,19 +46,19 @@ export default handleActions<any>({
   [`${types.SET_VISIBILITY}_LOADING`] : (state: IPojects, action: Action<string>) : IPojects => {
     return {
       ...state,
-      update_project: false,
+      reload_project: false,
     };
   },
   [`${types.SET_VISIBILITY}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
     return {
       ...state,
-      update_project: true,
+      reload_project: true,
     };
   },
   [`${types.SET_VISIBILITY}_ERROR`] : (state: IPojects, action: Action<string>) : IPojects => {
     return {
       ...state,
-      update_project: false,
+      reload_project: false,
     };
   },
 
@@ -83,19 +84,38 @@ export default handleActions<any>({
   [`${types.ADD_USER}_LOADING`] : (state: IPojects, action: Action<string>) : IPojects => {
     return {
       ...state,
-      update_project: false,
+      reload_project: false,
     };
   },
   [`${types.ADD_USER}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
     return {
       ...state,
-      update_project: true,
+      reload_project: true,
     };
   },
   [`${types.ADD_USER}_ERROR`] : (state: IPojects, action: Action<string>) : IPojects => {
     return {
       ...state,
-      update_project: false,
+      reload_project: false,
+    };
+  },
+
+  [`${types.DELETE_USER}_LOADING`] : (state: IPojects, action: Action<string>) : IPojects => {
+    return {
+      ...state,
+      reload_project: false,
+    };
+  },
+  [`${types.DELETE_USER}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
+    return {
+      ...state,
+      reload_project: true,
+    };
+  },
+  [`${types.DELETE_USER}_ERROR`] : (state: IPojects, action: Action<string>) : IPojects => {
+    return {
+      ...state,
+      reload_project: false,
     };
   },
 

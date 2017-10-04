@@ -19,9 +19,15 @@ interface Props {
   projects: any
   params: any
   selectedProject: any
+  update_project: boolean
+  reload_project: boolean
 
   loadProjects: () => void
   getProject: (id:string) => void
+  deleteProject: (item: object) => void
+  addUserProject: (project: string, email: string)=>void
+  delettUserProject: (project: string, email: string)=>void
+  changeVisibility: (project: string, country: string, visibility: boolean)=>void
 }
 interface State {
 	project: any;
@@ -42,6 +48,12 @@ class Project extends React.Component<Props, State> {
 			let elem:any = this.findProject(nextProps.projects, this.props.params.key);
 			this.setState({project: elem});
 			this.props.getProject(this.props.params.key);
+    }
+    if (nextProps.reload_project && nextProps.reload_project != this.props.reload_project) {
+      this.props.getProject(this.props.params.key);
+    }
+    if (nextProps.update_project && nextProps.update_project != this.props.update_project) {
+      hashHistory.push('/projects');
     }
   }
   findProject(array: Array<any>, value:any) {
@@ -84,7 +96,12 @@ class Project extends React.Component<Props, State> {
 				{loading ? <Loading /> :
             <Body
                 selectedProject={selectedProject}
-                project={project} />
+                project={project}
+                deleteProject={()=>this.props.deleteProject(project)}
+                addUserProject={(project:string, email: string)=>this.props.addUserProject(project, email)}
+                delettUserProject={(project:string, email: string)=>this.props.delettUserProject(project, email)}
+                changeVisibility={(project: string, country: string, visibility: boolean)=>this.props.changeVisibility(project, country, visibility)}
+            />
 				}
 			</Dashboard>
 		);
@@ -96,9 +113,15 @@ export default connect(
       projects: state.projects.list,
       loading: state.projects.loading,
       selectedProject: state.projects.selectedProject,
+      update_project: state.projects.update_project,
+      reload_project: state.projects.reload_project,
     }),
     ({
       loadProjects: actions.getProjects,
-      getProject: actions.getProject
+      getProject: actions.getProject,
+      deleteProject: actions.deleteProject,
+      addUserProject: actions.addUserProject,
+      delettUserProject: actions.delettUserProject,
+      changeVisibility: actions.changeVisibility
     })
 )(Project);

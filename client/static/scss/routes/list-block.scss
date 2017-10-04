@@ -1,10 +1,16 @@
 @import "../vars/vars";
 
+.layout_head {
+  z-index: 0;
+}
 .items-block-content {
   margin: 144px -6px 0;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  background: $x-palette-dark;
+  position: relative;
+  z-index: 1;
   .item-block {
     margin: 6px;
     min-width: 486px;

@@ -90,6 +90,7 @@
         letter-spacing: -0.2px;
         color: $x-palette-gray_1;
         line-height: 31px;
+        cursor: pointer;
         svg {
           margin: auto 0 auto;
         }
@@ -153,4 +154,9 @@
       }
     }
   }
+}
+button.modal_btn.action-button {
+  background: $pallete-brand;
+  color: $palette-white;
+  border-bottom-right-radius: 4px;
 }

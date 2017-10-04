@@ -5,6 +5,7 @@ export class projectsModel {
   list?: any;
   selectedProject?: {};
   update_project: boolean;
+  reload_project: boolean;
   createProjectResult: boolean;
 }
 
