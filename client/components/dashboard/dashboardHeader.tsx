@@ -1,11 +1,12 @@
 import * as React from 'react';
 import Modal from 'react-modal';
 import * as update from 'immutability-helper';
-import {storageHelper} from '../../utils';
 import {Link} from 'react-router';
-import * as firebase from 'firebase';
 
-const storage = new storageHelper;
+import {
+	storageHelper,
+	logOut
+} from '../../utils';
 
 import {
 	IconClose,
@@ -13,6 +14,8 @@ import {
 	IconQuestion
 } from '../../components/icons'
 import { Button } from '../button';
+
+const storage = new storageHelper;
 
 interface State {
 	logoutModalState: boolean,
@@ -35,13 +38,6 @@ class DashboardHeader extends React.Component<{}, State> {
 		}));
 	}
 
-	logOut = () => firebase.auth().signOut().then(() => {
-		storage.remove('firebase');
-		storage.remove('rest');
-		storage.remove('username');
-		window.location.replace("#/auth/signin");
-	});
-
 	render() {
 		const {
 			logoutModalState,
@@ -53,9 +49,9 @@ class DashboardHeader extends React.Component<{}, State> {
 				<div className="header_content">
 					<div className="header_user">
 						<div className="header_logo">
-							<a href="/">
+							<Link to="/">
 								<img className="header_logo_img" src={require('../../static/media/logo.png')} alt="Partners Portal Logo" width="auto" height="24"/>
-							</a>
+							</Link>
 						</div>
 						<div className="header_logout">
 							Hello {username}! <span className="header_logout_link" onClick={() => this.showLogout(true)}>Logout</span>
@@ -72,7 +68,7 @@ class DashboardHeader extends React.Component<{}, State> {
 									<button className="modal_btn modal_btn-reset" type="button" onClick={() => this.showLogout(false)}>
 										Cancel
 									</button>
-									<button className="modal_btn modal_btn-submit" type="button" onClick={() => this.logOut()}>
+									<button className="modal_btn modal_btn-submit" type="button" onClick={() => logOut()}>
 										Logout
 									</button>
 								</div>

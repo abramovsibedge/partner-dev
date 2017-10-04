@@ -1,4 +1,6 @@
 import * as React from 'react';
+import {Link} from 'react-router';
+
 import '../../static/scss/routes/auth.scss';
 
 interface Props {
@@ -24,13 +26,14 @@ export class AuthMessage extends React.Component<Props, {}> {
 					{!isSigned && <p>Please, sign in to continue.</p>}
 					{isSigned && <p>You are already signed in.</p>}
 					<div className="register_success_actions">
-						{!isSigned && <a href="/auth/signin">Sign in</a>}
-						{isSigned && <a href="/projects">Dashboard</a>}
+						{!isSigned && <Link to="/auth/signin">Sign in</Link>}
+						{isSigned && <Link to="/projects">Dashboard</Link>}
 
-						<a href="/">Main page</a>
+						<Link to="/">Main page</Link>
 					</div>
 				</div>
 			</div>
 		);
 	}
 }
+

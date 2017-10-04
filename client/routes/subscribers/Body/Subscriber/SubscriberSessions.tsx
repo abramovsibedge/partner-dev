@@ -113,7 +113,7 @@ class SubscriberSessions extends React.Component<Props, State> {
 				<div className="subscriber_tabs_content sessions_content">
 					<div className="subscriber_tabs_empty sessions_empty">
 						<p>
-							Subscriber has no sessions from <span>All Devices</span> between<br />
+							Subscriber has no sessions from <span>{this.state.activeDevice===0?'All Devices':this.state.activeDevice.device_id}</span> between<br />
 							<span>{this.time.from[1]} - {this.time.till[1]}</span>
 						</p>
 					</div>
@@ -187,8 +187,7 @@ class SubscriberSessions extends React.Component<Props, State> {
 				</div>
 				<div className="subscriber_tabs_empty sessions_empty">
 					<p>
-						Subscriber has {this.state.size} sessions from
-						<span>{this.state.activeDevice===0?'All Devices':this.state.activeDevice.name}</span> between<br />
+						Subscriber has {this.state.size} sessions from <span>{this.state.activeDevice===0?'All Devices':this.state.activeDevice.device_id}</span> between<br />
 						<span>{this.time.from[1]} - {this.time.till[1]}</span>
 					</p>
 					<p><a href="#" className="js-sessions-other-range">Try different time range</a></p>
@@ -209,7 +208,12 @@ class SubscriberSessions extends React.Component<Props, State> {
 			size ++;
 		}
 
-		this.setState({activeDevice: newDevice, tx: tx, rx: rx, size: size, showDevicesDropdown: false});
+		this.setState({
+			activeDevice: newDevice,
+			tx: tx,
+			rx: rx,
+			size: size,
+			showDevicesDropdown: false}, () => this.updateSearch(this.time));
 	}
 
 	renderDeviceSelector() {
@@ -227,7 +231,7 @@ class SubscriberSessions extends React.Component<Props, State> {
 			<div className="session_button_container devices">
 				<Button type="button" className={'calendar_button'} onClick={() => this.setState({showDevicesDropdown: !this.state.showDevicesDropdown})}>
 					<IconPhone width="24" height="24" />
-					<span>All Devices</span>
+					<span>{this.state.activeDevice.device_id || 'All devices'}</span>
 					<div className="arrow"><IconPlay width="24" height="24" /></div>
 				</Button>
 				<div className={'sessions_devices_drop' + (this.state.showDevicesDropdown?' opened':'')}>

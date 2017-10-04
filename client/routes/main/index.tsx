@@ -1,9 +1,6 @@
 import * as React from 'react';
 import {Link} from 'react-router';
 
-import {storageHelper} from '../../utils';
-const storage = new storageHelper;
-
 import {
 	IconDocs,
 	IconQuestion
@@ -11,7 +8,10 @@ import {
 
 import '../../static/scss/routes/main.scss';
 
-import {checkAuth} from '../../utils';
+import {
+	checkAuth,
+	logOut
+} from '../../utils';
 
 interface State {
 	isSigned: boolean
@@ -26,13 +26,6 @@ export class Main extends React.Component<{}, State> {
 		}
 	}
 
-	logOut = () => firebase.auth().signOut().then(() => {
-		storage.remove('firebase');
-		storage.remove('rest');
-		storage.remove('username');
-		window.location.replace("#/auth/signin");
-	});
-
 	render() {
 		const {
 			isSigned
@@ -43,15 +36,15 @@ export class Main extends React.Component<{}, State> {
 				<div className="front_header">
 					<div className="front_content front_header_content">
 						<div className="front_header_top">
-							<a className="logo_link" href="/">
+							<Link className="logo_link" to="/">
 								<img className="logo_img" src={require('../../static/media/poweredbyhss_light.svg')} alt="Partners Portal Logo" width="auto" height="50"/>
-							</a>
+							</Link>
 							<ul className="menu">
 								<li className="menu_item docslink">
-									<a href="/docs" className="menu_link">
+									<Link className="menu_link" to="/docs">
 										<IconDocs width="24" height="24"/>
 										<span>Docs</span>
-									</a>
+									</Link>
 								</li>
 								<li className="menu_item">
 									<a className="menu_link" href="mailto:platformpartners@anchorfree.com">
@@ -73,7 +66,7 @@ export class Main extends React.Component<{}, State> {
 									<Link className="auth_link auth_link-active" to="projects">Dashboard</Link>
 								</li>
 								<li className="auth_item">
-									<Link className="auth_link" to="#" onClick={() => this.logOut()}>Logout</Link>
+									<Link className="auth_link" to="#" onClick={() => logOut()}>Logout</Link>
 								</li>
 							</ul>}
 						</div>
@@ -104,7 +97,7 @@ export class Main extends React.Component<{}, State> {
 								<p className="front_products_description">Enable a VPN for securing the entire operating system of your
 									users. Protects your user data from malicious websites, ISPs, and hackers. Protects from unsafe
 									networks (like public Wi-Fi). Puts you in control of the enter OS.</p>
-								<a href="/auth/signup" className="front_products_action">Try it now</a>
+								<Link className="front_products_action" to="auth/signup">Try it now</Link>
 							</li>
 							<li className="front_products_item">
 								<div className="front_products_img front_products_img-2">&nbsp;</div>
@@ -113,7 +106,7 @@ export class Main extends React.Component<{}, State> {
 								<p className="front_products_description">Protects your app from throttling, censorship, or any kind of
 									interference from Internet Service providers. Protects your user data from ISPs and hackers. Ensures
 									that your app is always available from anywhere in the world.</p>
-								<a href="/auth/signup" className="front_products_action">Try it now</a>
+								<Link className="front_products_action" to="auth/signup">Try it now</Link>
 							</li>
 							<li className="front_products_item">
 								<div className="front_products_img front_products_img-3">&nbsp;</div>
@@ -176,7 +169,7 @@ export class Main extends React.Component<{}, State> {
 							<div className="getkey_pane_content">
 								<h2 className="getkey_pane_header">Ready to get started?</h2>
 								<div className="getkey_pane_banch"><span>FOR FREE</span></div>
-								<a href="/auth/signup" className="getkey_pane_action">Get a FREE API key</a>
+								<Link className="getkey_pane_action" to="auth/signup">Get a FREE API key</Link>
 							</div>
 						</div>
 						<div className="getkey_clients">
@@ -200,11 +193,16 @@ export class Main extends React.Component<{}, State> {
 							</div>
 							<div className="footer_top_menu">
 								<ul className="footer_top_list">
-									<li className="footer_top_item"><a className="footer_top_link" href="/">Docs</a></li>
+									<li className="footer_top_item">
+										<Link className="footer_top_link" to="/docs">Docs</Link>
+									</li>
 									<li className="footer_top_item"><a className="footer_top_link" href="mailto:platformpartners@anchorfree.com">Help</a>
 									</li>
-									<li className="footer_top_item"><a className="footer_top_link" href="/auth/signin">Log in</a>&nbsp;&amp;&nbsp;<a
-										className="footer_top_link" href="/auth/signup">Sign up</a></li>
+									<li className="footer_top_item">
+										<Link className="footer_top_link" to="/auth/signin">Log in</Link>
+										&nbsp;&amp;&nbsp;
+										<Link className="footer_top_link" to="/auth/signup">Sign up</Link>
+									</li>
 									{/*<li className="footer_top_item"><a className="footer_top_link" href="#/front">Menu & Products</a></li>*/}
 								</ul>
 							</div>

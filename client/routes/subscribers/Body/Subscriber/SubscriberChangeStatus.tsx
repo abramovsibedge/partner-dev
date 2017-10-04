@@ -25,6 +25,7 @@ interface Props {
 
 interface State {
 	showModal: boolean
+	condition: number
 }
 
 class SubscriberChangeStatus extends React.Component<Props, State> {
@@ -32,7 +33,8 @@ class SubscriberChangeStatus extends React.Component<Props, State> {
 		super(props);
 
 		this.state = {
-			showModal: false
+			showModal: false,
+			condition: props.data.condition
 		};
 	}
 
@@ -42,21 +44,18 @@ class SubscriberChangeStatus extends React.Component<Props, State> {
 
 	changeStatus(status: number) {
 		this.setState(update(this.state, {
-			showModal: {$set: false}
+			showModal: {$set: false},
+			condition: {$set: status}
 		}));
 
-		this.props.loadingState(true)
+		this.props.modifySubscriber(this.props.data.id, { condition: status })
 			.then(() => {
-				this.props.modifySubscriber(this.props.data.id, { condition: status })
-					.then(() => {
-						this.props.getSubscribers(this.props.projectsList[this.props.activeProject]);
-						this.props.getTraffic(this.props.data.id);
-					})
-			});
+				this.props.getSubscribers(this.props.projectsList[this.props.activeProject]);
+			})
 	}
 
 	render() {
-		let action = (this.props.data.condition === 0) ? ['Disable', 'disable', 1] : ['Enable', 'enable', 0];
+		let action = (this.state.condition === 0) ? ['Disable', 'disable', 1] : ['Enable', 'enable', 0];
 
 		return (
 			<div className="subscriber_manage-button">

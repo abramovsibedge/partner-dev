@@ -128,11 +128,6 @@
       width: $x-size-content_width;
       margin: 0 auto;
     }
-    @at-root {
-      .content-scrolled .layout_head {
-        z-index: 0;
-      }
-    }
   }
   &_h1 {
     font: 24px/29px $font-bold;

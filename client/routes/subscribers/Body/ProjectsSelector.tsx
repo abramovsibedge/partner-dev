@@ -31,7 +31,7 @@ class ProjectsSelector extends React.Component<Props, State> {
 		};
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		if (!this.props.activeProject) {
 			this.setActiveProject(0);
 		}
@@ -39,10 +39,12 @@ class ProjectsSelector extends React.Component<Props, State> {
 		this.setState(update(this.state, {
 			projectsList: {$set: this.getProjectsList(this.props.projects['list'])}
 		}));
+
+		window && window.addEventListener('scroll', () => this.changeState(false));
 	}
 
-	componentDidMount() {
-		window && window.addEventListener('scroll', () => this.changeState(false));
+	componentWillReceiveProps(nextprops: any) {
+		this.changeState(false);
 	}
 
 	getProjectsList = (projects: any) => {
@@ -76,7 +78,6 @@ class ProjectsSelector extends React.Component<Props, State> {
 			.then(() => this.props.setActiveProject(value))
 			.then(() => {
 				this.props.getSubscribers(this.props.projects['list'][this.props.activeProject]);
-				this.changeState(false);
 			});
 	};
 
@@ -95,13 +96,13 @@ class ProjectsSelector extends React.Component<Props, State> {
 
 		return (
 			<div className="subscriber_selector">
-				{projectsList[activeProject] && <div
+				{projectsList && projectsList[activeProject] && <div
 					className={classNames('subscriber_selector_current', showDropdown && 'subscriber_selector_current-open')}
 					onClick={() => this.changeState(!showDropdown)}>
 					{projectsList[activeProject].label}
 					<IconPlay width="24" height="24" />
 				</div>}
-				{projectsList[activeProject] && showDropdown && <WrappedSelectList
+				{projectsList && projectsList[activeProject] && showDropdown && <WrappedSelectList
 					list={projectsList}
 					active={projectsList[activeProject].value}
 					onStateChange={() => this.changeState(false)}
