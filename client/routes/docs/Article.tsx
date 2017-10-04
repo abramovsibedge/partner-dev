@@ -15,8 +15,8 @@ import {
 
 interface State {
 	loaded: boolean,
-	page: string,
-	navigation: string,
+	page: any,
+	navigation: any,
 	article: any,
 	iframe: boolean
 }
@@ -28,14 +28,14 @@ export class Article extends React.Component<{}, State> {
 		this.state = {
 			loaded: false,
 			page: '',
-			navigation: '',
+			navigation: null,
 			article: {},
 			iframe: false
 		};
 	}
 
 	componentDidMount() {
-		let name = window.location.href.match(/https?:\/\/[^/]+\/docs\/([a-z0-9_-]+)/);
+		let name = window.location.href.match(/https?:\/\/[^/]+\/\#\/docs\/([a-z0-9_-]+)/);
 		if(!name || !name[1]) return this.setState({loaded: true});
 		getDocsList().then((docs) => {
 			for(let k in docs) {
@@ -57,7 +57,7 @@ export class Article extends React.Component<{}, State> {
 			});
 		}
 		getArticle(article.url).then((content: string) => {
-			let [page, navigation] = this.parseContent(content)
+			let [page, navigation] = this.parseContent(content);
 
 			this.setState({
 				loaded: true,
@@ -91,17 +91,24 @@ export class Article extends React.Component<{}, State> {
 		});
 
 		content = marked(content);
-		let navigation = '';
+		let navigation = [];
 
 		let split = content.split("\n");
 		for(let k in split) {
 			if(!split[k].match(/<h1[^>]*>([^<]+)<\/h1>/)) continue;
 
 			let parsed = split[k].match(/<h1 id="([^"]+)">([^<]+)<\/h1>/);
-			navigation += '<a href="#'+parsed[1]+'">' + parsed[2] + '</div>'
+			// navigation += '<a href="#'+parsed[1]+'">' + parsed[2] + '</div>'
+			navigation.push(<NavItem key={k} onClick={(e) => this.scrollToElement(e, parsed[1])}>{parsed[2]}</NavItem>)
 		}
 
 		return [content, navigation];
+	}
+
+	scrollToElement(e: any, value: any) {
+		e.preventDefault();
+		const target = document.getElementById(value);
+		window.scrollTo(0, target.getBoundingClientRect().top);
 	}
 
 	render() {
@@ -120,7 +127,7 @@ export class Article extends React.Component<{}, State> {
 		let content = [];
 
 		if(this.state.navigation !== '') {
-			content.push(<div key="articleNavigation" className="articleNavigation" dangerouslySetInnerHTML={{__html: this.state.navigation}} />);
+			content.push(<div key="articleNavigation" className="articleNavigation">{this.state.navigation}</div>);
 		}
 
 		if(this.state.iframe) {
@@ -141,5 +148,13 @@ export class Article extends React.Component<{}, State> {
 				<Footer/>
 			</div>
 		);
+	}
+}
+
+class NavItem extends React.Component<{onClick: (e: any) => void}, {}> {
+	render() {
+		return (
+			<a href="#" onClick={(e) => this.props.onClick(e)}>{this.props.children}</a>
+		)
 	}
 }

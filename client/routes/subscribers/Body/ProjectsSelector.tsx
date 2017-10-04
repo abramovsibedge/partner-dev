@@ -43,6 +43,10 @@ class ProjectsSelector extends React.Component<Props, State> {
 		window && window.addEventListener('scroll', () => this.changeState(false));
 	}
 
+	componentWillUnmount(){
+		window && window.removeEventListener('scroll', () => this.changeState(false));
+	}
+
 	componentWillReceiveProps(nextprops: any) {
 		this.changeState(false);
 	}

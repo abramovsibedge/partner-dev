@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {Link} from 'react-router';
 
 import {
 	logOut
@@ -45,15 +46,15 @@ class Header extends React.Component<Parent, State> {
 		return (
 			<div id="header">
 				<div className="front_header_top">
-					<a className="logo_link" href="/">
+					<Link className="logo_link" to="/">
 						<img className="logo_img" src={require('../../../static/media/poweredbyhss_light.svg')} alt="Partners Portal Logo" width="auto" height="50"/>
-					</a>
+					</Link>
 					<ul className="menu">
 						<li className="menu_item docslink">
-							<a href="/docs" className="menu_link">
+							<Link className="menu_link" to="/docs">
 								<IconDocs width="24" height="24"/>
 								<span>Docs</span>
-							</a>
+							</Link>
 						</li>
 						<li className="menu_item">
 							<a className="menu_link" href="mailto:platformpartners@anchorfree.com">

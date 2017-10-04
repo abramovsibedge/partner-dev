@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {Link} from 'react-router';
 
 interface Parent {
 
@@ -25,11 +26,18 @@ export class Footer extends React.Component<Parent, State> {
 							</div>
 							<div className="footer_top_menu">
 								<ul className="footer_top_list">
-									<li className="footer_top_item"><a className="footer_top_link" href="/">Docs</a></li>
+									<li className="footer_top_item">
+										<Link className="footer_top_link" to="/docs">
+											<span>Docs</span>
+										</Link>
+									</li>
 									<li className="footer_top_item"><a className="footer_top_link" href="mailto:platformpartners@anchorfree.com">Help</a>
 									</li>
-									<li className="footer_top_item"><a className="footer_top_link" href="/auth/signin">Log in</a>&nbsp;&amp;&nbsp;<a
-										className="footer_top_link" href="/auth/signup">Sign up</a></li>
+									<li className="footer_top_item">
+										<Link className="footer_top_link" to="/auth/signin">Log in</Link>
+										&nbsp;&amp;&nbsp;
+										<Link className="footer_top_link" to="/auth/signup">Sign up</Link>
+									</li>
 								</ul>
 							</div>
 						</div>

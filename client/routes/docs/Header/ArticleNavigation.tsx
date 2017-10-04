@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {Link} from 'react-router';
 
 interface Parent {
 	article: any
@@ -28,7 +29,11 @@ class ArticleNavigation extends React.Component<Parent, State> {
 
 		return (
 			<div className="navigation articleNavigation">
-				<a href="/docs">Docs</a><span>></span><a href="/docs">{this.state.article.type[0]}</a><span>></span><a href="/docs">{this.state.article.title}</a>
+				<Link to="docs">Docs</Link>
+				<span>></span>
+				<Link to="docs">{this.state.article.type[0]}</Link>
+				<span>></span>
+				<Link to="docs">{this.state.article.title}</Link>
 			</div>
 		);
 	}

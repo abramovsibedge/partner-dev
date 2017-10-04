@@ -91,7 +91,7 @@ export class List extends React.Component<{}, State> {
 
 		let title = article.title.replace(/[^A-Za-z0-9_-]/g, '').toLocaleLowerCase();
 
-		window.location.href = '/docs/'+title;
+		window.location.href = '#/docs/'+title;
 	}
 
 	render() {
