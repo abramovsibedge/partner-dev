@@ -177,7 +177,7 @@ $table_transition_properties: .3s ease-in-out;
         &:before { border-radius: 4px 4px 0 0; }
         .table_row_content {
           max-height: 1000000px;
-          min-height: 430px;
+          min-height: 500px;
           transition: all $table_transition_properties;
         }
       }

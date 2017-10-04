@@ -36,7 +36,7 @@ class SubscribersList extends React.Component<Props, State> {
 	stickTableHead = () => {
 		let {stickedTableHead} = this.state;
 
-		window && window.scrollY > 80 ?
+		window && window.scrollY > 87 ?
 			!stickedTableHead && this.setState(update(this.state, {
 				stickedTableHead: {$set: true}
 			}))
@@ -52,12 +52,14 @@ class SubscribersList extends React.Component<Props, State> {
 			subscribersList
 		} = this.props;
 
+		const { stickedTableHead } = this.state;
+
 		return (
 			<div className={classNames('layout_content', loading && 'is-loading')}>
 				{loading && <Spinner width="65" height="65" strokeWidth="6"/>}
 				{!loading &&
 					<div className="table main_table">
-						<div className="table_head">
+						<div className={classNames("table_head", stickedTableHead && "table_head_sticked")}>
 							<table>
 								<tbody>
 									<tr>

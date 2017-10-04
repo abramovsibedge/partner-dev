@@ -31,14 +31,9 @@ export default handleActions<any>({
 	[`${types.GET_DEVICES}_SUCCESS`] : (state: IState, action: Action<string>) : IState => {
 		return {
 			...state,
-			devices: action.payload['devices'],
-			subscriberLoading: false
+			devices: action.payload['devices']
 		};
 	},
-
-
-
-
 	[`${types.GET_SESSIONS}_SUCCESS`] : (state: IState, action: Action<string>) : IState => {
 		return {
 			...state,

@@ -63,7 +63,7 @@
       right: 0;
       z-index: 1;
       width: 236px;
-      height: 192px;
+      height: 384px;
       overflow-y: auto;
       border-radius: 4px;
       background: $palette-white;
@@ -184,6 +184,11 @@
       cursor: pointer;
       &:hover { color: $palette-brand; }
       &-disable svg { fill: lighten( $palette-red, 18% ); }
+      &-enable svg {
+        border: 1px solid $palette-brand;
+        border-radius: 100%;
+        transform: rotate(-90deg);
+      }
     }
   }
   &_edit_checkbox {

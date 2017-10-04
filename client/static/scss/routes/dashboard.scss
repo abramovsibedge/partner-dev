@@ -118,7 +118,7 @@
   }
   &_head {
     position: fixed;
-    z-index: 1000;
+    z-index: 100;
     top: $x-size-header_height + 15px;
     left: 0;
     width: 100%;
@@ -127,6 +127,11 @@
       align-items: center;
       width: $x-size-content_width;
       margin: 0 auto;
+    }
+    @at-root {
+      .content-scrolled .layout_head {
+        z-index: 0;
+      }
     }
   }
   &_h1 {

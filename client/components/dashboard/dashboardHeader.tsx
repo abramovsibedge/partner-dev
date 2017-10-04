@@ -54,7 +54,7 @@ class DashboardHeader extends React.Component<{}, State> {
 					<div className="header_user">
 						<div className="header_logo">
 							<a href="/">
-								<img className="header_logo_img" src={require('../../static/media/poweredbyhss_light.svg')} alt="Partners Portal Logo" width="auto" height="24"/>
+								<img className="header_logo_img" src={require('../../static/media/logo.png')} alt="Partners Portal Logo" width="auto" height="24"/>
 							</a>
 						</div>
 						<div className="header_logout">

@@ -131,7 +131,7 @@ class SubscriberModify extends React.Component<Props, State> {
 
 		return (
 			<div className="subscriber_manage-button">
-				<Button type="button" className="subscriber_manage_item subscriber_manage_item-enable" onClick={() => this.showModal(true)}>
+				<Button type="button" className="subscriber_manage_item" onClick={() => this.showModal(true)}>
 					<IconLock width="24" height="24"/>
 					<span>Modify subscriber</span>
 				</Button>

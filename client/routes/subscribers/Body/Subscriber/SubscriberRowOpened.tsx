@@ -11,12 +11,12 @@ import {
 	byteConvert
 } from '../../../../utils';
 
-import SubscriberModify       from './SubscriberModify';
-import SubscriberSocial       from './SubscriberSocial';
-import SubscriberDevices      from './SubscriberDevices';
-import SubscriberSetLimit     from './SubscriberSetLimit';
-import SubscriberSessions     from './SubscriberSessions';
-import SubscriberPurchases    from './SubscriberPurchases';
+import SubscriberModify from './SubscriberModify';
+import SubscriberSocial from './SubscriberSocial';
+import SubscriberDevices from './SubscriberDevices';
+import SubscriberSetLimit from './SubscriberSetLimit';
+import SubscriberSessions from './SubscriberSessions';
+import SubscriberPurchases from './SubscriberPurchases';
 import SubscriberChangeStatus from './SubscriberChangeStatus';
 
 interface Props {

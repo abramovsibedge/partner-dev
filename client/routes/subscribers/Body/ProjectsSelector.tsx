@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as update from 'immutability-helper';
 import { connect } from 'react-redux';
 import * as classNames from 'classnames';
-import onClickOutside from 'react-onclickoutside'
+import onClickOutside from 'react-onclickoutside';
 
 import * as actions from '../../../reducers/subscribers/actions';
 
@@ -41,10 +41,14 @@ class ProjectsSelector extends React.Component<Props, State> {
 		}));
 	}
 
+	componentDidMount() {
+		window && window.addEventListener('scroll', () => this.changeState(false));
+	}
+
 	getProjectsList = (projects: any) => {
 		let list: any = [];
 
-		projects.map((item: any) => {
+		projects && projects.map((item: any) => {
 			list.push({
 				value: item.publickey,
 				label: item.description
@@ -69,18 +73,18 @@ class ProjectsSelector extends React.Component<Props, State> {
 
 	setActiveProject = (value: any) => {
 		this.props.loadingState(true)
+			.then(() => this.props.setActiveProject(value))
 			.then(() => {
+				this.props.getSubscribers(this.props.projects['list'][this.props.activeProject]);
 				this.changeState(false);
-				this.props.setActiveProject(value);
-			})
-			.then(() => this.props.getSubscribers(this.props.projects['list'][this.props.activeProject]));
+			});
 	};
 
-	changeState(state: boolean) {
+	changeState = (state: boolean): any => {
 		this.setState(update(this.state, {
 			showDropdown: {$set: state}
 		}))
-	}
+	};
 
 	render() {
 		const {
@@ -100,7 +104,7 @@ class ProjectsSelector extends React.Component<Props, State> {
 				{projectsList[activeProject] && showDropdown && <WrappedSelectList
 					list={projectsList}
 					active={projectsList[activeProject].value}
-					onStateChange={() => () => this.changeState(false)}
+					onStateChange={() => this.changeState(false)}
 					onChange={(value) => this.setActiveProject(this.getRowId(this.props.projects['list'], value))} />}
 			</div>
 		);
