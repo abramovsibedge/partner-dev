@@ -6,12 +6,17 @@ import {
   IconPlus
 } from '../../../components/icons';
 
+import {
+  Checkbox
+} from '../../../components/form';
+
 
 interface Props {
   project: any
 }
 
 interface State {
+	blockShow: number
 }
 
 class Body extends React.Component<Props, State> {
@@ -19,13 +24,25 @@ class Body extends React.Component<Props, State> {
 		super(props);
 
 		this.state = {
+      blockShow: 1
 		}
 	}
 
+  handleShowBlock(num:number) {
+		this.setState({
+			blockShow: num
+		})
+  }
+
 	render() {
+		const {
+      blockShow
+		} = this.state;
 		const {
 			project
 		} = this.props;
+
+
 		console.log('project', project);
 
 		let content = (<h1 className="layout_h1">Project not found</h1>);
@@ -69,10 +86,10 @@ class Body extends React.Component<Props, State> {
 						<div className="settings-project">
 							<div className="top-settings-project">
 								<div className="left">
-									<div className="active">
+									<div className={(blockShow == 1) ? "active" : ""} onClick={()=>{this.handleShowBlock(1)}}>
 										VPN Servers
 									</div>
-									<div>
+									<div className={(blockShow == 2) ? "active" : ""} onClick={()=>{this.handleShowBlock(2)}}>
 										Access
 									</div>
 								</div>
@@ -82,22 +99,61 @@ class Body extends React.Component<Props, State> {
 								</div>
 							</div>
 
-							<div className="info-settings-project">
-								<header>
+							<div className={(blockShow == 1) ? "info-settings-project" : "info-settings-project hidden"}>
+								<header className="cell-blocks">
 									<div>
-
+										Country
 									</div>
 									<div>
-
+										Protocols
 									</div>
 									<div>
-
+										Visibility
 									</div>
 								</header>
-								<div className="item">
-
+								<div className="item cell-blocks">
+									<div>
+										<div className="item-country">
+											<img src={require('../../../static/icons/svg/germany.svg')} alt="def" />
+											<p>DE</p>
+										</div>
+									</div>
+									<div>
+										<p>hydra-tcp,openvpn-udp,ipsec-eap-mschapv2,openvpn,ipsec,openvpn-tcp</p>
+									</div>
+									<div>
+										<Checkbox
+												checked={true}
+												className="project_edit_checkbox"
+												onChange={() => {}}>&nbsp;</Checkbox>
+									</div>
 								</div>
 							</div>
+
+							<div className={(blockShow == 2) ? "info-settings-project" : "info-settings-project hidden"}>
+								<header className="cell-blocks">
+									<div>
+										User
+									</div>
+									<div></div>
+									<div></div>
+								</header>
+								<div className="item cell-blocks">
+									<div>
+										<p>0xy9en@gmail.com</p>
+									</div>
+									<div>
+
+									</div>
+									<div>
+										<p className="user-delete">
+											<IconClose width="24px" height="24px" fill="#ef6359" />
+										</p>
+									</div>
+								</div>
+							</div>
+
+
 
 						</div>
 
