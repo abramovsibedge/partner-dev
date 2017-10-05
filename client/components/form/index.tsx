@@ -4,6 +4,7 @@ import FormGroup from './form-group'
 import Input from './input'
 import Checkbox from './checkbox'
 import Select from './select'
+import Textarea from './textarea'
 
 export {
 	Form,
@@ -11,5 +12,6 @@ export {
 	FormGroup,
 	Input,
 	Checkbox,
-	Select
+	Select,
+  Textarea
 }

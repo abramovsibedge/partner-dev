@@ -28,6 +28,7 @@ interface Props {
   addUserProject: (project: string, email: string)=>void
   delettUserProject: (project: string, email: string)=>void
   changeVisibility: (project: string, country: string, visibility: boolean)=>void
+  editProject: (project: string, description: string)=>void
 }
 interface State {
 	project: any;
@@ -101,6 +102,7 @@ class Project extends React.Component<Props, State> {
                 addUserProject={(project:string, email: string)=>this.props.addUserProject(project, email)}
                 delettUserProject={(project:string, email: string)=>this.props.delettUserProject(project, email)}
                 changeVisibility={(project: string, country: string, visibility: boolean)=>this.props.changeVisibility(project, country, visibility)}
+                editProject={(project: string, description: string)=>this.props.editProject(project, description)}
             />
 				}
 			</Dashboard>
@@ -122,6 +124,7 @@ export default connect(
       deleteProject: actions.deleteProject,
       addUserProject: actions.addUserProject,
       delettUserProject: actions.delettUserProject,
-      changeVisibility: actions.changeVisibility
+      changeVisibility: actions.changeVisibility,
+      editProject: actions.editProject
     })
 )(Project);

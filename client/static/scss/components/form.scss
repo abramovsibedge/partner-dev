@@ -19,6 +19,55 @@
     }
   }
 }
+.textarea {
+  $textarea: &;
+  position: relative;
+  background: $palette-white;
+  border-radius: 4px;
+  &_textarea {
+    box-sizing: border-box;
+    padding: 30px 12px 0;
+    position: relative;
+    z-index: 20;
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: $x-palette-dark;
+    font: 13px $font-regular;
+    &:focus,
+    &.is-filled {
+      & + #{$textarea}_label {
+        padding-top: 8px;
+        font-size: 10px;
+      }
+    }
+    &:-webkit-autofill {
+      & + #{$textarea}_label {
+        padding-top: 8px;
+        font-size: 10px;
+      }
+    }
+  }
+  &_label {
+    position: absolute;
+    z-index: 20;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 17px 0 0 12px;
+    color: $x-palette-gray_1;
+    transition: all 0.3s ease-in-out;
+  }
+
+  &_error {
+    label,
+    &.select_error { box-shadow: 0 0 10px $palette-red; }
+    svg { fill: $x-palette-lightred; }
+  }
+}
 
 .input {
   $input: &;

@@ -13,7 +13,8 @@ import {
   Checkbox,
   Form,
   FormRow,
-  Input
+  Input,
+  Textarea
 } from '../../../components/form';
 import {Button} from '../../../components/button';
 
@@ -25,6 +26,7 @@ interface Props {
   addUserProject: (project: string, email: string)=>void
   delettUserProject: (project: string, email: string)=>void
   changeVisibility: (project: string, country: string, visibility: boolean)=>void
+  editProject: (project: string, description: string)=>void
 }
 
 interface State {
@@ -32,8 +34,10 @@ interface State {
 	modalDeleteProject: boolean
   addUserModalState: boolean
   deleteUserModalState: boolean
+  projectEditModalState: boolean
   addUserObject: object
 	mailForDelete: string
+	descritionEdit: string
 }
 
 class Body extends React.Component<Props, State> {
@@ -45,7 +49,9 @@ class Body extends React.Component<Props, State> {
       modalDeleteProject: false,
       addUserModalState: false,
       deleteUserModalState: false,
+      projectEditModalState: false,
       mailForDelete: '',
+      descritionEdit: this.props.project.description,
       addUserObject: {
         email: '',
         validationState: true,
@@ -64,6 +70,9 @@ class Body extends React.Component<Props, State> {
     newState['addUserObject'] = {[stateItem]: {$set: value}};
     this.setState(update(this.state, newState));
   }
+  handlerDescritionEdit(value: string){
+		this.setState({descritionEdit: value})
+	}
   toggleModal(type:string, data?:string) {
 		let dataCheck = (data!='') ? data: '';
 
@@ -73,6 +82,9 @@ class Body extends React.Component<Props, State> {
 				break;
       case 'addUser':
         this.setState({addUserModalState: !this.state.addUserModalState})
+        break;
+      case 'editProject':
+        this.setState({projectEditModalState: !this.state.projectEditModalState})
         break;
       case 'deleteUser':
         this.setState({
@@ -118,13 +130,19 @@ class Body extends React.Component<Props, State> {
 		this.props.changeVisibility(project, country, visibility);
   }
 
+  editproject() {
+  	this.props.editProject(this.props.project.publickey, this.state.descritionEdit);
+    this.toggleModal('editProject');
+	}
 	render() {
 		const {
       blockShow,
       modalDeleteProject,
       addUserModalState,
       deleteUserModalState,
-      addUserObject
+      addUserObject,
+      projectEditModalState,
+      descritionEdit
 		} = this.state;
 		const {
 			project,
@@ -188,7 +206,7 @@ class Body extends React.Component<Props, State> {
 								<h1 className="layout_h1">{project.publickey}</h1>
 							</div>
 							<div className="right">
-								<div>
+								<div onClick={()=>this.toggleModal('editProject')}>
 									<IconPen width="24px" height="24px" fill="#f5f4f2" />
 									<p>Edit project</p>
 								</div>
@@ -341,6 +359,47 @@ class Body extends React.Component<Props, State> {
 					</div>
 					<Button type="button" className="modal_close"
 									onClick={()=>this.toggleModal('deleteUser')}>
+						<IconClose width="24" height="24"/>
+					</Button>
+				</Modal>
+
+				<Modal
+						isOpen={projectEditModalState}
+						className={{base: 'modal_inner'}}
+						overlayClassName={{base: 'modal_outer'}}
+						contentLabel="test">
+					<div className="modal_header">
+						<h2>{project.publickey}</h2>
+					</div>
+
+					<div className="modal_content_edit_project">
+						<div className="img-change-project">
+							<img src={require('../../../static/media/def-icon.png')} alt="def" />
+							<div>
+								<p>App icon</p>
+								<p className="upload-icon-project">Upload app icon</p>
+							</div>
+						</div>
+						<div className="description-change-project">
+							<Textarea
+									label="Description"
+									value={descritionEdit}
+									onChange={(e)=>{this.handlerDescritionEdit(e.target.value)}}
+							/>
+						</div>
+					</div>
+
+					<div className="modal_footer">
+						<button className="modal_btn modal_btn-reset" type="button"
+										onClick={()=>this.toggleModal('editProject')}>Cancel
+						</button>
+						<button className="modal_btn modal_btn-submit action-button" type="button"
+										onClick={() => {this.editproject()}}>
+							Save changes
+						</button>
+					</div>
+					<Button type="button" className="modal_close"
+									onClick={()=>this.toggleModal('editProject')}>
 						<IconClose width="24" height="24"/>
 					</Button>
 				</Modal>

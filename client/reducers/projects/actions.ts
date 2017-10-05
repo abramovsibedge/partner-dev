@@ -55,6 +55,22 @@ const loadProjectItem = (id: string) => {
   });
 }
 
+const editProjectItem = (project: string, description: string) => {
+  let request:string = config.host + 'portal/project?access_token=' + config.firebaseToken();
+  request += '&publickey=' + project;
+  request += '&description =' + description;
+
+  return axios(request, { method: 'PUT' })
+      .then(response => {
+        response.data
+      })
+      .catch((error: any) => {
+        throw (error.message);
+      });
+
+}
+
+
 const setVisibility = (project: string, country: string, visibility: boolean) => {
   let request:string = config.host + 'portal/project/country?access_token=' + config.firebaseToken();
   request += '&publickey=' + project;
@@ -146,3 +162,9 @@ export const createProject = ReduxActions.createAction<any, object>(
     types.CREATE_PROJECT,
     (data: object) => addProject(data)
 );
+
+export const editProject = ReduxActions.createAction<any, string, string>(
+    types.EDIT_PROJECT,
+    (project:string, description: string) => editProjectItem(project, description)
+);
+

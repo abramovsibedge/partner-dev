@@ -119,6 +119,26 @@ export default handleActions<any>({
     };
   },
 
+  //EDIT_PROJECT
+  [`${types.EDIT_PROJECT}_LOADING`] : (state: IPojects, action: Action<string>) : IPojects => {
+    return {
+      ...state,
+      reload_project: false,
+    };
+  },
+  [`${types.EDIT_PROJECT}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
+    return {
+      ...state,
+      reload_project: true,
+    };
+  },
+  [`${types.EDIT_PROJECT}_ERROR`] : (state: IPojects, action: Action<string>) : IPojects => {
+    return {
+      ...state,
+      reload_project: false,
+    };
+  },
+
   [`${types.CREATE_PROJECT}_LOADING`] : (state: IPojects, action: Action<string>) : IPojects => {
     return {
       ...state,
