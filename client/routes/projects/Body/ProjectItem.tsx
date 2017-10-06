@@ -30,7 +30,7 @@ class ProjectItem extends React.Component<Props, State> {
 		super(props);
 
 		this.state = {
-      statusEdit: true,
+      statusEdit: false,
       descritionEdit: this.props.project.description
 		}
 	}
