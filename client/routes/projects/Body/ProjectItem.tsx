@@ -2,6 +2,12 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import {Link} from 'react-router';
 
+import * as actions from '../../../reducers/projects/actions';
+
+import {
+  Textarea
+} from '../../../components/form';
+
 import {
   Resume
 } from '../../../components/icons/resume'
@@ -9,15 +15,14 @@ import {
 	Button
 } from '../../../components/button'
 
-import UsersAuthentication from './UsersAuthentication';
-import Payments from './Payments';
-
 interface Props {
 	project: any
+  editProject: (project: string, description: string)=>void
 }
 
 interface State {
 	statusEdit: boolean
+  descritionEdit: string
 }
 
 class ProjectItem extends React.Component<Props, State> {
@@ -25,7 +30,8 @@ class ProjectItem extends React.Component<Props, State> {
 		super(props);
 
 		this.state = {
-      statusEdit: false
+      statusEdit: true,
+      descritionEdit: this.props.project.description
 		}
 	}
 	changeStatusEdit() {
@@ -33,13 +39,19 @@ class ProjectItem extends React.Component<Props, State> {
       statusEdit: !this.state.statusEdit
 		})
 	}
-	componentWillReceiveProps(nextProps: any) {
 
+  handlerDescritionEdit(value: string){
+    this.setState({descritionEdit: value})
+  }
+
+  editProject() {
+  	this.props.editProject(this.props.project.publickey, this.state.descritionEdit);
 	}
 
 	render() {
 		const{
-      statusEdit
+      statusEdit,
+      descritionEdit
 		} = this.state;
 		const {
       project,
@@ -85,10 +97,11 @@ class ProjectItem extends React.Component<Props, State> {
             {
               (statusEdit) ?
 									<div className="description-change">
-										<p className="name-description-change">Description</p>
-										<textarea>
-											{project.description}
-										</textarea>
+										<Textarea
+												label="Description"
+												value={descritionEdit}
+												onChange={(e)=>{this.handlerDescritionEdit(e.target.value)}}
+										/>
 									</div>
                   :
 									<div className="item-info">
@@ -106,6 +119,7 @@ class ProjectItem extends React.Component<Props, State> {
 							<div className="more-info edit">
 								<div className="close" onClick={() => {this.changeStatusEdit()}}>Cancel</div>
 								<Button
+										onClick={()=>{this.editProject()}}
 										type="button"
 										className="save-button"
 										children="Save edits"
@@ -126,7 +140,9 @@ class ProjectItem extends React.Component<Props, State> {
 
 export default connect<any, any, any>(
     state => ({
+      reload_project: state.projects.reload_project,
     }),
     ({
+      editProject: actions.editProject
     })
 )(ProjectItem);

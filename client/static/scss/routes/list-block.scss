@@ -103,21 +103,13 @@
       border-radius: 4px;
       background: $x-palette-dark;
       overflow: hidden;
-      .name-description-change {
-        margin: 9px 0 0 0;
-        font: 10px $font-regular;
-        line-height: 1.5;
-        letter-spacing: -0.2px;
-        color: $x-palette-gray_1;
-      }
       textarea {
-        margin: 7px 0 0 0;
-        width: 107%;
-        height: 106px;
+        width: 100%;
+        height: 138px;
         resize: none;
-        background: none;
-        color: $palette-white;
+        background: $x-palette-dark;
         font: 13px $font-regular;
+        color: $palette-white;
         border: none;
         outline: none;
       }

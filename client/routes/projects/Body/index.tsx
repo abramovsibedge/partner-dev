@@ -1,6 +1,4 @@
 import * as React from 'react';
-import * as update from 'immutability-helper';
-import * as classNames from 'classnames';
 
 import ProjectItem from './ProjectItem';
 import '../../../static/scss/routes/list-block.scss';
