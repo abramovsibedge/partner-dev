@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import {Link} from 'react-router';
+import * as classNames from 'classnames';
 
 import * as actions from '../../../reducers/projects/actions';
 
@@ -58,80 +59,48 @@ class ProjectItem extends React.Component<Props, State> {
     } = this.props;
 
 		return (
-			<div className="item-block">
-				<div className="content">
-          {
-            (statusEdit) ?
-								<div></div>
-								:
-								<div className="link-edit" onClick={() => {this.changeStatusEdit()}}>Edit</div>
-          }
-					<div className="top-info">
-						<div className="avatar">
-							<div className="img">
-								<img src={require('../../../static/media/def-icon.png')} alt="def" />
-							</div>
-							{
-								(statusEdit) ?
-										<div className="action-img">
-											<p className="name-action-img">App icon</p>
-											<p>Upload app icon</p>
-										</div>
-										:
-										<div></div>
-							}
-						</div>
-						<p className="name">
-              {project.publickey}
-						</p>
-            {
-              (statusEdit) ?
-									<div></div>
-                  :
-									<div className="description">
-                    {project.description}
-									</div>
-            }
+			<div className="projects_item item-block">
+				{!statusEdit && <button type="button" className="projects_item_edit" onClick={() => this.changeStatusEdit()}>Edit</button>}
+				<div className="projects_item_top">
+					<div className="projects_item_logo">
+						<img src={require('../../../static/media/def-icon.png')} width="60" height="60" alt="def" />
 					</div>
-					<div className={(statusEdit) ? "block-item-info edit" : "block-item-info"}>
-            {
-              (statusEdit) ?
-									<div className="description-change">
-										<Textarea
-												label="Description"
-												value={descritionEdit}
-												onChange={(e)=>{this.handlerDescritionEdit(e.target.value)}}
-										/>
-									</div>
-                  :
-									<div className="item-info">
-										<div className="item-private">
-											<p className="item-label">Private Key</p>
-											<p className="item-text">{project.privatekey}</p>
-										</div>
-									</div>
-            }
-					</div>
-
+					<p className="projects_item_title">{project.publickey}</p>
+					{!statusEdit && <div className="projects_item_description">
+						{project.description}
+					</div>}
 				</div>
-        {
-          (statusEdit) ?
-							<div className="more-info edit">
-								<div className="close" onClick={() => {this.changeStatusEdit()}}>Cancel</div>
-								<Button
-										onClick={()=>{this.editProject()}}
-										type="button"
-										className="save-button"
-										children="Save edits"
-								/>
-							</div>
-              :
-							<div className="more-info">
-								<Link to={"project/"+project.publickey}>
-									<Resume width="25px" height="25px"/>
-									<p>View project</p>
-								</Link>
-							</div>
+				<div className={classNames('projects_item_info', statusEdit && 'projects_item_info-edit')}>
+					{statusEdit
+						? <Textarea
+								label="Description"
+								value={descritionEdit}
+								className="projects_item_textarea"
+								onChange={(e)=>{this.handlerDescritionEdit(e.target.value)}}
+						/>
+						: <div className="projects_item_private">
+								<p className="projects_item_private_label">Private Key</p>
+								<p className="projects_item_private_text">{project.privatekey}</p>
+						</div>}
+				</div>
+
+        {statusEdit
+					? <div className="projects_item_more projects_item_more-edit">
+						<Button
+							type="button"
+							className="projects_item_cancel"
+							onClick={() => {this.changeStatusEdit()}}>Cancel</Button>
+						<Button
+							onClick={()=>{this.editProject()}}
+							type="button"
+							className="projects_item_save">Save edits</Button>
+					</div>
+					: <div className="projects_item_more">
+						<Link to={"project/" + project.publickey} className="button">
+							<Resume width="20" height="20" />
+							View project
+						</Link>
+					</div>
         }
 			</div>
 		);
@@ -139,10 +108,10 @@ class ProjectItem extends React.Component<Props, State> {
 }
 
 export default connect<any, any, any>(
-    state => ({
-      reload_project: state.projects.reload_project,
-    }),
-    ({
-      editProject: actions.editProject
-    })
+	state => ({
+		reload_project: state.projects.reload_project,
+	}),
+	({
+		editProject: actions.editProject
+	})
 )(ProjectItem);

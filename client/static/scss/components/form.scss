@@ -22,16 +22,16 @@
 .textarea {
   $textarea: &;
   position: relative;
-  background: $palette-white;
-  border-radius: 4px;
   &_textarea {
-    box-sizing: border-box;
     padding: 30px 12px 0;
     position: relative;
     z-index: 20;
     width: 100%;
+    height: 100%;
     border: none;
+    border-radius: 4px;
     outline: none;
+    resize: none;
     background: transparent;
     color: $x-palette-dark;
     font: 13px $font-regular;
@@ -64,7 +64,10 @@
 
   &_error {
     label,
-    &.select_error { box-shadow: 0 0 10px $palette-red; }
+    &.select_error {
+      box-shadow: 0 0 10px $palette-red;
+      border-radius: 4px;
+    }
     svg { fill: $x-palette-lightred; }
   }
 }

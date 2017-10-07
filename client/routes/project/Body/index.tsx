@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Modal from 'react-modal';
 import * as update from 'immutability-helper';
+import * as classNames from 'classnames';
+
 import {emailValidation} from '../../../utils';
 
 import {
@@ -38,6 +40,7 @@ interface State {
   addUserObject: object
 	mailForDelete: string
 	descritionEdit: string
+	stickedTableHead: boolean
 }
 
 class Body extends React.Component<Props, State> {
@@ -57,8 +60,30 @@ class Body extends React.Component<Props, State> {
         validationState: true,
         message: ''
       },
+			stickedTableHead: false
 		}
 	}
+
+	componentDidMount(){
+		window && window.addEventListener('scroll',this.stickTableHead);
+	}
+
+	componentWillUnmount(){
+		window && window.removeEventListener('scroll',this.stickTableHead);
+	}
+
+	stickTableHead = () => {
+		let {stickedTableHead} = this.state;
+
+		window && window.scrollY > 240 ?
+			!stickedTableHead && this.setState(update(this.state, {
+				stickedTableHead: {$set: true}
+			}))
+			:
+			stickedTableHead && this.setState(update(this.state, {
+				stickedTableHead: {$set: false}
+			}));
+	};
 
   handleShowBlock(num:number) {
 		this.setState({
@@ -155,126 +180,158 @@ class Body extends React.Component<Props, State> {
     if (selectedProject.countries) {
     	listCountries = selectedProject.countries.countries.map((e:any, t:any)=>{
         return (
-						<div className="item cell-blocks" key={t}>
-							<div>
-								<div className="item-country">
-									<Flags type={e.country} />
-									<p>{e.country}</p>
+					<div className={classNames('table_row')} key={t}>
+						<div className="table_row_wrapper">
+							<div className="table_cell" style={{width: '20%'}}>
+								<div className="table_cell_content">
+									<div className="project_country">
+										<Flags type={e.country} />
+										{e.country}
+									</div>
 								</div>
 							</div>
-							<div>
-								<p>{e.protocols.join(', ')}</p>
+							<div className="table_cell" style={{width: '70%'}}>
+								<div className="table_cell_content">
+									<p>{e.protocols.join(', ')}</p>
+								</div>
 							</div>
-							<div>
-								<Checkbox
-										className="project_edit_checkbox"
-										checked={e.visibility}
-										onChange={() => this.setVisibility(project.publickey, e.country, !e.visibility)}>&nbsp;</Checkbox>
+							<div className="table_cell" style={{width: '10%'}}>
+								<div className="table_cell_content">
+									<div className="project_accesibility">
+										<Checkbox
+											className="project_edit_checkbox"
+											checked={e.visibility}
+											onChange={() => this.setVisibility(project.publickey, e.country, !e.visibility)}>&nbsp;</Checkbox>
+									</div>
+								</div>
 							</div>
 						</div>
-				);
+					</div>);
 			});
+
       listAccess = selectedProject.emails.usersMail.map((e:any, t:any)=>{
       	return (
-						<div className="item cell-blocks" key={t}>
-							<div>
-								<p>{e}</p>
+					<div className={classNames('table_row')} key={t}>
+						<div className="table_row_wrapper">
+							<div className="table_cell" style={{width: '80%'}}>
+								<div className="table_cell_content">{e}</div>
 							</div>
-							<div>
-
-							</div>
-							<div>
-								<p className="user-delete" onClick={()=>this.toggleModal('deleteUser', e)}>
-									<IconClose width="24px" height="24px" fill="#ef6359" />
-								</p>
+							<div className="table_cell" style={{width: '20%'}}>
+								<div className="table_cell_content">
+									<div className="project_user-delete" onClick={()=>this.toggleModal('deleteUser', e)}>
+										<IconClose width="24" height="24" />
+									</div>
+								</div>
 							</div>
 						</div>
+					</div>
 				);
 			});
     }
 
-		let content = (<h1 className="layout_h1">Project not found</h1>);
+		const { stickedTableHead } = this.state;
+
+		let content: any = (<h1 className="layout_h1">Project not found</h1>);
 		if (project.publickey) {
-      content=(
-      		<div className="project-info">
+			content = [];
 
-						<div className="top">
-							<div className="left">
-								<div className="img">
-									<img src={require('../../../static/media/def-icon.png')} alt="def" />
-								</div>
-								<h1 className="layout_h1">{project.publickey}</h1>
-							</div>
-							<div className="right">
-								<div onClick={()=>this.toggleModal('editProject')}>
-									<IconPen width="24px" height="24px" fill="#f5f4f2" />
-									<p>Edit project</p>
-								</div>
-								<div onClick={()=>this.toggleModal('delete')}>
-									<IconClose width="24px" height="24px" fill="#ef6359" />
-									<p>Delete project</p>
-								</div>
-							</div>
+      content.push(
+				<div className="project">
+					<div className="project_head">
+						<h1 className="layout_h1">
+							<img src={require('../../../static/media/def-icon.png')} className="project_logo" width="26" height="26" alt="def" />
+							{project.publickey}
+						</h1>
+						<div className="project_actions">
+							<Button
+								type="button"
+								className="project_actions-edit"
+								onClick={()=>this.toggleModal('editProject')}>
+								<IconPen width="24px" height="24px" />
+								Edit project
+							</Button>
+							<Button
+								type="button"
+								className="project_actions-delete"
+								onClick={()=>this.toggleModal('delete')}>
+								<IconClose width="24px" height="24px" />
+								Delete project
+							</Button>
 						</div>
+					</div>
 
-						<div className="details">
-							<div className="description">
-                <p>{project.description}</p>
-							</div>
-							<div className="private-key">
-								<p className="name">Private Key</p>
-                <p>{project.privatekey}</p>
-							</div>
-							<div className="url">
-								<p className="name">URL</p>
-								<p>https://backend.northghost.com</p>
-							</div>
+					<div className="project_top">
+						{project.description && <div>
+							<p>{project.description}</p>
+						</div>}
+						<div>
+							<p className="project_top_label">Private Key</p>
+							<p>{project.privatekey}</p>
 						</div>
+						<div>
+							<p className="project_top_label">URL</p>
+							<p>https://backend.northghost.com</p>
+						</div>
+					</div>
 
-						<div className="settings-project">
-							<div className="top-settings-project">
-								<div className="left">
-									<div className={(blockShow == 1) ? "active" : ""} onClick={()=>{this.handleShowBlock(1)}}>
-										VPN Servers
-									</div>
-									<div className={(blockShow == 2) ? "active" : ""} onClick={()=>{this.handleShowBlock(2)}}>
-										Access
-									</div>
-								</div>
-								<div className="right" onClick={()=>this.toggleModal('addUser')}>
-									<IconPlus width="24px" height="24px" fill="#3f9beb" />
-									<p>Add access email</p>
-								</div>
+					<div className="project_settings">
+						<div className="project_tabs">
+							<button
+								className={classNames('project_tabs_item', blockShow == 1 && 'project_tabs_item-active')}
+								onClick={()=>{this.handleShowBlock(1)}}>
+								VPN Servers
+							</button>
+							<button
+								className={classNames('project_tabs_item', blockShow == 2 && 'project_tabs_item-active')}
+								onClick={()=>{this.handleShowBlock(2)}}>
+								Access
+							</button>
+						</div>
+						<Button
+							type="button"
+							className="project_add-email"
+							onClick={()=>this.toggleModal('addUser')}>
+							<IconPlus width="24" height="24" />
+							Add access email
+						</Button>
+					</div>
+
+					<div className="settings-project">
+
+						{blockShow === 1 && <div className="table main_table">
+							<div className={classNames("table_head", stickedTableHead && "table_head_sticked")}>
+								<table>
+									<tbody>
+									<tr>
+										<td style={{width: '20%'}}>Country</td>
+										<td style={{width: '70%'}}>Protocols</td>
+										<td style={{width: '10%'}}>Visibility</td>
+									</tr>
+									</tbody>
+								</table>
 							</div>
-
-							<div className={(blockShow == 1) ? "info-settings-project" : "info-settings-project hidden"}>
-								<header className="cell-blocks">
-									<div>
-										Country
-									</div>
-									<div>
-										Protocols
-									</div>
-									<div>
-										Visibility
-									</div>
-								</header>
+							<div className="table_body">
 								{listCountries}
 							</div>
+						</div>}
 
-							<div className={(blockShow == 2) ? "info-settings-project" : "info-settings-project hidden"}>
-								<header className="cell-blocks">
-									<div>
-										User
-									</div>
-									<div></div>
-									<div></div>
-								</header>
+						{blockShow == 2 && <div className="table main_table">
+							<div className={classNames("table_head", stickedTableHead && "table_head_sticked")}>
+								<table>
+									<tbody>
+										<tr>
+											<td style={{width: '80%'}}>User</td>
+											<td style={{width: '20%'}}>&nbsp;</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div className="table_body">
 								{listAccess}
 							</div>
-						</div>
-
+						</div>}
 					</div>
+				</div>
 			);
 		}
 

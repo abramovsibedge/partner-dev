@@ -127,9 +127,12 @@
       align-items: center;
       width: $x-size-content_width;
       margin: 0 auto;
+      &-centered { justify-content: center; }
     }
   }
   &_h1 {
+    display: flex;
+    align-items: center;
     font: 24px/29px $font-bold;
   }
   &_content {

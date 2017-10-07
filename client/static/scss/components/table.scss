@@ -80,7 +80,10 @@ $table_transition_properties: .3s ease-in-out;
     word-break: break-all;
     transition: border-top-color 0s linear .3s;
     &.a-right { text-align: right; }
-    &_content { padding: 0 16px; }
+    &_content {
+      width: 100%;
+      padding: 0 16px;
+    }
   }
   &_label {
     display: inline-block;

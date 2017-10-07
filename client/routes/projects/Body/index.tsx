@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import ProjectItem from './ProjectItem';
-import '../../../static/scss/routes/list-block.scss';
+import '../../../static/scss/routes/projects.scss';
 
 interface Props {
 	onUpdate: () => void
@@ -44,7 +44,6 @@ class Body extends React.Component<Props, State> {
 			projects
 		} = this.props;
 
-
 		return (
 			<section className="layout">
 				<header className="layout_head">
@@ -52,16 +51,13 @@ class Body extends React.Component<Props, State> {
 						<h1 className="layout_h1">Projects</h1>
 					</div>
 				</header>
-
-				<div className="items-block-content">
-
-					{projects.length === 0 && <div className="center-item-block">No result for your request.</div>}
+				<div className="layout_content projects items-block-content">
+					{projects.length === 0 && <div className="projects-empty">No result for your request.</div>}
 
 					{projects.length > 0 && projects.map((project: any, index: number) => {
 						return <ProjectItem key={index} project={project} onUpdate={this.props.onUpdate} />
 					})}
 				</div>
-
 			</section>
 		);
 	}

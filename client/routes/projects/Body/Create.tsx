@@ -10,7 +10,8 @@ import {
   Form,
   FormRow,
   Input,
-  Select
+  Select,
+	Textarea
 } from '../../../components/form';
 
 import {Button} from '../../../components/button';
@@ -62,7 +63,7 @@ class Create extends React.Component<Props, State> {
     let state: boolean = true;
     let message: string = '';
 
-    if (!$state.addProjectObject['public_key'] || !$state.addProjectObject['project_type']) {
+    if (!$state.addProjectObject['public_key'] || !$state.addProjectObject['project_type'] || !$state.addProjectObject['private_key']) {
       state = false;
       message += 'Fill in the highlighted fields.';
     }
@@ -86,51 +87,55 @@ class Create extends React.Component<Props, State> {
     } = this.state;
 
 		return (
-				<section className="layout">
-					<div className="create-project">
+			<section className="layout">
+				<header className="layout_head">
+					<div className="layout_head_content layout_head_content-centered">
 						<h1 className="layout_h1">Create your first project</h1>
-						<Form submit={() => this.addProjectSubmit()} className="modal_form">
-								<FormRow>
-									<Input
-											type="text"
-											label="Public Key"
-											value={addProjectObject['public_key']}
-											notValid={!addProjectObject['validationState'] && !addProjectObject['public_key']}
-											onChange={(e) => this.addProjectHandler(e.target.value, 'public_key')}>
-									</Input>
-								</FormRow>
-								<FormRow>
-									<Input
-											type="text"
-											label="Private Key"
-											value={addProjectObject['private_key']}
-											onChange={(e) => this.addProjectHandler(e.target.value, 'private_key')}>
-									</Input>
-								</FormRow>
-								<FormRow>
-									<Input
-											type="text"
-											label="Description"
-											value={addProjectObject['description']}
-											onChange={(e) => this.addProjectHandler(e.target.value, 'description')}>
-									</Input>
-								</FormRow>
-
-								<FormRow>
-									<Select
-											notValid={!addProjectObject['validationState'] && !addProjectObject['project_type']}
-											value={addProjectObject['project_type']}
-											options={productTypes}
-											onChange={(e) => this.addProjectHandler(e.target.value, 'project_type')}>
-										Project type
-									</Select>
-								</FormRow>
-
-								<button className="button-create" type="submit">Create project</button>
-
-						</Form>
 					</div>
-				</section>
+				</header>
+				<div className="layout_content create-project">
+					<Form submit={() => this.addProjectSubmit()} className="create-project_form">
+						<FormRow>
+							<Input
+									type="text"
+									label="Public Key"
+									value={addProjectObject['public_key']}
+									notValid={!addProjectObject['validationState'] && !addProjectObject['public_key']}
+									onChange={(e) => this.addProjectHandler(e.target.value, 'public_key')}>
+							</Input>
+						</FormRow>
+						<FormRow>
+							<Input
+									type="text"
+									label="Private Key"
+									value={addProjectObject['private_key']}
+									notValid={!addProjectObject['validationState'] && !addProjectObject['private_key']}
+									onChange={(e) => this.addProjectHandler(e.target.value, 'private_key')}>
+							</Input>
+						</FormRow>
+						<FormRow>
+							<Textarea
+								label="Description"
+								value={addProjectObject['description']}
+								className="create-project_textarea"
+								onChange={(e) => this.addProjectHandler(e.target.value, 'description')}
+							/>
+						</FormRow>
+
+						<FormRow>
+							<Select
+									notValid={!addProjectObject['validationState'] && !addProjectObject['project_type']}
+									value={addProjectObject['project_type']}
+									options={productTypes}
+									onChange={(e) => this.addProjectHandler(e.target.value, 'project_type')}>
+								Project type
+							</Select>
+						</FormRow>
+
+						<Button className="create-project_submit" type="submit">Create project</Button>
+					</Form>
+				</div>
+			</section>
 		);
 	}
 }
