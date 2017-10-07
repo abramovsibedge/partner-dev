@@ -213,14 +213,14 @@ class Body extends React.Component<Props, State> {
       	return (
 					<div className={classNames('table_row')} key={t}>
 						<div className="table_row_wrapper">
-							<div className="table_cell" style={{width: '80%'}}>
+							<div className="table_cell" style={{width: '90%'}}>
 								<div className="table_cell_content">{e}</div>
 							</div>
-							<div className="table_cell" style={{width: '20%'}}>
+							<div className="table_cell" style={{width: '10%'}}>
 								<div className="table_cell_content">
-									<div className="project_user-delete" onClick={()=>this.toggleModal('deleteUser', e)}>
+									<button className="project_user-delete" onClick={()=>this.toggleModal('deleteUser', e)}>
 										<IconClose width="24" height="24" />
-									</div>
+									</button>
 								</div>
 							</div>
 						</div>
@@ -233,9 +233,8 @@ class Body extends React.Component<Props, State> {
 
 		let content: any = (<h1 className="layout_h1">Project not found</h1>);
 		if (project.publickey) {
-			content = [];
 
-      content.push(
+      content = (
 				<div className="project">
 					<div className="project_head">
 						<h1 className="layout_h1">
@@ -320,8 +319,8 @@ class Body extends React.Component<Props, State> {
 								<table>
 									<tbody>
 										<tr>
-											<td style={{width: '80%'}}>User</td>
-											<td style={{width: '20%'}}>&nbsp;</td>
+											<td style={{width: '90%'}}>User</td>
+											<td style={{width: '10%'}}>&nbsp;</td>
 										</tr>
 									</tbody>
 								</table>

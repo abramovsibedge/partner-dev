@@ -122,7 +122,7 @@ $table_transition_properties: .3s ease-in-out;
     }
   }
   > .table_body {
-    > .table_row {
+    &.table_body-hovered > .table_row {
       &:before {
         content: '';
         position: absolute;

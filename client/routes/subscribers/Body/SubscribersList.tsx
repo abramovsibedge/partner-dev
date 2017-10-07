@@ -76,7 +76,7 @@ class SubscribersList extends React.Component<Props, State> {
 								</tbody>
 							</table>
 						</div>
-						<div className="table_body">
+						<div className="table_body table_body-hovered">
               {subscribersList.length === 0 && <div className="table_row table_row_empty">
 								<div className="table_cell" style={{width: '100%'}}>
 									<div className="table_cell_content">No result for your request.</div>

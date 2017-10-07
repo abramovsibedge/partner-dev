@@ -62,7 +62,7 @@ body {
             background: $table-cell-dark;
           }
         }
-        > .table_body {
+        > .table_body-hovered {
           > .table_row:not(.table_row_empty):hover .table_row_wrapper,
           > .table_row_open .table_row_wrapper {
             > .table_cell {
