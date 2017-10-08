@@ -8,7 +8,9 @@ import {Action, ActionCreator, Dispatch} from 'redux';
 import axios from 'axios';
 import config from '../../config';
 
-import {storageHelper} from '../../utils';
+import {
+	storageHelper,
+  logOut } from '../../utils';
 const storage = new storageHelper;
 
 import { projectsModel } from './model';
@@ -22,14 +24,7 @@ export const loadProjects = () => {
 		.catch(error => {
 			let result = error.response.data.result;
 
-			if (result === 'NOT_AUTHORIZED') {
-        storage.remove('rest');
-        storage.remove('firebase');
-        hashHistory.push('/auth/signin');
-        return false;
-			}
-
-      throw (error.message);
+			if (result === 'NOT_AUTHORIZED') logOut();
 		});
 };
 

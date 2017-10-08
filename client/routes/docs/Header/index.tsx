@@ -53,26 +53,24 @@ class Header extends React.Component<Parent, State> {
 							</Link>
 						</li>
 						<li className="menu_item">
-							<a className="menu_link" href="mailto:platformpartners@anchorfree.com">
+							<Link className="menu_link" to="mailto:platformpartners@anchorfree.com">
 								<IconQuestion width="17" height="17" />
 								<span>Help</span>
-							</a>
+							</Link>
 						</li>
 					</ul>
 					{!this.state.isSigned && <ul className="auth">
-						<li className="auth_item"><a className="auth_link auth_link-active" href="#/auth/signup">Sign up</a></li>
-						<li className="auth_item"><a className="auth_link" href="#/auth/signin">Sign in</a></li>
+						<li className="auth_item"><Link className="auth_link auth_link-active" to="/auth/signup">Sign up</Link></li>
+						<li className="auth_item"><Link className="auth_link" to="/auth/signin">Sign in</Link></li>
 					</ul>}
 					{this.state.isSigned && <ul className="auth">
-						<li className="auth_item"><a className="auth_link auth_link-active" href="#/projects">Dashboard</a></li>
-						<li className="auth_item"><a className="auth_link" href="#" onClick={logOut}>Logout</a></li>
+						<li className="auth_item"><Link className="auth_link auth_link-active" to="/projects">Dashboard</Link></li>
+						<li className="auth_item"><span className="auth_link" onClick={logOut}>Logout</span></li>
 					</ul>}
 				</div>
-				{
-					(this.state.filters.length === 0)
-						? <div />
-						: (this.state.type === 'list' ? <ListNavigation filters={this.state.filters} /> : <ArticleNavigation article={this.state.filters}/>)
-				}
+				{this.state.filters.length === 0
+					? <div />
+					: (this.state.type === 'list' ? <ListNavigation filters={this.state.filters} /> : <ArticleNavigation article={this.state.filters}/>)}
 			</div>
 		);
 	}
