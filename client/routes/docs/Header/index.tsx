@@ -1,15 +1,11 @@
 import * as React from 'react';
 import {Link} from 'react-router';
 
-import {
-	logOut
-} from '../../../functions/auth';
+import { logOut, checkAuth } from '../../../utils';
 import {
 	IconDocs,
 	IconQuestion
 } from '../../../components/icons'
-
-import {check} from '../../../../client/functions/auth';
 
 import ListNavigation from './ListNavigation';
 import ArticleNavigation from './ArticleNavigation';
@@ -30,7 +26,7 @@ class Header extends React.Component<Parent, State> {
 		super(props);
 
 		this.state = {
-			isSigned: check(),
+			isSigned: checkAuth(),
 			type: props.type,
 			filters: props.filters
 		}
@@ -64,11 +60,11 @@ class Header extends React.Component<Parent, State> {
 						</li>
 					</ul>
 					{!this.state.isSigned && <ul className="auth">
-						<li className="auth_item"><a className="auth_link auth_link-active" href="/auth/signup">Sign up</a></li>
-						<li className="auth_item"><a className="auth_link" href="/auth/signin">Sign in</a></li>
+						<li className="auth_item"><a className="auth_link auth_link-active" href="#/auth/signup">Sign up</a></li>
+						<li className="auth_item"><a className="auth_link" href="#/auth/signin">Sign in</a></li>
 					</ul>}
 					{this.state.isSigned && <ul className="auth">
-						<li className="auth_item"><a className="auth_link auth_link-active" href="/projects">Dashboard</a></li>
+						<li className="auth_item"><a className="auth_link auth_link-active" href="#/projects">Dashboard</a></li>
 						<li className="auth_item"><a className="auth_link" href="#" onClick={logOut}>Logout</a></li>
 					</ul>}
 				</div>

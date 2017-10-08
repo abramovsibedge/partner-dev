@@ -6,8 +6,53 @@
     display: flex;
     align-items: center;
   }
-  &_select {
 
+  &_selector {
+    position: relative;
+
+    &_current {
+      display: flex;
+      align-items: center;
+      border-radius: 4px;
+      font-size: 13px;
+      letter-spacing: -0.2px;
+      line-height: 48px;
+      cursor: pointer;
+      &-open {
+        svg {
+          transform: rotate(-180deg);
+        }
+      }
+      svg {
+        margin-left: 5px;
+        fill: $palette-white;
+      }
+    }
+    &_drop {
+      position: absolute;
+      z-index: 100;
+      top: 25px;
+      left: 0;
+      width: 236px;
+      height: 384px;
+      overflow-y: auto;
+      border-radius: 4px;
+      background: $palette-white;
+    }
+    &_item {
+      display: block;
+      line-height: 48px;
+      padding-left: 14px;
+      color: $x-palette-gray;
+      font-size: 13px;
+      letter-spacing: -0.2px;
+      cursor: pointer;
+      &-current,
+      &:hover {
+        color: $palette-white;
+        background: $palette-brand;
+      }
+    }
   }
   &_logo { margin-right: 8px; }
   &_actions {
@@ -79,6 +124,14 @@
   }
   &_add-email {
     margin-left: auto;
+    background: transparent;
+    color: $x-palette-gray_1;
+    svg {
+      margin-right: 8.5px;
+      fill: $palette-brand;
+    }
+  }
+  &_add-auth {
     background: transparent;
     color: $x-palette-gray_1;
     svg {

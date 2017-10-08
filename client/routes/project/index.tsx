@@ -30,20 +30,20 @@ interface Props {
 }
 interface State {
 	project: any;
+	hash: string
 }
 
 class Project extends React.Component<Props, State> {
 	constructor(props: any) {
 		super(props);
     this.state = {
-      project: {}
+      project: {},
+			hash: this.props.params.key
     }
 	}
 
   componentWillReceiveProps(nextProps: any) {
-	  if (
-		    nextProps.projects.length>0 && !this.state.project.publickey
-    ) {
+	  if ( nextProps.projects.length>0 && !this.state.project.publickey ) {
 			let elem:any = this.findProject(nextProps.projects, this.props.params.key);
 			this.setState({project: elem});
 			this.props.getProject(this.props.params.key);
@@ -54,13 +54,17 @@ class Project extends React.Component<Props, State> {
     if (nextProps.update_project && nextProps.update_project != this.props.update_project) {
       hashHistory.push('/projects');
     }
+		if (nextProps.params.key !== this.state.hash) {
+			window.location.reload();
+		}
   }
-  findProject(array: Array<any>, value:any) {
-    for (var i = 0; i < array.length; i++) {
+
+  findProject = (array: Array<any>, value:any) => {
+    for (let i = 0; i < array.length; i++) {
       if (array[i].publickey === value) return array[i];
     }
     return {};
-	}
+	};
 
 	componentDidMount() {
     if (!checkAuth()) {

@@ -16,7 +16,7 @@ interface State {
 	emailForDelete: string
 }
 
-class ProjectUsers extends React.Component<Props, State> {
+class ProjectPayments extends React.Component<Props, State> {
 	constructor(props: any) {
 		super(props);
 
@@ -119,4 +119,4 @@ class ProjectUsers extends React.Component<Props, State> {
 	}
 }
 
-export default ProjectUsers;
+export default ProjectPayments;

@@ -42,18 +42,33 @@ const loadProjectItem = (id: string) => {
       });
 
   const emailsRequest = config.host + 'portal/project/access?access_token=' + config.firebaseToken() + '&publickey=' + id;
-
   const emails = axios(emailsRequest)
       .then(response => response.data)
       .catch(error => {
         throw (error.message);
       });
 
-  const combinedData = {"countries":{},"emails":{}};
+	const authRequest = config.host + 'portal/project/authentifications_setting?access_token=' + config.firebaseToken() + '&publickey=' + id;
+	const auth = axios(authRequest)
+		.then(response => response.data)
+		.catch(error => {
+			throw (error.message);
+		});
 
-  return Promise.all([countries, emails]).then(result => {
+	const paymentsRequest = config.host + 'portal/project/payments_settings?access_token=' + config.firebaseToken() + '&publickey=' + id;
+	const payments = axios(paymentsRequest)
+		.then(response => response.data)
+		.catch(error => {
+			throw (error.message);
+		});
+
+  const combinedData = {"countries": {},"emails": {}, "auth": {}, "payments": {}};
+
+  return Promise.all([countries, emails, auth, payments]).then(result => {
     combinedData["countries"] = result[0];
     combinedData["emails"] = result[1];
+    combinedData["auth"] = result[2];
+    combinedData["payments"] = result[3];
     combinedData["id"] = id;
     return combinedData;
   });
@@ -62,16 +77,9 @@ const loadProjectItem = (id: string) => {
 const editProjectItem = async (project: string, description: string) => {
   let request:string = config.host + 'portal/project?access_token=' + config.firebaseToken();
   request += '&publickey=' + project;
-  request += '&description =' + description;
+  request += '&description=' + description;
 
-  return axios(request, { method: 'PUT' })
-      .then(response => {
-        response.data
-      })
-      .catch((error: any) => {
-        throw (error.message);
-      });
-
+  return axios(request, { method: 'PUT' }).then(response => response.data);
 }
 
 
@@ -82,12 +90,12 @@ const setVisibility = (project: string, country: string, visibility: boolean) =>
   request += '&visibility=' + visibility;
 
   return axios(request, { method: 'PUT' })
-      .then(response => {
-        response.data
-      })
-      .catch((error: any) => {
-        throw (error.message);
-      });
+		.then(response => {
+			response.data
+		})
+		.catch((error: any) => {
+			throw (error.message);
+		});
 };
 
 const deletePr = (item: object) => {
@@ -96,11 +104,10 @@ const deletePr = (item: object) => {
   request += '&privatekey=' + item['privatekey'];
 
   return axios(request, { method: 'DELETE' })
-      .then(response => response.data)
-      .catch((error: any) => {
-        console.log('error.message', error.message);
-        throw (error.message);
-      });
+		.then(response => response.data)
+		.catch((error: any) => {
+			throw (error.message);
+		});
 };
 
 const addProject = (data: object) => {
@@ -112,6 +119,38 @@ const addProject = (data: object) => {
 
   return axios(request, { method: 'POST' }).then(response => response.data)
 };
+
+
+
+const removeAuth = (project: string, auth: string) => {
+	let request:string = config.host + 'portal/project/authentifications_setting?access_token=' + config.firebaseToken();
+	request += '&publickey=' + project;
+	request += '&auth_method=' + auth;
+
+	return axios(request, { method: 'DELETE' }).then(response => response.data)
+};
+
+const authAdd = (project: string, auth: any) => {
+	let request:string = config.host + 'portal/project/authentifications_setting?access_token=' + config.firebaseToken();
+	request += '&publickey=' + project;
+	request += '&auth_method=' + auth.name;
+	request += '&auth_settings=' + auth.settings;
+
+	return axios(request, { method: 'PUT' }).then(response => response.data)
+};
+
+
+const deleteAuth = ReduxActions.createAction<any, string, string>(
+	types.DELETE_AUTH,
+	(project: string, auth: string) => removeAuth(project, auth)
+);
+
+const addAuth = ReduxActions.createAction<any, string, string>(
+	types.ADD_AUTH,
+	(project: string, value: string) => authAdd(project, value)
+);
+
+
 
 // ____________________________>>
 
@@ -151,3 +190,8 @@ export const editProject: ActionCreator<ThunkAction<Promise<Action>, IPojects, v
 		});
 	};
 };
+
+export {
+	deleteAuth,
+	addAuth
+}

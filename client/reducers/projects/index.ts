@@ -24,7 +24,6 @@ export default handleActions<any>({
     return {
       ...state,
       list: action.payload['projects'],
-			selectedProject: 0,
       loading: false
     };
   },
@@ -61,6 +60,13 @@ export default handleActions<any>({
       reload_project: false,
     };
   },
+
+	[`${types.ADD_AUTH}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
+		return {
+			...state,
+			reload_project: true,
+		};
+	},
 
   [`${types.DELETE_PROJECT}_LOADING`] : (state: IPojects, action: Action<string>) : IPojects => {
     return {

@@ -87,7 +87,7 @@ class ProjectCountries extends React.Component<Props, State> {
 							</div>
 						</div>
 					</div>;
-				})};
+				})}
 			</div>
 		</div>);
 	}

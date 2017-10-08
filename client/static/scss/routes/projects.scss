@@ -67,6 +67,7 @@
       right: 40px;
       bottom: 27px;
       &-edit { justify-content: flex-end; }
+      &-deleted { color: $x-palette-lightred_2; }
       a {
         display: flex;
         align-items: center;

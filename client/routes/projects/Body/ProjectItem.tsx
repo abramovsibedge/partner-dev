@@ -58,13 +58,11 @@ class ProjectItem extends React.Component<Props, State> {
       statusEdit,
       descritionEdit
 		} = this.state;
-		const {
-      project,
-    } = this.props;
+		const { project } = this.props;
 
 		return (
 			<div className="projects_item item-block">
-				{!statusEdit && <button type="button" className="projects_item_edit" onClick={() => this.changeStatusEdit()}>Edit</button>}
+				{!statusEdit && !project.deleteTaskCode && <button type="button" className="projects_item_edit" onClick={() => this.changeStatusEdit()}>Edit</button>}
 				<div className="projects_item_top">
 					<div className="projects_item_logo">
 						<img src={require('../../../static/media/def-icon.png')} width="60" height="60" alt="def" />
@@ -99,13 +97,15 @@ class ProjectItem extends React.Component<Props, State> {
 							type="button"
 							className="projects_item_save">Save edits</Button>
 					</div>
-					: <div className="projects_item_more">
+					: !project.deleteTaskCode && <div className="projects_item_more">
 						<Link to={"project/" + project.publickey} className="button">
 							<Resume width="20" height="20" />
 							View project
 						</Link>
 					</div>
         }
+
+				{project.deleteTaskCode && <div className="projects_item_more projects_item_more-deleted">Deleted</div>}
 			</div>
 		);
 	}

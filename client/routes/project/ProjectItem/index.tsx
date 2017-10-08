@@ -4,23 +4,32 @@ import * as update from 'immutability-helper';
 import * as classNames from 'classnames';
 import {connect} from 'react-redux';
 import { hashHistory } from 'react-router';
+import onClickOutside from 'react-onclickoutside';
+import {Link} from 'react-router';
 
 import {emailValidation} from '../../../utils';
 
 import ProjectCountries from './ProjectCountries';
 import ProjectUsers from './ProjectUsers';
+import ProjectAuth from './ProjectAuth';
+import ProjectPayments from './ProjectPayments';
 
 import * as actions from '../../../reducers/project/actions';
-import { editProject, getProjects } from '../../../reducers/projects/actions';
+import {changeVisibility} from '../../../reducers/projects/actions';
+import {
+	editProject,
+	getProjects,
+	deleteAuth,
+	addAuth
+} from '../../../reducers/projects/actions';
 
 import {
 	IconClose,
 	IconPen,
 	IconPlus,
-	Flags
+	IconPlay
 } from '../../../components/icons';
 import {
-	Checkbox,
 	Form,
 	FormRow,
 	Input,
@@ -31,28 +40,26 @@ import {Button} from '../../../components/button';
 interface Props {
 	project: any
 	data: any
-	getProjects?: () => any
+	loadProjects?: () => any
 	deleteProject?: (item: object) => any
 	editProject?: (project: string, description: string) => any
 	addUser?: (project: string, email: string) => void
 	deleteUser?: (project: string, email: string) => void
-
-
-	selectedProject?: any
+	deleteAuth?: (project: string, auth: string) => void
+	addAuth?: (project: string, auth: any) => void
 	changeVisibility?: (project: string, country: string, visibility: boolean) => void
+	projectList?: any
 }
 
 interface State {
 	blockShow: number
 	modalDeleteProject: boolean
-
-
-
 	addUserModalState: boolean
 	projectEditModalState: boolean
 	addUserObject: object
 	mailForDelete: string
 	descritionEdit: string
+	projectSelectorVisibility: boolean
 }
 
 class ProjectItem extends React.Component<Props, State> {
@@ -70,7 +77,8 @@ class ProjectItem extends React.Component<Props, State> {
 				email: '',
 				validationState: true,
 				message: ''
-			}
+			},
+			projectSelectorVisibility: false
 		}
 	}
 
@@ -139,14 +147,22 @@ class ProjectItem extends React.Component<Props, State> {
 		this.props.deleteUser(this.props.project.publickey, email);
 	}
 
+	addAuth(value: any) {
+		this.props.addAuth(this.props.project.publickey, value);
+	}
+
+	deleteAuth(auth: string) {
+		this.props.deleteAuth(this.props.project.publickey, auth);
+	}
+
 	setVisibility(project: string, country: string, visibility: boolean) {
 		this.props.changeVisibility(project, country, visibility);
 	}
 
 	editProject() {
 		this.props.editProject(this.props.project.publickey, this.state.descritionEdit).then(() => {
-			this.props.getProjects();
-			this.toggleModal('editProject')
+			this.toggleModal('editProject');
+			this.props.loadProjects();
 		});
 	}
 
@@ -154,24 +170,27 @@ class ProjectItem extends React.Component<Props, State> {
 		this.props.deleteProject(this.props.project).then(() => hashHistory.push('/projects'))
 	}
 
+	toggleProjectSelector() {
+		this.setState({
+			projectSelectorVisibility: !this.state.projectSelectorVisibility
+		})
+	}
+
 	render() {
 		const {
 			blockShow,
-
-
-
 			modalDeleteProject,
 			addUserModalState,
 			addUserObject,
 			projectEditModalState,
-			descritionEdit
+			descritionEdit,
+			projectSelectorVisibility
 		} = this.state;
 
 		const {
 			project,
 			data,
-
-			selectedProject
+			projectList
 		} = this.props;
 
 		let content: any = (<h1 className="layout_h1">Project not found</h1>);
@@ -183,6 +202,16 @@ class ProjectItem extends React.Component<Props, State> {
 						<img src={require('../../../static/media/def-icon.png')} className="project_logo" width="26" height="26" alt="def"/>
 						{project.publickey}
 					</h1>
+					<div className="project_selector">
+						<div
+							className={classNames('project_selector_current', projectSelectorVisibility && 'project_selector_current-open')}
+							onClick={() => this.toggleProjectSelector()}>
+							<IconPlay width="24" height="24" />
+						</div>
+						{projectSelectorVisibility && <WrappedSelectList
+							list={projectList}
+							onStateChange={() => this.toggleProjectSelector()}/>}
+					</div>
 					<div className="project_actions">
 						<Button
 							type="button"
@@ -231,6 +260,20 @@ class ProjectItem extends React.Component<Props, State> {
 							}}>
 							Access
 						</button>
+						<button
+							className={classNames('project_tabs_item', blockShow == 3 && 'project_tabs_item-active')}
+							onClick={() => {
+								this.handleShowBlock(3)
+							}}>
+							Users authentication
+						</button>
+						<button
+							className={classNames('project_tabs_item', blockShow == 4 && 'project_tabs_item-active')}
+							onClick={() => {
+								this.handleShowBlock(4)
+							}}>
+							Payments settings
+						</button>
 					</div>
 					<Button
 						type="button"
@@ -244,10 +287,19 @@ class ProjectItem extends React.Component<Props, State> {
 				<div className="settings-project">
 					{blockShow === 1 && data.countries && <ProjectCountries
 						countries={data.countries.countries}
-						onChange={(country: any, state: boolean) => this.setVisibility(project, country, state)} />}
+						onChange={(country: any, state: boolean) => this.setVisibility(project.publickey, country, state)} />}
 
 					{blockShow === 2 && data.emails && <ProjectUsers
 						users={data.emails.usersMail}
+						onChange={(email: string) => this.deleteUser(email)} />}
+
+					{blockShow === 3 && data.auth && <ProjectAuth
+						auth={data.auth.all_auth_settings}
+						addAuth={(value: any) => this.addAuth(value)}
+						deleteAuth={(auth: string) => this.deleteAuth(auth)} />}
+
+					{blockShow === 4 && data.payments && <ProjectPayments
+						users={data.payments.all_purchase_settings}
 						onChange={(email: string) => this.deleteUser(email)} />}
 				</div>
 			</div>);
@@ -365,6 +417,33 @@ class ProjectItem extends React.Component<Props, State> {
 	}
 }
 
+class SelectList extends React.Component<{
+	disableOnClickOutside: () => void
+	enableOnClickOutside: () => void
+	list: any
+	onStateChange: () => void
+}, {}> {
+	handleClickOutside = () => this.props.onStateChange();
+
+	render() {
+		return (
+			<div className="project_selector_drop">
+				{this.props.list.map((item: any, index: number) => {
+					return <Link
+						className={classNames('project_selector_item')}
+						key={index}
+						to={'/project/' + item.publickey}>{item.publickey}</Link>
+				})}
+			</div>
+		);
+	}
+}
+
+const WrappedSelectList = onClickOutside<{
+	list: any
+	onStateChange: () => void
+}>(SelectList);
+
 export default connect<any, any, Props>(
 	state => ({
 		projectList: state.projects.list
@@ -375,5 +454,8 @@ export default connect<any, any, Props>(
 		editProject: editProject,
 		addUser: actions.addUser,
 		deleteUser: actions.deleteUser,
+		deleteAuth: deleteAuth,
+		addAuth: addAuth,
+		changeVisibility: changeVisibility
 	})
 )(ProjectItem);
