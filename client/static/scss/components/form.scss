@@ -21,6 +21,7 @@
 }
 .textarea {
   $textarea: &;
+
   position: relative;
   &_textarea {
     padding: 30px 12px 0;

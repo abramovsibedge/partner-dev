@@ -2,6 +2,9 @@ import * as ReduxActions from "redux-actions";
 import * as types from './constants';
 import { hashHistory } from 'react-router';
 
+import {ThunkAction} from 'redux-thunk';
+import {Action, ActionCreator, Dispatch} from 'redux';
+
 import axios from 'axios';
 import config from '../../config';
 
@@ -9,6 +12,7 @@ import {storageHelper} from '../../utils';
 const storage = new storageHelper;
 
 import { projectsModel } from './model';
+import { IPojects } from './model';
 
 export const loadProjects = () => {
 	const request = config.host + 'portal/projects?access_token=' + config.firebaseToken();
@@ -55,7 +59,7 @@ const loadProjectItem = (id: string) => {
   });
 }
 
-const editProjectItem = (project: string, description: string) => {
+const editProjectItem = async (project: string, description: string) => {
   let request:string = config.host + 'portal/project?access_token=' + config.firebaseToken();
   request += '&publickey=' + project;
   request += '&description =' + description;
@@ -99,22 +103,6 @@ const deletePr = (item: object) => {
       });
 };
 
-const addUser = (project: string, email: string) => {
-  let request:string = config.host + 'portal/project/access?access_token=' + config.firebaseToken();
-  request += '&publickey=' + project;
-  request += '&email=' + email;
-
-  return axios(request, { method: 'POST' }).then(response => response.data)
-};
-
-const deleteUser = (project: string, email: string) => {
-  let request:string = config.host + 'portal/project/access?access_token=' + config.firebaseToken();
-  request += '&publickey=' + project;
-  request += '&email=' + email;
-
-  return axios(request, { method: 'DELETE' }).then(response => response.data)
-};
-
 const addProject = (data: object) => {
   let request:string = config.host + 'portal/project?access_token=' + config.firebaseToken();
   request += '&publickey=' + data['public_key'];
@@ -147,24 +135,19 @@ export const deleteProject = ReduxActions.createAction<any, object>(
     (item: object) => deletePr(item)
 );
 
-export const addUserProject = ReduxActions.createAction<any, string, string>(
-    types.ADD_USER,
-    (project: string, email: string) => addUser(project, email)
-);
-
-
-export const delettUserProject = ReduxActions.createAction<any, string, string>(
-    types.DELETE_USER,
-    (project: string, email: string) => deleteUser(project, email)
-);
 
 export const createProject = ReduxActions.createAction<any, object>(
     types.CREATE_PROJECT,
     (data: object) => addProject(data)
 );
 
-export const editProject = ReduxActions.createAction<any, string, string>(
-    types.EDIT_PROJECT,
-    (project:string, description: string) => editProjectItem(project, description)
-);
+export const editProject: ActionCreator<ThunkAction<Promise<Action>, IPojects, void>> = (project:string, description: string) => {
+	return async (dispatch: Dispatch<IPojects>): Promise<Action> => {
+		let result = await editProjectItem(project, description);
 
+		return dispatch({
+			type: types.EDIT_PROJECT,
+			result
+		});
+	};
+};

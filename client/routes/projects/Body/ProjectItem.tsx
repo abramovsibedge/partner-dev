@@ -18,7 +18,8 @@ import {
 
 interface Props {
 	project: any
-  editProject: (project: string, description: string)=>void
+  editProject: (project: string, description: string)=>any
+	getProjects: any
 }
 
 interface State {
@@ -35,6 +36,7 @@ class ProjectItem extends React.Component<Props, State> {
       descritionEdit: this.props.project.description
 		}
 	}
+
 	changeStatusEdit() {
 		this.setState({
       statusEdit: !this.state.statusEdit
@@ -46,7 +48,9 @@ class ProjectItem extends React.Component<Props, State> {
   }
 
   editProject() {
-  	this.props.editProject(this.props.project.publickey, this.state.descritionEdit);
+  	this.props.editProject(this.props.project.publickey, this.state.descritionEdit).then(() => {
+			this.props.getProjects();
+		});
 	}
 
 	render() {
@@ -76,7 +80,7 @@ class ProjectItem extends React.Component<Props, State> {
 								label="Description"
 								value={descritionEdit}
 								className="projects_item_textarea"
-								onChange={(e)=>{this.handlerDescritionEdit(e.target.value)}}
+								onChange={(e) => this.handlerDescritionEdit(e.target.value)}
 						/>
 						: <div className="projects_item_private">
 								<p className="projects_item_private_label">Private Key</p>
@@ -89,9 +93,9 @@ class ProjectItem extends React.Component<Props, State> {
 						<Button
 							type="button"
 							className="projects_item_cancel"
-							onClick={() => {this.changeStatusEdit()}}>Cancel</Button>
+							onClick={() => this.changeStatusEdit()}>Cancel</Button>
 						<Button
-							onClick={()=>{this.editProject()}}
+							onClick={() => this.editProject()}
 							type="button"
 							className="projects_item_save">Save edits</Button>
 					</div>
@@ -112,6 +116,7 @@ export default connect<any, any, any>(
 		reload_project: state.projects.reload_project,
 	}),
 	({
-		editProject: actions.editProject
+		editProject: actions.editProject,
+		getProjects: actions.getProjects
 	})
 )(ProjectItem);

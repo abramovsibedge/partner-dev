@@ -7,10 +7,10 @@ import Loading from './Loading';
 import Dashboard from '../../components/dashboard';
 import DashboardHeader from '../../components/dashboard/dashboardHeader';
 import Header from './Header';
-import Body from './Body';
+import ProjectItem from './ProjectItem';
 
 import * as actions from '../../reducers/projects/actions';
-import { checkAuth } from '../../utils';
+import { checkAuth, logOut } from '../../utils';
 
 import '../../static/scss/routes/project.scss';
 
@@ -24,8 +24,6 @@ interface Props {
 
   loadProjects: () => void
   getProject: (id:string) => void
-  deleteProject: (item: object) => void
-  addUserProject: (project: string, email: string)=>void
   delettUserProject: (project: string, email: string)=>void
   changeVisibility: (project: string, country: string, visibility: boolean)=>void
   editProject: (project: string, description: string)=>void
@@ -66,8 +64,7 @@ class Project extends React.Component<Props, State> {
 
 	componentDidMount() {
     if (!checkAuth()) {
-      hashHistory.push('/auth/signin');
-      return false;
+			logOut();
     } else {
       this.props.loadProjects();
     }
@@ -94,17 +91,7 @@ class Project extends React.Component<Props, State> {
 				<DashboardHeader>
 					<Header onUpdate={() => this.reloadProjects()} />
 				</DashboardHeader>
-				{loading ? <Loading /> :
-            <Body
-                selectedProject={selectedProject}
-                project={project}
-                deleteProject={()=>this.props.deleteProject(project)}
-                addUserProject={(project:string, email: string)=>this.props.addUserProject(project, email)}
-                delettUserProject={(project:string, email: string)=>this.props.delettUserProject(project, email)}
-                changeVisibility={(project: string, country: string, visibility: boolean)=>this.props.changeVisibility(project, country, visibility)}
-                editProject={(project: string, description: string)=>this.props.editProject(project, description)}
-            />
-				}
+				{loading ? <Loading /> : <ProjectItem project={project} data={selectedProject} />}
 			</Dashboard>
 		);
 	}
@@ -112,19 +99,17 @@ class Project extends React.Component<Props, State> {
 
 export default connect(
     state => ({
+			loading: state.projects.loading,
       projects: state.projects.list,
-      loading: state.projects.loading,
       selectedProject: state.projects.selectedProject,
+
+
       update_project: state.projects.update_project,
       reload_project: state.projects.reload_project,
     }),
     ({
       loadProjects: actions.getProjects,
       getProject: actions.getProject,
-      deleteProject: actions.deleteProject,
-      addUserProject: actions.addUserProject,
-      delettUserProject: actions.delettUserProject,
-      changeVisibility: actions.changeVisibility,
-      editProject: actions.editProject
+      changeVisibility: actions.changeVisibility
     })
 )(Project);

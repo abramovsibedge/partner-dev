@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { hashHistory } from 'react-router';
 
 import Loading from './Loading';
 import Dashboard from '../../components/dashboard';
@@ -10,7 +9,7 @@ import Body from './Body';
 
 import { getProjects } from '../../reducers/projects/actions';
 import * as actions from '../../reducers/subscribers/actions';
-import { checkAuth } from '../../utils'
+import { checkAuth, logOut } from '../../utils'
 
 import '../../static/scss/routes/subscribers.scss';
 
@@ -27,8 +26,7 @@ class Subscribers extends React.Component<Props, {}> {
 
 	componentWillMount() {
 		if (!checkAuth()) {
-			hashHistory.push('/auth/signin');
-			return false;
+			logOut();
 		} else {
 			this.props.loadProjects();
 			this.props.getLicenses();

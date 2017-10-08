@@ -6,6 +6,9 @@
     display: flex;
     align-items: center;
   }
+  &_select {
+
+  }
   &_logo { margin-right: 8px; }
   &_actions {
     display: flex;
@@ -98,5 +101,10 @@
     text-align: center;
     cursor: pointer;
     svg { fill: $x-palette-lightred_2; }
+  }
+  &_edit {
+    &_textarea {
+      height: 138px;
+    }
   }
 }

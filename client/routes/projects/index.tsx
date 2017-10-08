@@ -10,7 +10,7 @@ import Header from './Header';
 import Body from './Body';
 
 import * as actions from '../../reducers/projects/actions';
-import { checkAuth } from '../../utils';
+import { checkAuth, logOut } from '../../utils';
 
 import '../../static/scss/routes/projects.scss';
 
@@ -28,8 +28,7 @@ class Projects extends React.Component<Props, {}> {
 
 	componentDidMount() {
     if (!checkAuth()) {
-      hashHistory.push('/auth/signin');
-      return false;
+			logOut();
     } else {
       this.props.loadProjects();
     }
