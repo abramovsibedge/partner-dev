@@ -99,6 +99,18 @@ class ProjectAuth extends React.Component<Props, State> {
 			message += 'Fill in the highlighted fields.';
 		}
 
+		if ($state.addAuthObject['settings'].match(/^[0-9]+$/)) {
+			state = false;
+			message += 'Settings field has wrong format';
+		}
+
+		try {
+			JSON.parse($state.addAuthObject['settings']);
+		} catch(e) {
+			state = false;
+			message += 'Settings field has wrong format';
+		}
+
 		$t.setState(update($state, {
 			addAuthObject: {
 				validationState: {$set: false},

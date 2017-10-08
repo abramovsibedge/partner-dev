@@ -20,7 +20,9 @@ import {
 	editProject,
 	getProjects,
 	deleteAuth,
-	addAuth
+	addAuth,
+	deletePayment,
+	addPayment
 } from '../../../reducers/projects/actions';
 
 import {
@@ -47,6 +49,8 @@ interface Props {
 	deleteUser?: (project: string, email: string) => void
 	deleteAuth?: (project: string, auth: string) => void
 	addAuth?: (project: string, auth: any) => void
+	deletePayment?: (project: string, payment: string) => void
+	addPayment?: (project: string, payment: any) => void
 	changeVisibility?: (project: string, country: string, visibility: boolean) => void
 	projectList?: any
 }
@@ -153,6 +157,14 @@ class ProjectItem extends React.Component<Props, State> {
 
 	deleteAuth(auth: string) {
 		this.props.deleteAuth(this.props.project.publickey, auth);
+	}
+
+	addPayment(value: any) {
+		this.props.addPayment(this.props.project.publickey, value);
+	}
+
+	deletePayment(payment: string) {
+		this.props.deletePayment(this.props.project.publickey, payment);
 	}
 
 	setVisibility(project: string, country: string, visibility: boolean) {
@@ -293,14 +305,15 @@ class ProjectItem extends React.Component<Props, State> {
 						users={data.emails.usersMail}
 						onChange={(email: string) => this.deleteUser(email)} />}
 
-					{blockShow === 3 && data.auth && <ProjectAuth
-						auth={data.auth.all_auth_settings}
-						addAuth={(value: any) => this.addAuth(value)}
-						deleteAuth={(auth: string) => this.deleteAuth(auth)} />}
+					{/*{blockShow === 3 && data.auth && <ProjectAuth*/}
+						{/*auth={data.auth.all_auth_settings}*/}
+						{/*addAuth={(value: any) => this.addAuth(value)}*/}
+						{/*deleteAuth={(auth: string) => this.deleteAuth(auth)} />}*/}
 
-					{blockShow === 4 && data.payments && <ProjectPayments
-						users={data.payments.all_purchase_settings}
-						onChange={(email: string) => this.deleteUser(email)} />}
+					{/*{blockShow === 4 && data.payments && <ProjectPayments*/}
+						{/*payments={data.payments.all_purchase_settings}*/}
+						{/*addPayment={(value: any) => this.addPayment(value)}*/}
+						{/*deletePayment={(auth: string) => this.deletePayment(auth)} />}*/}
 				</div>
 			</div>);
 		}
@@ -456,6 +469,8 @@ export default connect<any, any, Props>(
 		deleteUser: actions.deleteUser,
 		deleteAuth: deleteAuth,
 		addAuth: addAuth,
+		deletePayment: deletePayment,
+		addPayment: addPayment,
 		changeVisibility: changeVisibility
 	})
 )(ProjectItem);

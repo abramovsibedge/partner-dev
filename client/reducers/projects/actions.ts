@@ -134,23 +134,51 @@ const authAdd = (project: string, auth: any) => {
 	let request:string = config.host + 'portal/project/authentifications_setting?access_token=' + config.firebaseToken();
 	request += '&publickey=' + project;
 	request += '&auth_method=' + auth.name;
-	request += '&auth_settings=' + auth.settings;
+	request += '&auth_settings=' + JSON.stringify(auth.settings);
 
 	return axios(request, { method: 'PUT' }).then(response => response.data)
 };
 
 
-const deleteAuth = ReduxActions.createAction<any, string, string>(
+export const deleteAuth = ReduxActions.createAction<any, string, string>(
 	types.DELETE_AUTH,
 	(project: string, auth: string) => removeAuth(project, auth)
 );
 
-const addAuth = ReduxActions.createAction<any, string, string>(
+export const addAuth = ReduxActions.createAction<any, string, string>(
 	types.ADD_AUTH,
 	(project: string, value: string) => authAdd(project, value)
 );
 
 
+
+const removePayment = (project: string, payment: string) => {
+	let request:string = config.host + 'portal/project/payments_settings?access_token=' + config.firebaseToken();
+	request += '&publickey=' + project;
+	request += '&auth_method=' + payment;
+
+	return axios(request, { method: 'DELETE' }).then(response => response.data)
+};
+
+
+const authPayment = (project: string, auth: any) => {
+	let request:string = config.host + 'portal/project/authentifications_setting?access_token=' + config.firebaseToken();
+	request += '&publickey=' + project;
+	request += '&auth_method=' + auth.name;
+	request += '&auth_settings=' + JSON.stringify(auth.settings);
+
+	return axios(request, { method: 'PUT' }).then(response => response.data)
+};
+
+export const deletePayment = ReduxActions.createAction<any, string, string>(
+	types.DELETE_PAYMENTS,
+	(project: string, payment: string) => removePayment(project, payment)
+);
+
+export const addPayment = ReduxActions.createAction<any, string, string>(
+	types.ADD_PAYMENT,
+	(project: string, value: string) => authPayment(project, value)
+);
 
 // ____________________________>>
 
@@ -190,8 +218,3 @@ export const editProject: ActionCreator<ThunkAction<Promise<Action>, IPojects, v
 		});
 	};
 };
-
-export {
-	deleteAuth,
-	addAuth
-}

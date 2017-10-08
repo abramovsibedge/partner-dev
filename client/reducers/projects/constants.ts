@@ -8,3 +8,5 @@ export const CREATE_PROJECT = 'CREATE_PROJECT';
 export const EDIT_PROJECT = 'EDIT_PROJECT';
 export const ADD_AUTH = 'ADD_AUTH';
 export const DELETE_AUTH = 'DELETE_AUTH';
+export const ADD_PAYMENT = 'ADD_PAYMENT';
+export const DELETE_PAYMENTS = 'DELETE_PAYMENTS';
