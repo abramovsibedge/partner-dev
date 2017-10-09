@@ -17,12 +17,6 @@ const initialState: IPojects = <projectsModel>{
 };
 
 export default handleActions<any>({
-	[`${types.LOAD_PROJECTS}_LOADING`] : (state: IPojects, action: Action<string>) : IPojects => {
-		return {
-			...state,
-			loading: true
-		};
-	},
 	[`${types.LOAD_PROJECTS}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
 		return {
 			...state,

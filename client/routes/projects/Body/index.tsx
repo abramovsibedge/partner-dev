@@ -1,47 +1,21 @@
 import * as React from 'react';
 
 import ProjectItem from './ProjectItem';
-import '../../../static/scss/routes/projects.scss';
 
 interface Props {
 	onUpdate: () => void
 	projects: any
 }
 
-interface State {
-	deleteProjectModalState: boolean
-	addUserModalState: boolean
-	addUserObject: object
-	deleteUserModalState: boolean
-	loading: boolean
-	selectedProjectId: string
-	selectedProject: object
-	selectedProjectTab: string
-}
-
-class Body extends React.Component<Props, State> {
+class Body extends React.Component<Props, {}> {
 	constructor(props: any) {
 		super(props);
-
-		this.state = {
-			deleteProjectModalState: false,
-			addUserModalState: false,
-			addUserObject: {
-				email: '',
-				validationState: true,
-				message: ''
-			},
-			deleteUserModalState: false,
-			loading: true,
-			selectedProjectId: '',
-			selectedProject: {},
-			selectedProjectTab: 'vpn-servers',
-		}
 	}
 
 	render() {
 		const {
-			projects
+			projects,
+			onUpdate
 		} = this.props;
 
 		return (
@@ -55,7 +29,7 @@ class Body extends React.Component<Props, State> {
 					{projects.length === 0 && <div className="projects-empty">No result for your request.</div>}
 
 					{projects.length > 0 && projects.map((project: any, index: number) => {
-						return <ProjectItem key={index} project={project} onUpdate={this.props.onUpdate} />
+						return <ProjectItem key={index} project={project} />
 					})}
 				</div>
 			</section>

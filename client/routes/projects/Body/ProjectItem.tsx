@@ -1,25 +1,18 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import {Link} from 'react-router';
+import { Link } from 'react-router';
 import * as classNames from 'classnames';
 
 import * as actions from '../../../reducers/projects/actions';
 
-import {
-  Textarea
-} from '../../../components/form';
-
-import {
-  Resume
-} from '../../../components/icons/resume'
-import {
-	Button
-} from '../../../components/button'
+import { Textarea } from '../../../components/form';
+import { Resume } from '../../../components/icons/resume'
+import { Button } from '../../../components/button'
 
 interface Props {
 	project: any
-  editProject: (project: string, description: string)=>any
-	getProjects: any
+  editProject?: (project: string, description: string)=>any
+	getProjects?: () => any
 }
 
 interface State {
@@ -37,20 +30,25 @@ class ProjectItem extends React.Component<Props, State> {
 		}
 	}
 
-	changeStatusEdit() {
+	changeEditStatus() {
 		this.setState({
       statusEdit: !this.state.statusEdit
-		})
+		});
 	}
 
   handlerDescritionEdit(value: string){
-    this.setState({descritionEdit: value})
+    this.setState({
+			descritionEdit: value
+    });
   }
 
   editProject() {
-  	this.props.editProject(this.props.project.publickey, this.state.descritionEdit).then(() => {
-			this.props.getProjects();
+  	this.setState({
+			statusEdit: false
 		});
+
+  	this.props.editProject(this.props.project.publickey, this.state.descritionEdit)
+			.then(() => this.props.getProjects());
 	}
 
 	render() {
@@ -62,7 +60,7 @@ class ProjectItem extends React.Component<Props, State> {
 
 		return (
 			<div className="projects_item item-block">
-				{!statusEdit && !project.deleteTaskCode && <button type="button" className="projects_item_edit" onClick={() => this.changeStatusEdit()}>Edit</button>}
+				{!statusEdit && !project.deleteTaskCode && <button type="button" className="projects_item_edit" onClick={() => this.changeEditStatus()}>Edit</button>}
 				<div className="projects_item_top">
 					<div className="projects_item_logo">
 						<img src={require('../../../static/media/def-icon.png')} width="60" height="60" alt="def" />
@@ -91,7 +89,7 @@ class ProjectItem extends React.Component<Props, State> {
 						<Button
 							type="button"
 							className="projects_item_cancel"
-							onClick={() => this.changeStatusEdit()}>Cancel</Button>
+							onClick={() => this.changeEditStatus()}>Cancel</Button>
 						<Button
 							onClick={() => this.editProject()}
 							type="button"
@@ -113,7 +111,6 @@ class ProjectItem extends React.Component<Props, State> {
 
 export default connect<any, any, any>(
 	state => ({
-		reload_project: state.projects.reload_project,
 	}),
 	({
 		editProject: actions.editProject,
