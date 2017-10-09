@@ -1,12 +1,12 @@
 export class projectsModel {
 	loading?: boolean;
+	list?: any;
+	createProjectResult: boolean | any;
 
 
-  list?: any;
   selectedProject?: {};
   update_project: boolean;
   reload_project: boolean;
-  createProjectResult: boolean;
 }
 
 export type IPojects = projectsModel;

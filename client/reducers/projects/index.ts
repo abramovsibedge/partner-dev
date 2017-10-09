@@ -5,34 +5,54 @@ import * as types from './constants';
 
 const initialState: IPojects = <projectsModel>{
 	loading: true,
-	selectedProject: 0,
+	list: [],
+	createProjectResult: false,
 
-  list: [],
+
+
+
+	selectedProject: 0,
   update_project: false,
   reload_project: false,
-  createProjectResult: false
 };
 
 export default handleActions<any>({
-  [`${types.LOAD_PROJECTS}_LOADING`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      loading: true
-    };
-  },
-  [`${types.LOAD_PROJECTS}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      list: action.payload['projects'],
-      loading: false
-    };
-  },
-  [`${types.LOAD_PROJECTS}_ERROR`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      loading: false
-    };
-  },
+	[`${types.LOAD_PROJECTS}_LOADING`] : (state: IPojects, action: Action<string>) : IPojects => {
+		return {
+			...state,
+			loading: true
+		};
+	},
+	[`${types.LOAD_PROJECTS}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
+		return {
+			...state,
+			list: action.payload['projects'],
+			loading: false
+		};
+	},
+	[`${types.CREATE_PROJECT}_ERROR`] : (state: IPojects, action: Action<any>) : IPojects => {
+		return {
+			...state,
+			createProjectResult: {
+				type: 'error',
+				reason: action.payload.response.data.error
+			}
+		};
+	},
+	[`${types.CREATE_PROJECT}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
+		return {
+			...state,
+			createProjectResult: {
+				type: 'success'
+			}
+		};
+	},
+
+
+
+
+
+
 
   [`${types.LOAD_PROJECT}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
     return {
@@ -125,44 +145,6 @@ export default handleActions<any>({
     };
   },
 
-  //EDIT_PROJECT
-  [`${types.EDIT_PROJECT}_LOADING`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      reload_project: false,
-    };
-  },
-  [`${types.EDIT_PROJECT}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      reload_project: true,
-    };
-  },
-  [`${types.EDIT_PROJECT}_ERROR`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      reload_project: false,
-    };
-  },
-
-  [`${types.CREATE_PROJECT}_LOADING`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      createProjectResult: false,
-    };
-  },
-  [`${types.CREATE_PROJECT}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      createProjectResult: true,
-    };
-  },
-  [`${types.CREATE_PROJECT}_ERROR`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      createProjectResult: false,
-    };
-  },
 
 }, initialState);
 

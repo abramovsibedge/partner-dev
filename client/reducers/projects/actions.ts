@@ -1,22 +1,18 @@
 import * as ReduxActions from "redux-actions";
 import * as types from './constants';
-import { hashHistory } from 'react-router';
-
 import {ThunkAction} from 'redux-thunk';
 import {Action, ActionCreator, Dispatch} from 'redux';
 
 import axios from 'axios';
 import config from '../../config';
 
-import {
-	storageHelper,
-  logOut } from '../../utils';
-const storage = new storageHelper;
-
 import { projectsModel } from './model';
 import { IPojects } from './model';
 
-export const loadProjects = () => {
+import { logOut } from '../../utils';
+
+/* Load projects */
+const loadProjects = () => {
 	const request = config.host + 'portal/projects?access_token=' + config.firebaseToken();
 
 	return axios(request)
@@ -27,6 +23,80 @@ export const loadProjects = () => {
 			if (result === 'NOT_AUTHORIZED') logOut();
 		});
 };
+
+export const getProjects = ReduxActions.createAction<any, projectsModel>(
+	types.LOAD_PROJECTS,
+	() => loadProjects()
+);
+/**/
+
+/* Edit project item */
+const editProjectItem = async (project: string, description: string) => {
+	let request:string = config.host + 'portal/project?access_token=' + config.firebaseToken();
+	request += '&publickey=' + project;
+	request += '&description=' + description;
+
+	return axios(request, { method: 'PUT' }).then(response => response.data);
+};
+
+export const editProject: ActionCreator<ThunkAction<Promise<Action>, IPojects, void>> = (project:string, description: string) => {
+	return async (dispatch: Dispatch<IPojects>): Promise<Action> => {
+		let result = await editProjectItem(project, description);
+
+		return dispatch({
+			type: types.EDIT_PROJECT,
+			result
+		});
+	};
+};
+/**/
+
+/* Add new project */
+const addProject = (data: object) => {
+	let request:string = config.host + 'portal/project?access_token=' + config.firebaseToken();
+	request += '&publickey=' + data['public_key'];
+	request += '&privatekey=' + data['private_key'];
+	request += '&description=' + data['description'];
+	request += '&project_type=' + data['project_type'];
+
+	return axios(request, { method: 'POST' }).then(response => response.data)
+};
+
+export const createProject = ReduxActions.createAction<any, object>(
+	types.CREATE_PROJECT,
+	(data: object) => addProject(data)
+);
+/**/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const loadProjectItem = (id: string) => {
   const countriesRequest = config.host + 'portal/project/countries?access_token=' + config.firebaseToken()+ '&publickey=' + id;
@@ -67,15 +137,9 @@ const loadProjectItem = (id: string) => {
     combinedData["id"] = id;
     return combinedData;
   });
-}
+};
 
-const editProjectItem = async (project: string, description: string) => {
-  let request:string = config.host + 'portal/project?access_token=' + config.firebaseToken();
-  request += '&publickey=' + project;
-  request += '&description=' + description;
 
-  return axios(request, { method: 'PUT' }).then(response => response.data);
-}
 
 
 const setVisibility = (project: string, country: string, visibility: boolean) => {
@@ -105,15 +169,6 @@ const deletePr = (item: object) => {
 		});
 };
 
-const addProject = (data: object) => {
-  let request:string = config.host + 'portal/project?access_token=' + config.firebaseToken();
-  request += '&publickey=' + data['public_key'];
-  request += '&privatekey=' + data['private_key'];
-  request += '&description=' + data['description'];
-  request += '&project_type=' + data['project_type'];
-
-  return axios(request, { method: 'POST' }).then(response => response.data)
-};
 
 
 
@@ -165,6 +220,8 @@ const authPayment = (project: string, auth: any) => {
 	return axios(request, { method: 'PUT' }).then(response => response.data)
 };
 
+// ____________________________>>
+
 export const deletePayment = ReduxActions.createAction<any, string, string>(
 	types.DELETE_PAYMENTS,
 	(project: string, payment: string) => removePayment(project, payment)
@@ -173,13 +230,6 @@ export const deletePayment = ReduxActions.createAction<any, string, string>(
 export const addPayment = ReduxActions.createAction<any, string, string>(
 	types.ADD_PAYMENT,
 	(project: string, value: string) => authPayment(project, value)
-);
-
-// ____________________________>>
-
-export const getProjects = ReduxActions.createAction<any, projectsModel>(
-    types.LOAD_PROJECTS,
-    () => loadProjects()
 );
 
 export const getProject = ReduxActions.createAction<any, string>(
@@ -196,20 +246,3 @@ export const deleteProject = ReduxActions.createAction<any, object>(
     types.DELETE_PROJECT,
     (item: object) => deletePr(item)
 );
-
-
-export const createProject = ReduxActions.createAction<any, object>(
-    types.CREATE_PROJECT,
-    (data: object) => addProject(data)
-);
-
-export const editProject: ActionCreator<ThunkAction<Promise<Action>, IPojects, void>> = (project:string, description: string) => {
-	return async (dispatch: Dispatch<IPojects>): Promise<Action> => {
-		let result = await editProjectItem(project, description);
-
-		return dispatch({
-			type: types.EDIT_PROJECT,
-			result
-		});
-	};
-};
