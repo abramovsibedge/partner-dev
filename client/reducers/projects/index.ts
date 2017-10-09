@@ -6,14 +6,7 @@ import * as types from './constants';
 const initialState: IProjects = <projectsModel>{
 	loading: true,
 	list: [],
-	createProjectResult: false,
-
-
-
-
-	selectedProject: 0,
-  update_project: false,
-  reload_project: false,
+	createProjectResult: false
 };
 
 export default handleActions<any>({
@@ -40,25 +33,6 @@ export default handleActions<any>({
 				type: 'success'
 			}
 		};
-	},
-
-
-
-
-
-
-
-
-
-
-	// [`${types.ADD_AUTH}_SUCCESS`] : (state: IProjects, action: Action<string>) : IProjects => {
-		// return {
-		// 	...state,
-		// 	reload_project: true,
-		// };
-	// },
-	//
-
-
+	}
 }, initialState);
 

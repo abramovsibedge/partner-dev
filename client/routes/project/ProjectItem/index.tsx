@@ -7,7 +7,6 @@ import { hashHistory } from 'react-router';
 import onClickOutside from 'react-onclickoutside';
 import { Link } from 'react-router';
 
-
 import ProjectCountries from './ProjectCountries';
 import ProjectUsers from './ProjectUsers';
 import ProjectAuth from './ProjectAuth';
@@ -15,11 +14,7 @@ import ProjectPayments from './ProjectPayments';
 
 import {
 	editProject,
-	getProjects,
-	// deleteAuth,
-	// addAuth,
-	// deletePayment,
-	// addPayment
+	getProjects
 } from '../../../reducers/projects/actions';
 import * as actions from '../../../reducers/project/actions';
 
@@ -35,7 +30,7 @@ import {
 	Input,
 	Textarea
 } from '../../../components/form';
-import {Button} from '../../../components/button';
+import { Button } from '../../../components/button';
 
 import {
 	emailValidation,
@@ -54,18 +49,11 @@ interface Props {
 	loadProjects?: () => any
 	deleteProject?: (item: object) => any
 	addUser?: (project: string, email: string) => void
-
-
-
-
-
-
-
 	deleteUser?: (project: string, email: string) => void
-	deleteAuth?: (project: string, auth: string) => void
-	addAuth?: (project: string, auth: any) => void
-	deletePayment?: (project: string, payment: string) => void
-	addPayment?: (project: string, payment: any) => void
+	deletePaymentMethod?: (project: string, payment: string) => void
+	addPaymentMethod?: (project: string, payment: any) => void
+	addAuthMethod?: (project: string, auth: any) => void
+	deleteAuthMethod?: (project: string, auth: string) => void
 }
 
 interface State {
@@ -73,11 +61,6 @@ interface State {
 	blockShow: number
 	modalEditProject: boolean
 	modalDeleteProject: boolean
-
-
-
-
-
 	modalAddUser: boolean
 	addUserObject: object
 	mailForDelete: string
@@ -94,8 +77,6 @@ class ProjectItem extends React.Component<Props, State> {
 			blockShow: 1,
 			modalDeleteProject: false,
 			modalEditProject: false,
-
-
 			modalAddUser: false,
 			mailForDelete: '',
 			projectDescription: this.props.project.description,
@@ -135,6 +116,12 @@ class ProjectItem extends React.Component<Props, State> {
 		return result;
 	};
 
+	toggleProjectSelector() {
+		this.setState({
+			projectSelectorVisibility: !this.state.projectSelectorVisibility
+		})
+	}
+
 	toggleModal(type: string, data?: string) {
 		let dataCheck = (data != '') ? data : '';
 
@@ -158,11 +145,17 @@ class ProjectItem extends React.Component<Props, State> {
 		});
 	}
 
+	editProjectHandler(value: string) {
+		this.setState({
+			projectDescription: value
+		});
+	}
+
 	deleteProject() {
 		this.props.deleteProject(this.props.project).then(() => hashHistory.push('/projects'))
 	}
 
-	handleShowBlock(num: number) {
+	switchTab(num: number) {
 		this.setState({
 			blockShow: num
 		});
@@ -174,12 +167,6 @@ class ProjectItem extends React.Component<Props, State> {
 				[stateItem]: { $set: value }
 			}
 		}));
-	}
-
-	handlerDescritionEdit(value: string) {
-		this.setState({
-			projectDescription: value
-		});
 	}
 
 	addUserSubmit() {
@@ -211,34 +198,28 @@ class ProjectItem extends React.Component<Props, State> {
 		this.toggleModal('addUser');
 	}
 
-	deleteUser(email: string) {
-		this.props.deleteUser(this.props.project.publickey, email);
-	}
-
-	addAuth(value: any) {
-		this.props.addAuth(this.props.project.publickey, value);
-	}
-
-	deleteAuth(auth: string) {
-		this.props.deleteAuth(this.props.project.publickey, auth);
-	}
-
-	addPayment(value: any) {
-		this.props.addPayment(this.props.project.publickey, value);
-	}
-
-	deletePayment(payment: string) {
-		this.props.deletePayment(this.props.project.publickey, payment);
-	}
-
 	setVisibility(project: string, country: string, visibility: boolean) {
 		this.props.changeVisibility(project, country, visibility);
 	}
 
-	toggleProjectSelector() {
-		this.setState({
-			projectSelectorVisibility: !this.state.projectSelectorVisibility
-		})
+	deleteUser(email: string) {
+		this.props.deleteUser(this.props.project.publickey, email);
+	}
+
+	addAuthMethod(value: any) {
+		this.props.addAuthMethod(this.props.project.publickey, value);
+	}
+
+	deleteAuthMethod(auth: string) {
+		this.props.deleteAuthMethod(this.props.project.publickey, auth);
+	}
+
+	addPaymentMethod(value: any) {
+		this.props.addPaymentMethod(this.props.project.publickey, value);
+	}
+
+	deletePaymentMethod(payment: string) {
+		this.props.deletePaymentMethod(this.props.project.publickey, payment);
 	}
 
 	render() {
@@ -313,22 +294,22 @@ class ProjectItem extends React.Component<Props, State> {
 					<div className="project_tabs">
 						<button
 							className={classNames('project_tabs_item', blockShow == 1 && 'project_tabs_item-active')}
-							onClick={() => this.handleShowBlock(1)}>
+							onClick={() => this.switchTab(1)}>
 							VPN Servers
 						</button>
 						<button
 							className={classNames('project_tabs_item', blockShow == 2 && 'project_tabs_item-active')}
-							onClick={() => this.handleShowBlock(2)}>
+							onClick={() => this.switchTab(2)}>
 							Access
 						</button>
 						{/*<button*/}
 							{/*className={classNames('project_tabs_item', blockShow == 3 && 'project_tabs_item-active')}*/}
-							{/*onClick={() => this.handleShowBlock(3)}>*/}
+							{/*onClick={() => this.switchTab(3)}>*/}
 							{/*Users authentication*/}
 						{/*</button>*/}
 						{/*<button*/}
 							{/*className={classNames('project_tabs_item', blockShow == 4 && 'project_tabs_item-active')}*/}
-							{/*onClick={() => this.handleShowBlock(4)}>*/}
+							{/*onClick={() => this.switchTab(4)}>*/}
 							{/*Payments settings*/}
 						{/*</button>*/}
 					</div>
@@ -352,13 +333,13 @@ class ProjectItem extends React.Component<Props, State> {
 
 					{/*{blockShow === 3 && data.auth && <ProjectAuth*/}
 						{/*auth={data.auth.all_auth_settings}*/}
-						{/*addAuth={(value: any) => this.addAuth(value)}*/}
-						{/*deleteAuth={(auth: string) => this.deleteAuth(auth)} />}*/}
+						{/*addAuthMethod={(value: any) => this.addAuthMethod(value)}*/}
+						{/*deleteAuthMethod={(auth: string) => this.deleteAuthMethod(auth)} />}*/}
 
 					{/*{blockShow === 4 && data.payments && <ProjectPayments*/}
 						{/*payments={data.payments.all_purchase_settings}*/}
-						{/*addPayment={(value: any) => this.addPayment(value)}*/}
-						{/*deletePayment={(auth: string) => this.deletePayment(auth)} />}*/}
+						{/*addPaymentMethod={(value: any) => this.addPaymentMethod(value)}*/}
+						{/*deletePaymentMethod={(auth: string) => this.deletePaymentMethod(auth)} />}*/}
 				</div>
 			</div>);
 		}
@@ -385,7 +366,7 @@ class ProjectItem extends React.Component<Props, State> {
 									className="project_edit_textarea"
 									label="Description"
 									value={projectDescription}
-									onChange={(e)=>{this.handlerDescritionEdit(e.target.value)}} />
+									onChange={(e)=>{this.editProjectHandler(e.target.value)}} />
 							</FormRow>
 						</div>
 						<div className="modal_footer">
@@ -515,12 +496,9 @@ export default connect<any, any, Props>(
 		loadProjects: getProjects,
 		deleteProject: actions.deleteProject,
 		addUser: actions.addUser,
-
-
-
-		// deleteAuth: deleteAuth,
-		// addAuth: addAuth,
-		// deletePayment: deletePayment,
-		// addPayment: addPayment,
+		addPaymentMethod: actions.addPaymentMethod,
+		deletePaymentMethod: actions.deletePaymentMethod,
+		addAuthMethod: actions.addAuthMethod,
+		deleteAuthMethod: actions.deleteAuthMethod
 	})
 )(ProjectItem);

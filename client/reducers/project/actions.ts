@@ -126,3 +126,65 @@ export const addUser = ReduxActions.createAction<any, string, string>(
 	(project: string, email: string) => addUserEmail(project, email)
 );
 /**/
+
+/* Add auth */
+const addAuth = (project: string, auth: any) => {
+	let request:string = config.host + 'portal/project/authentifications_setting?access_token=' + config.firebaseToken();
+	request += '&publickey=' + project;
+	request += '&auth_method=' + auth.name;
+	request += '&auth_settings=' + JSON.stringify(auth.settings);
+
+	return axios.put(request).then(response => response.data)
+};
+
+export const addAuthMethod = ReduxActions.createAction<any, string, string>(
+	types.ADD_AUTH,
+	(project: string, value: string) => addAuth(project, value)
+);
+/**/
+
+/* remove auth */
+const removeAuth = (project: string, auth: string) => {
+	let request:string = config.host + 'portal/project/authentifications_setting?access_token=' + config.firebaseToken();
+	request += '&publickey=' + project;
+	request += '&auth_method=' + auth;
+
+	return axios.delete(request).then(response => response.data)
+};
+
+export const deleteAuthMethod = ReduxActions.createAction<any, string, string>(
+	types.DELETE_AUTH,
+	(project: string, auth: string) => removeAuth(project, auth)
+);
+/**/
+
+/* Add payment method */
+const addPayment = (project: string, auth: any) => {
+	let request:string = config.host + 'portal/project/authentifications_setting?access_token=' + config.firebaseToken();
+	request += '&publickey=' + project;
+	request += '&auth_method=' + auth.name;
+	request += '&auth_settings=' + JSON.stringify(auth.settings);
+
+	return axios.put(request).then(response => response.data)
+};
+
+export const addPaymentMethod = ReduxActions.createAction<any, string, string>(
+	types.ADD_PAYMENT,
+	(project: string, value: string) => addPayment(project, value)
+);
+/**/
+
+/* Delete payment method */
+const removePayment = (project: string, payment: string) => {
+	let request:string = config.host + 'portal/project/payments_settings?access_token=' + config.firebaseToken();
+	request += '&publickey=' + project;
+	request += '&auth_method=' + payment;
+
+	return axios.delete(request).then(response => response.data)
+};
+
+export const deletePaymentMethod = ReduxActions.createAction<any, string, string>(
+	types.DELETE_PAYMENTS,
+	(project: string, payment: string) => removePayment(project, payment)
+);
+/**/

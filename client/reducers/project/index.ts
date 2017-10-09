@@ -24,16 +24,40 @@ export default handleActions<any>({
 			updateProject: true
 		};
 	},
+	[`${types.ADD_USER}_SUCCESS`] : (state: IProject) : IProject => {
+		return {
+			...state,
+			updateProject: true,
+		};
+	},
 	[`${types.DELETE_USER}_SUCCESS`] : (state: IProject) : IProject => {
 		return {
 			...state,
 			updateProject: true
 		};
 	},
-	[`${types.ADD_USER}_SUCCESS`] : (state: IProject, action: Action<string>) : IProject => {
-	  return {
-	    ...state,
+	[`${types.ADD_AUTH}_SUCCESS`] : (state: IProject) : IProject => {
+		return {
+			...state,
 			updateProject: true,
-	  };
+		};
+	},
+	[`${types.DELETE_AUTH}_SUCCESS`] : (state: IProject) : IProject => {
+		return {
+			...state,
+			updateProject: true,
+		};
+	},
+	[`${types.ADD_PAYMENT}_SUCCESS`] : (state: IProject) : IProject => {
+		return {
+			...state,
+			updateProject: true,
+		};
+	},
+	[`${types.DELETE_PAYMENTS}_SUCCESS`] : (state: IProject) : IProject => {
+		return {
+			...state,
+			updateProject: true,
+		};
 	}
 }, initialState);
