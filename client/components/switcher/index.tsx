@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import {Link} from 'react-router';
+import { Link } from 'react-router';
 
 import '../../static/scss/components/switcher.scss';
 

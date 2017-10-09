@@ -19,10 +19,6 @@ import {Button} from '../../../components/button';
 
 import * as actions from '../../../reducers/projects/actions';
 
-import {
-	addProject
-} from '../../../functions/projects';
-
 interface Props {
 	onUpdate: () => void
   createProjectResult: boolean

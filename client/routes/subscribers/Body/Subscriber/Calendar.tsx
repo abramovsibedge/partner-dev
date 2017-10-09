@@ -1,7 +1,8 @@
 import * as React from 'react';
-import * as DayPicker from 'react-day-picker';
 import ReactInputMask from 'react-input-mask';
 import * as classNames from 'classnames';
+
+let DayPicker = require('react-day-picker');
 
 import { Checkbox } from '../../../../components/form';
 import { Button } from "../../../../components/button/index";

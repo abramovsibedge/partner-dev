@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Modal from 'react-modal';
 import * as update from 'immutability-helper';
-import {Link} from 'react-router';
+import { Link } from 'react-router';
 
 import {
 	storageHelper,

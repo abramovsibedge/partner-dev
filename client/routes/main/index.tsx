@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Link} from 'react-router';
+import { Link } from 'react-router';
 
 import {
 	IconDocs,
@@ -27,9 +27,7 @@ export class Main extends React.Component<{}, State> {
 	}
 
 	render() {
-		const {
-			isSigned
-		} = this.state;
+		const { isSigned } = this.state;
 
 		return (
 			<div className="front">
@@ -47,10 +45,10 @@ export class Main extends React.Component<{}, State> {
 									</Link>
 								</li>
 								<li className="menu_item">
-									<a className="menu_link" href="mailto:platformpartners@anchorfree.com">
+									<Link className="menu_link" to="mailto:platformpartners@anchorfree.com">
 										<IconQuestion width="17" height="17" />
 										<span>Help</span>
-									</a>
+									</Link>
 								</li>
 							</ul>
 							{!isSigned && <ul className="auth">
@@ -78,7 +76,7 @@ export class Main extends React.Component<{}, State> {
 									<Link className="selllinks_item_link selllinks_item_link-custom" to="auth/signup">Get a FREE API key</Link>
 								</li>
 								<li className="selllinks_item">
-									<a className="selllinks_item_link selllinks_item_link-simple" href="mailto:platformpartners@anchorfree.com">Learn more</a>
+									<Link className="selllinks_item_link selllinks_item_link-simple" to="mailto:platformpartners@anchorfree.com">Learn more</Link>
 								</li>
 							</ul>
 						</div>
@@ -115,7 +113,7 @@ export class Main extends React.Component<{}, State> {
 								<p className="front_products_description">Use AnchorFree’s proprietary, lightning-fast Hydra VPN and the
 									AnchorFree Server Network (among the 100 largest networks in the world). Contact our partnership team
 									For more information.</p>
-								<a href="mailto:platformpartners@anchorfree.com" className="front_products_action">Learn more</a>
+								<Link className="front_products_action" to="mailto:platformpartners@anchorfree.com">Learn more</Link>
 							</li>
 						</ul>
 					</div>
@@ -169,7 +167,7 @@ export class Main extends React.Component<{}, State> {
 							<div className="getkey_pane_content">
 								<h2 className="getkey_pane_header">Ready to get started?</h2>
 								<div className="getkey_pane_banch"><span>FOR FREE</span></div>
-								<Link className="getkey_pane_action" to="auth/signup">Get a FREE API key</Link>
+								<Link className="getkey_pane_action" to="/auth/signup">Get a FREE API key</Link>
 							</div>
 						</div>
 						<div className="getkey_clients">

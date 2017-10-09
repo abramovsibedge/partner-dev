@@ -4,6 +4,7 @@ import { checkAuth } from './checkAuth';
 import { dateString } from './dateString';
 import { byteConvert } from './byteConvert';
 import { logOut } from './logOut';
+import { firebaseInit } from './firebaseInit';
 
 export {
 	emailValidation,
@@ -11,5 +12,6 @@ export {
 	checkAuth,
 	dateString,
 	byteConvert,
-	logOut
+	logOut,
+	firebaseInit
 }

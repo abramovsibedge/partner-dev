@@ -4,29 +4,19 @@ require("babel-polyfill");
 import * as React from 'react';
 import promiseMiddleware from 'redux-promise-middleware';
 import thunk from 'redux-thunk';
-
-import { render } from 'react-dom';
-import { Router, browserHistory, hashHistory } from 'react-router';
-import { routes } from './routes';
-import { loadState } from './utils/storage';
-
-// redux
 import { Store, createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import {createLogger} from 'redux-logger';
+import { render } from 'react-dom';
+import { Router, hashHistory } from 'react-router';
 
+import { routes } from './routes';
 import rootReducer from './reducers'
-const logger = createLogger({duration: true});
-
-const persistedstate = loadState();
 
 const store: Store<any> = createStore(
-	rootReducer, persistedstate,
-	applyMiddleware(promiseMiddleware(
-		{
-				promiseTypeSuffixes: ['LOADING', 'SUCCESS', 'ERROR']
-		}
-	), thunk)
+	rootReducer,
+	applyMiddleware(promiseMiddleware({
+		promiseTypeSuffixes: ['LOADING', 'SUCCESS', 'ERROR']
+	}), thunk)
 );
 
 render((

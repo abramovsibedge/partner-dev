@@ -11,28 +11,3 @@ export class storageHelper {
 
 	public remove = (key: string): void => this.storeSupport && localStorage.removeItem(key);
 }
-
-export const loadState = () => {
-    const storage = new storageHelper;
-	try {
-		const serializedState = storage.get('state');
-		if (serializedState === null) {
-			return undefined;
-		}
-		else  return JSON.parse(serializedState);
-	}
-	catch (e) {
-        return undefined;
-	}
-}
-
-export const saveState = (state:any) => {
-    const storage = new storageHelper;
-	try {
-        const serializedState = JSON.stringify(state);
-        storage.add('state', serializedState);
-	}
-    catch (e) {
-		console.log('saveState error', e);
-    }
-}

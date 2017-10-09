@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import Switcher from '../../components/switcher';
 
 import '../../static/scss/routes/dashboard.scss';
