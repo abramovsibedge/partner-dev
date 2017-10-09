@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as update from 'immutability-helper';
-import { hashHistory } from 'react-router';
 
 import Loading from './Loading';
 import Dashboard from '../../components/dashboard';
@@ -9,24 +7,19 @@ import DashboardHeader from '../../components/dashboard/dashboardHeader';
 import Header from './Header';
 import ProjectItem from './ProjectItem';
 
-import * as actions from '../../reducers/projects/actions';
+import * as actions from '../../reducers/project/actions';
+import { getProjects } from '../../reducers/projects/actions';
 import { checkAuth, logOut } from '../../utils';
 
 import '../../static/scss/routes/project.scss';
 
 interface Props {
+	params: any
 	loading: boolean
-  projects: any
-  params: any
-  selectedProject: any
-  update_project: boolean
-  reload_project: boolean
-
-  loadProjects: () => void
-  getProject: (id:string) => void
-  delettUserProject: (project: string, email: string)=>void
-  changeVisibility: (project: string, country: string, visibility: boolean)=>void
-  editProject: (project: string, description: string)=>void
+	loadProjects: () => void
+	getProject: (id: string) => void
+	projectsList: any
+	selectedProject: any
 }
 interface State {
 	project: any;
@@ -43,57 +36,47 @@ class Project extends React.Component<Props, State> {
 	}
 
   componentWillReceiveProps(nextProps: any) {
-	  if ( nextProps.projects.length>0 && !this.state.project.publickey ) {
-			let elem:any = this.findProject(nextProps.projects, this.props.params.key);
-			this.setState({project: elem});
+		if (nextProps.projectsList.length > 0 && !this.state.project.publickey) {
+			let elem: any = this.findProject(nextProps.projectsList, this.props.params.key);
+			this.setState({
+				project: elem
+			});
+
 			this.props.getProject(this.props.params.key);
-    }
-    if (nextProps.reload_project && nextProps.reload_project != this.props.reload_project) {
-      this.props.getProject(this.props.params.key);
-    }
-    if (nextProps.update_project && nextProps.update_project != this.props.update_project) {
-      hashHistory.push('/projects');
-    }
+		}
 		if (nextProps.params.key !== this.state.hash) {
 			window.location.reload();
 		}
   }
 
-  findProject = (array: Array<any>, value:any) => {
-    for (let i = 0; i < array.length; i++) {
-      if (array[i].publickey === value) return array[i];
+  findProject = (projects: any, value: any) => {
+		let result: any = {};
+
+    for (let i = 0; i < projects.length; i++) {
+      if (projects[i].publickey === value) {
+				result = projects[i];
+				break;
+			}
     }
-    return {};
+
+    return result;
 	};
 
 	componentDidMount() {
-    if (!checkAuth()) {
-			logOut();
-    } else {
-      this.props.loadProjects();
-    }
+		checkAuth() ?  this.props.loadProjects() : logOut();
 	}
 
-	reloadProjects = () => {
-		this.setState(update(this.state, {
-			loading: {$set: true},
-		}), () => this.componentDidMount());
-	};
-
 	render() {
-    const {
-      project
-    } = this.state;
+    const { project } = this.state;
 		const {
       loading,
       selectedProject
 		} = this.props;
 
-
 		return (
 			<Dashboard current="projects">
 				<DashboardHeader>
-					<Header onUpdate={() => this.reloadProjects()} />
+					<Header />
 				</DashboardHeader>
 				{loading ? <Loading /> : <ProjectItem project={project} data={selectedProject} />}
 			</Dashboard>
@@ -102,18 +85,13 @@ class Project extends React.Component<Props, State> {
 }
 
 export default connect(
-    state => ({
-			loading: state.projects.loading,
-      projects: state.projects.list,
-      selectedProject: state.projects.selectedProject,
-
-
-      update_project: state.projects.update_project,
-      reload_project: state.projects.reload_project,
-    }),
-    ({
-      loadProjects: actions.getProjects,
-      getProject: actions.getProject,
-      changeVisibility: actions.changeVisibility
-    })
+	state => ({
+		loading: state.project.loading,
+		projectsList: state.projects.list,
+		selectedProject: state.projects.selectedProject
+	}),
+	({
+		loadProjects: getProjects,
+		getProject: actions.getProject
+	})
 )(Project);

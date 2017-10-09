@@ -1,6 +1,6 @@
 import { handleActions, Action } from 'redux-actions';
-import { projectsModel, IPojects } from './model';
 
+import { projectsModel, IPojects } from './model';
 import * as types from './constants';
 
 const initialState: IPojects = <projectsModel>{
@@ -48,13 +48,6 @@ export default handleActions<any>({
 
 
 
-  [`${types.LOAD_PROJECT}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      selectedProject: action.payload,
-      update_project: false,
-    };
-  },
 
   [`${types.SET_VISIBILITY}_LOADING`] : (state: IPojects, action: Action<string>) : IPojects => {
     return {

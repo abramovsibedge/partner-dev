@@ -5,7 +5,7 @@ export const CREATE_PROJECT = 'CREATE_PROJECT';
 
 
 
-export const LOAD_PROJECT = 'LOAD_PROJECT';
+
 export const SET_VISIBILITY = 'SET_VISIBILITY';
 export const DELETE_PROJECT = 'DELETE_PROJECT';
 export const ADD_USER = 'ADD_USER';

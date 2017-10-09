@@ -98,46 +98,7 @@ export const createProject = ReduxActions.createAction<any, object>(
 
 
 
-const loadProjectItem = (id: string) => {
-  const countriesRequest = config.host + 'portal/project/countries?access_token=' + config.firebaseToken()+ '&publickey=' + id;
-  const countries = axios(countriesRequest, { method: 'POST' })
-      .then(response => response.data)
-      .catch(error => {
-        throw (error.message);
-      });
 
-  const emailsRequest = config.host + 'portal/project/access?access_token=' + config.firebaseToken() + '&publickey=' + id;
-  const emails = axios(emailsRequest)
-      .then(response => response.data)
-      .catch(error => {
-        throw (error.message);
-      });
-
-	const authRequest = config.host + 'portal/project/authentifications_setting?access_token=' + config.firebaseToken() + '&publickey=' + id;
-	const auth = axios(authRequest)
-		.then(response => response.data)
-		.catch(error => {
-			throw (error.message);
-		});
-
-	const paymentsRequest = config.host + 'portal/project/payments_settings?access_token=' + config.firebaseToken() + '&publickey=' + id;
-	const payments = axios(paymentsRequest)
-		.then(response => response.data)
-		.catch(error => {
-			throw (error.message);
-		});
-
-  const combinedData = {"countries": {},"emails": {}, "auth": {}, "payments": {}};
-
-  return Promise.all([countries, emails, auth, payments]).then(result => {
-    combinedData["countries"] = result[0];
-    combinedData["emails"] = result[1];
-    combinedData["auth"] = result[2];
-    combinedData["payments"] = result[3];
-    combinedData["id"] = id;
-    return combinedData;
-  });
-};
 
 
 
@@ -230,11 +191,6 @@ export const deletePayment = ReduxActions.createAction<any, string, string>(
 export const addPayment = ReduxActions.createAction<any, string, string>(
 	types.ADD_PAYMENT,
 	(project: string, value: string) => authPayment(project, value)
-);
-
-export const getProject = ReduxActions.createAction<any, string>(
-    types.LOAD_PROJECT,
-    (id: string) => loadProjectItem(id)
 );
 
 export const changeVisibility = ReduxActions.createAction<any, string, string, boolean>(
