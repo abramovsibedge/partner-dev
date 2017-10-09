@@ -14,16 +14,16 @@ import {
 
 interface Props {
 	auth: any
-	deleteAuth: (auth: string) => void
-	addAuth: (auth: any) => void
+	deleteAuthMethod: (auth: string) => void
+	addAuthMethod: (auth: any) => void
 }
 
 interface State {
 	stickedTableHead: boolean
-	deleteAuthModalState: boolean
+	deleteAuthMethodModalState: boolean
 	authForDelete: string
-	addAuthModalState: boolean
-	addAuthObject: any
+	addAuthMethodModalState: boolean
+	addAuthMethodObject: any
 }
 
 class ProjectAuth extends React.Component<Props, State> {
@@ -32,10 +32,10 @@ class ProjectAuth extends React.Component<Props, State> {
 
 		this.state = {
 			stickedTableHead: false,
-			deleteAuthModalState: false,
+			deleteAuthMethodModalState: false,
 			authForDelete: '',
-			addAuthModalState: false,
-			addAuthObject: {
+			addAuthMethodModalState: false,
+			addAuthMethodObject: {
 				name: '',
 				settings: '',
 				validationState: true,
@@ -63,56 +63,56 @@ class ProjectAuth extends React.Component<Props, State> {
 
 	toggleModalDelete(state: boolean, auth: string) {
 		this.setState({
-			deleteAuthModalState: state,
+			deleteAuthMethodModalState: state,
 			authForDelete: auth
 		});
 	}
 
-	deleteAuth(auth: string) {
-		this.props.deleteAuth(auth);
+	deleteAuthMethod(auth: string) {
+		this.props.deleteAuthMethod(auth);
 		this.toggleModalDelete(false, '');
 	}
 
 	toggleModalAdd(state: boolean) {
 		this.setState({
-			addAuthModalState: state
+			addAuthMethodModalState: state
 		});
 	}
 
-	addAuthHandler(value: string, type: string) {
+	addAuthMethodHandler(value: string, type: string) {
 		this.setState(update(this.state, {
-			addAuthObject: {
+			addAuthMethodObject: {
 				[type]: { $set: value }
 			}
 		}))
 	}
 
-	addAuth() {
+	addAuthMethod() {
 		const $t = this;
 		const $state = $t.state;
 		let state: boolean = true;
 		let message: string = '';
 
-		if (!$state.addAuthObject['name']
-			|| !$state.addAuthObject['settings']) {
+		if (!$state.addAuthMethodObject['name']
+			|| !$state.addAuthMethodObject['settings']) {
 			state = false;
 			message += 'Fill in the highlighted fields.';
 		}
 
-		if ($state.addAuthObject['settings'].match(/^[0-9]+$/)) {
+		if ($state.addAuthMethodObject['settings'].match(/^[0-9]+$/)) {
 			state = false;
 			message += 'Settings field has wrong format';
 		}
 
 		try {
-			JSON.parse($state.addAuthObject['settings']);
+			JSON.parse($state.addAuthMethodObject['settings']);
 		} catch(e) {
 			state = false;
 			message += 'Settings field has wrong format';
 		}
 
 		$t.setState(update($state, {
-			addAuthObject: {
+			addAuthMethodObject: {
 				validationState: {$set: false},
 				message: {$set: message}
 			}
@@ -120,7 +120,7 @@ class ProjectAuth extends React.Component<Props, State> {
 
 		if (!state && message) return false;
 
-		this.props.addAuth(this.state.addAuthObject);
+		this.props.addAuthMethod(this.state.addAuthMethodObject);
 		this.toggleModalAdd(false);
 	}
 
@@ -128,10 +128,10 @@ class ProjectAuth extends React.Component<Props, State> {
 		const { auth } = this.props;
 		const {
 			stickedTableHead,
-			deleteAuthModalState,
+			deleteAuthMethodModalState,
 			authForDelete,
-			addAuthModalState,
-			addAuthObject
+			addAuthMethodModalState,
+			addAuthMethodObject
 		} = this.state;
 
 		return (<div>
@@ -172,7 +172,7 @@ class ProjectAuth extends React.Component<Props, State> {
 				</div>
 
 				<Modal
-					isOpen={deleteAuthModalState}
+					isOpen={deleteAuthMethodModalState}
 					className={{base: 'modal_inner'}}
 					overlayClassName={{base: 'modal_outer'}}
 					contentLabel="test">
@@ -184,7 +184,7 @@ class ProjectAuth extends React.Component<Props, State> {
 						<button className="modal_btn modal_btn-reset" type="button" onClick={() => this.toggleModalDelete(false, '')}>
 							Cancel
 						</button>
-						<button className="modal_btn modal_btn-submit action-button" type="button" onClick={() => this.deleteAuth(authForDelete)}>
+						<button className="modal_btn modal_btn-submit action-button" type="button" onClick={() => this.deleteAuthMethod(authForDelete)}>
 							Delete method
 						</button>
 					</div>
@@ -194,31 +194,31 @@ class ProjectAuth extends React.Component<Props, State> {
 				</Modal>
 
 				<Modal
-					isOpen={addAuthModalState}
+					isOpen={addAuthMethodModalState}
 					className={{base: 'modal_inner'}}
 					overlayClassName={{base: 'modal_outer'}}
 					contentLabel="test">
 					<div className="modal_header">
 						<h2>Auth method</h2>
 					</div>
-					<Form submit={() => this.addAuth()} className="modal_form">
-						<div className="modal_error">{addAuthObject['message']}</div>
+					<Form submit={() => this.addAuthMethod()} className="modal_form">
+						<div className="modal_error">{addAuthMethodObject['message']}</div>
 						<div className="modal_content">
 							<FormRow>
 								<Input
 									type="text"
 									label="Method"
-									notValid={!addAuthObject['validationState'] && !addAuthObject['name']}
-									value={addAuthObject.name}
-									onChange={(e)=>{this.addAuthHandler(e.target.value, 'name')}} />
+									notValid={!addAuthMethodObject['validationState'] && !addAuthMethodObject['name']}
+									value={addAuthMethodObject.name}
+									onChange={(e)=>{this.addAuthMethodHandler(e.target.value, 'name')}} />
 							</FormRow>
 							<FormRow>
 								<Input
 									type="text"
 									label="Settings"
-									notValid={!addAuthObject['validationState'] && !addAuthObject['settings']}
-									value={addAuthObject.settings}
-									onChange={(e)=>{this.addAuthHandler(e.target.value, 'settings')}}/>
+									notValid={!addAuthMethodObject['validationState'] && !addAuthMethodObject['settings']}
+									value={addAuthMethodObject.settings}
+									onChange={(e)=>{this.addAuthMethodHandler(e.target.value, 'settings')}}/>
 							</FormRow>
 						</div>
 						<div className="modal_footer">

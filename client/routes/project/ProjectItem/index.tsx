@@ -302,16 +302,16 @@ class ProjectItem extends React.Component<Props, State> {
 							onClick={() => this.switchTab(2)}>
 							Access
 						</button>
-						{/*<button*/}
-							{/*className={classNames('project_tabs_item', blockShow == 3 && 'project_tabs_item-active')}*/}
-							{/*onClick={() => this.switchTab(3)}>*/}
-							{/*Users authentication*/}
-						{/*</button>*/}
-						{/*<button*/}
-							{/*className={classNames('project_tabs_item', blockShow == 4 && 'project_tabs_item-active')}*/}
-							{/*onClick={() => this.switchTab(4)}>*/}
-							{/*Payments settings*/}
-						{/*</button>*/}
+						<button
+							className={classNames('project_tabs_item', blockShow == 3 && 'project_tabs_item-active')}
+							onClick={() => this.switchTab(3)}>
+							Users authentication
+						</button>
+						<button
+							className={classNames('project_tabs_item', blockShow == 4 && 'project_tabs_item-active')}
+							onClick={() => this.switchTab(4)}>
+							Payments settings
+						</button>
 					</div>
 					<Button
 						type="button"
@@ -331,15 +331,15 @@ class ProjectItem extends React.Component<Props, State> {
 						users={data.emails.usersMail}
 						onChange={(email: string) => this.deleteUser(email)} />}
 
-					{/*{blockShow === 3 && data.auth && <ProjectAuth*/}
-						{/*auth={data.auth.all_auth_settings}*/}
-						{/*addAuthMethod={(value: any) => this.addAuthMethod(value)}*/}
-						{/*deleteAuthMethod={(auth: string) => this.deleteAuthMethod(auth)} />}*/}
+					{blockShow === 3 && data.auth && <ProjectAuth
+						auth={data.auth.all_auth_settings}
+						addAuthMethod={(value: any) => this.addAuthMethod(value)}
+						deleteAuthMethod={(auth: string) => this.deleteAuthMethod(auth)} />}
 
-					{/*{blockShow === 4 && data.payments && <ProjectPayments*/}
-						{/*payments={data.payments.all_purchase_settings}*/}
-						{/*addPaymentMethod={(value: any) => this.addPaymentMethod(value)}*/}
-						{/*deletePaymentMethod={(auth: string) => this.deletePaymentMethod(auth)} />}*/}
+					{blockShow === 4 && data.payments && <ProjectPayments
+						payments={data.payments.all_purchase_settings}
+						addPaymentMethod={(value: any) => this.addPaymentMethod(value)}
+						deletePaymentMethod={(auth: string) => this.deletePaymentMethod(auth)} />}
 				</div>
 			</div>);
 		}

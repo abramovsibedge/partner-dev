@@ -105,7 +105,7 @@ class ProjectsSelector extends React.Component<Props, State> {
 				{projectsList && projectsList[activeProject] && <div
 					className={classNames('subscriber_selector_current', showDropdown && 'subscriber_selector_current-open')}
 					onClick={() => this.changeState(!showDropdown)}>
-					{projectsList[activeProject].label}
+					{projectsList[activeProject].value}
 					<IconPlay width="24" height="24" />
 				</div>}
 				{projectsList && projectsList[activeProject] && showDropdown && <WrappedSelectList
@@ -135,7 +135,7 @@ class SelectList extends React.Component<{
 					return <div
 						className={classNames('subscriber_selector_item', item.value === this.props.active && 'subscriber_selector_item-current')}
 						key={index}
-						onClick={() => this.props.onChange(item.value)}>{item.label}</div>
+						onClick={() => this.props.onChange(item.value)}>{item.value}</div>
 				})}
 			</div>
 		);

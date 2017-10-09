@@ -14,16 +14,16 @@ import {
 
 interface Props {
 	payments: any
-	addPayment: (payment: string) => void
-	deletePayment: (payment: any) => void
+	addPaymentMethod: (payment: string) => void
+	deletePaymentMethod: (payment: any) => void
 }
 
 interface State {
 	stickedTableHead: boolean
-	deletePaymentModalState: boolean
+	deletePaymentMethodModalState: boolean
 	authForDelete: string
-	addPaymentModalState: boolean
-	addPaymentObject: any
+	addPaymentMethodModalState: boolean
+	addPaymentMethodObject: any
 }
 
 class ProjectPayments extends React.Component<Props, State> {
@@ -32,10 +32,10 @@ class ProjectPayments extends React.Component<Props, State> {
 
 		this.state = {
 			stickedTableHead: false,
-			deletePaymentModalState: false,
+			deletePaymentMethodModalState: false,
 			authForDelete: '',
-			addPaymentModalState: false,
-			addPaymentObject: {
+			addPaymentMethodModalState: false,
+			addPaymentMethodObject: {
 				name: '',
 				settings: '',
 				validationState: true,
@@ -63,56 +63,56 @@ class ProjectPayments extends React.Component<Props, State> {
 
 	toggleModalDelete(state: boolean, auth: string) {
 		this.setState({
-			deletePaymentModalState: state,
+			deletePaymentMethodModalState: state,
 			authForDelete: auth
 		});
 	}
 
-	deletePayment(auth: string) {
-		this.props.deletePayment(auth);
+	deletePaymentMethod(auth: string) {
+		this.props.deletePaymentMethod(auth);
 		this.toggleModalDelete(false, '');
 	}
 
 	toggleModalAdd(state: boolean) {
 		this.setState({
-			addPaymentModalState: state
+			addPaymentMethodModalState: state
 		});
 	}
 
-	addPaymentHandler(value: string, type: string) {
+	addPaymentMethodHandler(value: string, type: string) {
 		this.setState(update(this.state, {
-			addPaymentObject: {
+			addPaymentMethodObject: {
 				[type]: { $set: value }
 			}
 		}))
 	}
 
-	addPayment() {
+	addPaymentMethod() {
 		const $t = this;
 		const $state = $t.state;
 		let state: boolean = true;
 		let message: string = '';
 
-		if (!$state.addPaymentObject['name']
-			|| !$state.addPaymentObject['settings']) {
+		if (!$state.addPaymentMethodObject['name']
+			|| !$state.addPaymentMethodObject['settings']) {
 			state = false;
 			message += 'Fill in the highlighted fields.';
 		}
 
-		if ($state.addPaymentObject['settings'].match(/^[0-9]+$/)) {
+		if ($state.addPaymentMethodObject['settings'].match(/^[0-9]+$/)) {
 			state = false;
 			message += 'Settings field has wrong format';
 		}
 
 		try {
-			JSON.parse($state.addPaymentObject['settings']);
+			JSON.parse($state.addPaymentMethodObject['settings']);
 		} catch(e) {
 			state = false;
 			message += 'Settings field has wrong format';
 		}
 
 		$t.setState(update($state, {
-			addPaymentObject: {
+			addPaymentMethodObject: {
 				validationState: {$set: false},
 				message: {$set: message}
 			}
@@ -120,7 +120,7 @@ class ProjectPayments extends React.Component<Props, State> {
 
 		if (!state && message) return false;
 
-		this.props.addPayment(this.state.addPaymentObject);
+		this.props.addPaymentMethod(this.state.addPaymentMethodObject);
 		this.toggleModalAdd(false);
 	}
 
@@ -128,10 +128,10 @@ class ProjectPayments extends React.Component<Props, State> {
 		const { payments } = this.props;
 		const {
 			stickedTableHead,
-			deletePaymentModalState,
+			deletePaymentMethodModalState,
 			authForDelete,
-			addPaymentModalState,
-			addPaymentObject
+			addPaymentMethodModalState,
+			addPaymentMethodObject
 		} = this.state;
 
 		return (<div>
@@ -172,7 +172,7 @@ class ProjectPayments extends React.Component<Props, State> {
 				</div>
 
 				<Modal
-					isOpen={deletePaymentModalState}
+					isOpen={deletePaymentMethodModalState}
 					className={{base: 'modal_inner'}}
 					overlayClassName={{base: 'modal_outer'}}
 					contentLabel="test">
@@ -184,7 +184,7 @@ class ProjectPayments extends React.Component<Props, State> {
 						<button className="modal_btn modal_btn-reset" type="button" onClick={() => this.toggleModalDelete(false, '')}>
 							Cancel
 						</button>
-						<button className="modal_btn modal_btn-submit action-button" type="button" onClick={() => this.deletePayment(authForDelete)}>
+						<button className="modal_btn modal_btn-submit action-button" type="button" onClick={() => this.deletePaymentMethod(authForDelete)}>
 							Delete method
 						</button>
 					</div>
@@ -194,31 +194,31 @@ class ProjectPayments extends React.Component<Props, State> {
 				</Modal>
 
 				<Modal
-					isOpen={addPaymentModalState}
+					isOpen={addPaymentMethodModalState}
 					className={{base: 'modal_inner'}}
 					overlayClassName={{base: 'modal_outer'}}
 					contentLabel="test">
 					<div className="modal_header">
 						<h2>Auth method</h2>
 					</div>
-					<Form submit={() => this.addPayment()} className="modal_form">
-						<div className="modal_error">{addPaymentObject['message']}</div>
+					<Form submit={() => this.addPaymentMethod()} className="modal_form">
+						<div className="modal_error">{addPaymentMethodObject['message']}</div>
 						<div className="modal_content">
 							<FormRow>
 								<Input
 									type="text"
 									label="Method"
-									notValid={!addPaymentObject['validationState'] && !addPaymentObject['name']}
-									value={addPaymentObject.name}
-									onChange={(e)=>{this.addPaymentHandler(e.target.value, 'name')}} />
+									notValid={!addPaymentMethodObject['validationState'] && !addPaymentMethodObject['name']}
+									value={addPaymentMethodObject.name}
+									onChange={(e)=>{this.addPaymentMethodHandler(e.target.value, 'name')}} />
 							</FormRow>
 							<FormRow>
 								<Input
 									type="text"
 									label="Settings"
-									notValid={!addPaymentObject['validationState'] && !addPaymentObject['settings']}
-									value={addPaymentObject.settings}
-									onChange={(e)=>{this.addPaymentHandler(e.target.value, 'settings')}}/>
+									notValid={!addPaymentMethodObject['validationState'] && !addPaymentMethodObject['settings']}
+									value={addPaymentMethodObject.settings}
+									onChange={(e)=>{this.addPaymentMethodHandler(e.target.value, 'settings')}}/>
 							</FormRow>
 						</div>
 						<div className="modal_footer">
