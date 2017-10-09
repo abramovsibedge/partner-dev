@@ -1,15 +1,7 @@
 export class projectModel {
-	loading?: boolean
-
-
-
-	subscriberLoading?: boolean
-	traffic?: any
-	devices?: any
-
+	loading?: boolean;
 	data?: any;
-	sessions?: any;
-	purchases?: any
+	updateProject?: boolean
 }
 
 export type IProject = projectModel;

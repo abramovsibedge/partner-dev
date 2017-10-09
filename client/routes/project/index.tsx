@@ -1,15 +1,17 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import Loading from './Loading';
 import Dashboard from '../../components/dashboard';
 import DashboardHeader from '../../components/dashboard/dashboardHeader';
-import Header from './Header';
 import ProjectItem from './ProjectItem';
 
 import * as actions from '../../reducers/project/actions';
 import { getProjects } from '../../reducers/projects/actions';
 import { checkAuth, logOut } from '../../utils';
+
+import { IconPlus } from '../../components/icons'
 
 import '../../static/scss/routes/project.scss';
 
@@ -19,7 +21,6 @@ interface Props {
 	loadProjects: () => void
 	getProject: (id: string) => void
 	projectsList: any
-	selectedProject: any
 }
 interface State {
 	project: any;
@@ -68,17 +69,17 @@ class Project extends React.Component<Props, State> {
 
 	render() {
     const { project } = this.state;
-		const {
-      loading,
-      selectedProject
-		} = this.props;
+		const { loading } = this.props;
 
 		return (
 			<Dashboard current="projects">
 				<DashboardHeader>
-					<Header />
+					<Link to="createproject" className="button is-transparent">
+						<IconPlus width="24" height="24"/>
+						<span>Add project</span>
+					</Link>
 				</DashboardHeader>
-				{loading ? <Loading /> : <ProjectItem project={project} data={selectedProject} />}
+				{loading ? <Loading /> : <ProjectItem project={project} />}
 			</Dashboard>
 		);
 	}
@@ -87,8 +88,7 @@ class Project extends React.Component<Props, State> {
 export default connect(
 	state => ({
 		loading: state.project.loading,
-		projectsList: state.projects.list,
-		selectedProject: state.projects.selectedProject
+		projectsList: state.projects.list
 	}),
 	({
 		loadProjects: getProjects,

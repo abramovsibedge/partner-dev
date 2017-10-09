@@ -1,9 +1,9 @@
 import { handleActions, Action } from 'redux-actions';
 
-import { projectsModel, IPojects } from './model';
+import { projectsModel, IProjects } from './model';
 import * as types from './constants';
 
-const initialState: IPojects = <projectsModel>{
+const initialState: IProjects = <projectsModel>{
 	loading: true,
 	list: [],
 	createProjectResult: false,
@@ -17,14 +17,14 @@ const initialState: IPojects = <projectsModel>{
 };
 
 export default handleActions<any>({
-	[`${types.LOAD_PROJECTS}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
+	[`${types.LOAD_PROJECTS}_SUCCESS`] : (state: IProjects, action: Action<string>) : IProjects => {
 		return {
 			...state,
 			list: action.payload['projects'],
 			loading: false
 		};
 	},
-	[`${types.CREATE_PROJECT}_ERROR`] : (state: IPojects, action: Action<any>) : IPojects => {
+	[`${types.CREATE_PROJECT}_ERROR`] : (state: IProjects, action: Action<any>) : IProjects => {
 		return {
 			...state,
 			createProjectResult: {
@@ -33,7 +33,7 @@ export default handleActions<any>({
 			}
 		};
 	},
-	[`${types.CREATE_PROJECT}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
+	[`${types.CREATE_PROJECT}_SUCCESS`] : (state: IProjects, action: Action<string>) : IProjects => {
 		return {
 			...state,
 			createProjectResult: {
@@ -49,88 +49,15 @@ export default handleActions<any>({
 
 
 
-  [`${types.SET_VISIBILITY}_LOADING`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      reload_project: false,
-    };
-  },
-  [`${types.SET_VISIBILITY}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      reload_project: true,
-    };
-  },
-  [`${types.SET_VISIBILITY}_ERROR`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      reload_project: false,
-    };
-  },
 
-	[`${types.ADD_AUTH}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
-		return {
-			...state,
-			reload_project: true,
-		};
-	},
 
-  [`${types.DELETE_PROJECT}_LOADING`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      update_project: false,
-    };
-  },
-      [`${types.DELETE_PROJECT}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      update_project: true,
-    };
-  },
-    [`${types.DELETE_PROJECT}_ERROR`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      update_project: false,
-    };
-  },
-
-  [`${types.ADD_USER}_LOADING`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      reload_project: false,
-    };
-  },
-  [`${types.ADD_USER}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      reload_project: true,
-    };
-  },
-  [`${types.ADD_USER}_ERROR`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      reload_project: false,
-    };
-  },
-
-  [`${types.DELETE_USER}_LOADING`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      reload_project: false,
-    };
-  },
-  [`${types.DELETE_USER}_SUCCESS`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      reload_project: true,
-    };
-  },
-  [`${types.DELETE_USER}_ERROR`] : (state: IPojects, action: Action<string>) : IPojects => {
-    return {
-      ...state,
-      reload_project: false,
-    };
-  },
+	// [`${types.ADD_AUTH}_SUCCESS`] : (state: IProjects, action: Action<string>) : IProjects => {
+		// return {
+		// 	...state,
+		// 	reload_project: true,
+		// };
+	// },
+	//
 
 
 }, initialState);

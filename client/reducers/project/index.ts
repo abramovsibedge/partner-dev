@@ -5,35 +5,35 @@ import * as types from './constants';
 
 const initialState: IProject = <projectModel>{
 	loading: true,
-
-
-	subscriberLoading: true,
-	traffic: null,
-	devices: null,
-
 	data: null,
-	sessions: null,
-	purchases: null
+	updateProject: false
 };
 
 export default handleActions<any>({
 	[`${types.LOAD_PROJECT}_SUCCESS`] : (state: IProject, action: Action<string>) : IProject => {
 		return {
 			...state,
-			loading: false
+			loading: false,
+			data: action.payload,
+			updateProject: false
 		};
 	},
-
-
-
-
-
-
-
-	[`${types.DELETE_PROJECT}`] : (state: IProject, action: Action<string>) : IProject => {
+	[`${types.SET_VISIBILITY}_SUCCESS`] : (state: IProject) : IProject => {
 		return {
 			...state,
-			subscriberLoading: action['value']
+			updateProject: true
 		};
+	},
+	[`${types.DELETE_USER}_SUCCESS`] : (state: IProject) : IProject => {
+		return {
+			...state,
+			updateProject: true
+		};
+	},
+	[`${types.ADD_USER}_SUCCESS`] : (state: IProject, action: Action<string>) : IProject => {
+	  return {
+	    ...state,
+			updateProject: true,
+	  };
 	}
 }, initialState);

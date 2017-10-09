@@ -2,28 +2,26 @@ import * as React from 'react';
 import Modal from 'react-modal';
 import * as update from 'immutability-helper';
 import * as classNames from 'classnames';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import { hashHistory } from 'react-router';
 import onClickOutside from 'react-onclickoutside';
-import {Link} from 'react-router';
+import { Link } from 'react-router';
 
-import {emailValidation} from '../../../utils';
 
 import ProjectCountries from './ProjectCountries';
 import ProjectUsers from './ProjectUsers';
 import ProjectAuth from './ProjectAuth';
 import ProjectPayments from './ProjectPayments';
 
-import * as actions from '../../../reducers/project/actions';
-import {changeVisibility} from '../../../reducers/projects/actions';
 import {
 	editProject,
 	getProjects,
-	deleteAuth,
-	addAuth,
-	deletePayment,
-	addPayment
+	// deleteAuth,
+	// addAuth,
+	// deletePayment,
+	// addPayment
 } from '../../../reducers/projects/actions';
+import * as actions from '../../../reducers/project/actions';
 
 import {
 	IconClose,
@@ -39,30 +37,51 @@ import {
 } from '../../../components/form';
 import {Button} from '../../../components/button';
 
+import {
+	emailValidation,
+	checkAuth,
+	logOut
+} from '../../../utils';
+
 interface Props {
 	project: any
-	data: any
+	data?: any
+	changeVisibility?: (project: string, country: string, visibility: boolean) => void
+	updateProject?: boolean
+	projectList?: any
+	getProject?: (id: string) => any
+	editProject?: (project: string, description: string) => any
 	loadProjects?: () => any
 	deleteProject?: (item: object) => any
-	editProject?: (project: string, description: string) => any
 	addUser?: (project: string, email: string) => void
+
+
+
+
+
+
+
 	deleteUser?: (project: string, email: string) => void
 	deleteAuth?: (project: string, auth: string) => void
 	addAuth?: (project: string, auth: any) => void
 	deletePayment?: (project: string, payment: string) => void
 	addPayment?: (project: string, payment: any) => void
-	changeVisibility?: (project: string, country: string, visibility: boolean) => void
-	projectList?: any
 }
 
 interface State {
+	project: any
 	blockShow: number
+	modalEditProject: boolean
 	modalDeleteProject: boolean
-	addUserModalState: boolean
-	projectEditModalState: boolean
+
+
+
+
+
+	modalAddUser: boolean
 	addUserObject: object
 	mailForDelete: string
-	descritionEdit: string
+	projectDescription: string
 	projectSelectorVisibility: boolean
 }
 
@@ -71,12 +90,15 @@ class ProjectItem extends React.Component<Props, State> {
 		super(props);
 
 		this.state = {
+			project: this.props.project,
 			blockShow: 1,
 			modalDeleteProject: false,
-			addUserModalState: false,
-			projectEditModalState: false,
+			modalEditProject: false,
+
+
+			modalAddUser: false,
 			mailForDelete: '',
-			descritionEdit: this.props.project.description,
+			projectDescription: this.props.project.description,
 			addUserObject: {
 				email: '',
 				validationState: true,
@@ -86,21 +108,32 @@ class ProjectItem extends React.Component<Props, State> {
 		}
 	}
 
-	handleShowBlock(num: number) {
+	componentDidMount() {
+		!checkAuth() && logOut();
+	}
+
+	componentWillReceiveProps(nextprops: any) {
 		this.setState({
-			blockShow: num
-		})
+			project: this.findProject(nextprops.projectList, nextprops.project.publickey)
+		});
+
+		if (nextprops.updateProject) {
+			this.props.getProject(this.props.project.publickey);
+		}
 	}
 
-	addUserHandler(value: string, stateItem: string) {
-		let newState = {};
-		newState['addUserObject'] = {[stateItem]: {$set: value}};
-		this.setState(update(this.state, newState));
-	}
+	findProject = (projects: any, value: any) => {
+		let result: any = {};
 
-	handlerDescritionEdit(value: string) {
-		this.setState({descritionEdit: value})
-	}
+		for (let i = 0; i < projects.length; i++) {
+			if (projects[i].publickey === value) {
+				result = projects[i];
+				break;
+			}
+		}
+
+		return result;
+	};
 
 	toggleModal(type: string, data?: string) {
 		let dataCheck = (data != '') ? data : '';
@@ -110,15 +143,46 @@ class ProjectItem extends React.Component<Props, State> {
 				this.setState({modalDeleteProject: !this.state.modalDeleteProject});
 				break;
 			case 'addUser':
-				this.setState({addUserModalState: !this.state.addUserModalState});
+				this.setState({modalAddUser: !this.state.modalAddUser});
 				break;
 			case 'editProject':
-				this.setState({projectEditModalState: !this.state.projectEditModalState});
+				this.setState({modalEditProject: !this.state.modalEditProject});
 				break;
 		}
 	}
 
-	addUserSubmit(project: string) {
+	editProject() {
+		this.props.editProject(this.props.project.publickey, this.state.projectDescription).then(() => {
+			this.toggleModal('editProject');
+			this.props.loadProjects();
+		});
+	}
+
+	deleteProject() {
+		this.props.deleteProject(this.props.project).then(() => hashHistory.push('/projects'))
+	}
+
+	handleShowBlock(num: number) {
+		this.setState({
+			blockShow: num
+		});
+	}
+
+	addUserHandler(value: string, stateItem: string) {
+		this.setState(update(this.state, {
+			addUserObject: {
+				[stateItem]: { $set: value }
+			}
+		}));
+	}
+
+	handlerDescritionEdit(value: string) {
+		this.setState({
+			projectDescription: value
+		});
+	}
+
+	addUserSubmit() {
 		const $t = this;
 		const $state = $t.state;
 		let state: boolean = true;
@@ -171,17 +235,6 @@ class ProjectItem extends React.Component<Props, State> {
 		this.props.changeVisibility(project, country, visibility);
 	}
 
-	editProject() {
-		this.props.editProject(this.props.project.publickey, this.state.descritionEdit).then(() => {
-			this.toggleModal('editProject');
-			this.props.loadProjects();
-		});
-	}
-
-	deleteProject() {
-		this.props.deleteProject(this.props.project).then(() => hashHistory.push('/projects'))
-	}
-
 	toggleProjectSelector() {
 		this.setState({
 			projectSelectorVisibility: !this.state.projectSelectorVisibility
@@ -190,17 +243,17 @@ class ProjectItem extends React.Component<Props, State> {
 
 	render() {
 		const {
+			project,
 			blockShow,
+			projectSelectorVisibility,
+			modalEditProject,
 			modalDeleteProject,
-			addUserModalState,
+			modalAddUser,
 			addUserObject,
-			projectEditModalState,
-			descritionEdit,
-			projectSelectorVisibility
+			projectDescription
 		} = this.state;
 
 		const {
-			project,
 			data,
 			projectList
 		} = this.props;
@@ -260,32 +313,24 @@ class ProjectItem extends React.Component<Props, State> {
 					<div className="project_tabs">
 						<button
 							className={classNames('project_tabs_item', blockShow == 1 && 'project_tabs_item-active')}
-							onClick={() => {
-								this.handleShowBlock(1)
-							}}>
+							onClick={() => this.handleShowBlock(1)}>
 							VPN Servers
 						</button>
 						<button
 							className={classNames('project_tabs_item', blockShow == 2 && 'project_tabs_item-active')}
-							onClick={() => {
-								this.handleShowBlock(2)
-							}}>
+							onClick={() => this.handleShowBlock(2)}>
 							Access
 						</button>
-						<button
-							className={classNames('project_tabs_item', blockShow == 3 && 'project_tabs_item-active')}
-							onClick={() => {
-								this.handleShowBlock(3)
-							}}>
-							Users authentication
-						</button>
-						<button
-							className={classNames('project_tabs_item', blockShow == 4 && 'project_tabs_item-active')}
-							onClick={() => {
-								this.handleShowBlock(4)
-							}}>
-							Payments settings
-						</button>
+						{/*<button*/}
+							{/*className={classNames('project_tabs_item', blockShow == 3 && 'project_tabs_item-active')}*/}
+							{/*onClick={() => this.handleShowBlock(3)}>*/}
+							{/*Users authentication*/}
+						{/*</button>*/}
+						{/*<button*/}
+							{/*className={classNames('project_tabs_item', blockShow == 4 && 'project_tabs_item-active')}*/}
+							{/*onClick={() => this.handleShowBlock(4)}>*/}
+							{/*Payments settings*/}
+						{/*</button>*/}
 					</div>
 					<Button
 						type="button"
@@ -320,6 +365,45 @@ class ProjectItem extends React.Component<Props, State> {
 
 		return (
 			<section className="layout">
+				{content}
+
+				<Modal
+					isOpen={modalEditProject}
+					className={{base: 'modal_inner'}}
+					overlayClassName={{base: 'modal_outer'}}
+					contentLabel="test">
+					<div className="modal_header">
+						<h2>{project.publickey}</h2>
+					</div>
+					<Form submit={() => this.editProject()} className="modal_form">
+						<div className="modal_content">
+							<FormRow>
+								<img src={require('../../../static/media/def-icon.png')} width="60" height="60" alt="def" />
+							</FormRow>
+							<FormRow>
+								<Textarea
+									className="project_edit_textarea"
+									label="Description"
+									value={projectDescription}
+									onChange={(e)=>{this.handlerDescritionEdit(e.target.value)}} />
+							</FormRow>
+						</div>
+						<div className="modal_footer">
+							<button type="button" className="modal_btn modal_btn-reset" onClick={() => this.toggleModal('editProject')}>
+								Cancel
+							</button>
+							<button type="submit" className="modal_btn modal_btn-submit" >
+								Save changes
+							</button>
+						</div>
+					</Form>
+					<Button
+						type="button"
+						className="modal_close"
+						onClick={() => this.toggleModal('editProject')}>
+						<IconClose width="24" height="24"/>
+					</Button>
+				</Modal>
 
 				<Modal
 					isOpen={modalDeleteProject}
@@ -353,52 +437,14 @@ class ProjectItem extends React.Component<Props, State> {
 				</Modal>
 
 				<Modal
-					isOpen={projectEditModalState}
-					className={{base: 'modal_inner'}}
-					overlayClassName={{base: 'modal_outer'}}
-					contentLabel="test">
-					<div className="modal_header">
-						<h2>{project.publickey}</h2>
-					</div>
-					<Form submit={() => this.editProject()} className="modal_form">
-						<div className="modal_content">
-							<FormRow>
-								<img src={require('../../../static/media/def-icon.png')} width="60" height="60" alt="def" />
-							</FormRow>
-							<FormRow>
-								<Textarea
-									className="project_edit_textarea"
-									label="Description"
-									value={descritionEdit}
-									onChange={(e)=>{this.handlerDescritionEdit(e.target.value)}} />
-							</FormRow>
-						</div>
-						<div className="modal_footer">
-							<button type="button" className="modal_btn modal_btn-reset" onClick={() => this.toggleModal('editProject')}>
-								Cancel
-							</button>
-							<button type="submit" className="modal_btn modal_btn-submit" >
-								Save changes
-							</button>
-						</div>
-					</Form>
-					<Button
-						type="button"
-						className="modal_close"
-						onClick={() => this.toggleModal('editProject')}>
-						<IconClose width="24" height="24"/>
-					</Button>
-				</Modal>
-
-				<Modal
-					isOpen={addUserModalState}
+					isOpen={modalAddUser}
 					className={{base: 'modal_inner'}}
 					overlayClassName={{base: 'modal_outer'}}
 					contentLabel="test">
 					<div className="modal_header">
 						<h2>Create user</h2>
 					</div>
-					<Form submit={() => this.addUserSubmit(project.publickey)} className="modal_form">
+					<Form submit={() => this.addUserSubmit()} className="modal_form">
 						<div className="modal_error">{addUserObject['message']}</div>
 						<div className="modal_content">
 							<FormRow>
@@ -423,8 +469,6 @@ class ProjectItem extends React.Component<Props, State> {
 						<IconClose width="24" height="24"/>
 					</Button>
 				</Modal>
-
-				{content}
 			</section>
 		);
 	}
@@ -459,18 +503,24 @@ const WrappedSelectList = onClickOutside<{
 
 export default connect<any, any, Props>(
 	state => ({
-		projectList: state.projects.list
+		projectList: state.projects.list,
+		data: state.project.data,
+		updateProject: state.project.updateProject
 	}),
 	({
+		changeVisibility: actions.changeVisibility,
+		getProject: actions.getProject,
+		deleteUser: actions.deleteUser,
+		editProject: editProject,
 		loadProjects: getProjects,
 		deleteProject: actions.deleteProject,
-		editProject: editProject,
 		addUser: actions.addUser,
-		deleteUser: actions.deleteUser,
-		deleteAuth: deleteAuth,
-		addAuth: addAuth,
-		deletePayment: deletePayment,
-		addPayment: addPayment,
-		changeVisibility: changeVisibility
+
+
+
+		// deleteAuth: deleteAuth,
+		// addAuth: addAuth,
+		// deletePayment: deletePayment,
+		// addPayment: addPayment,
 	})
 )(ProjectItem);
