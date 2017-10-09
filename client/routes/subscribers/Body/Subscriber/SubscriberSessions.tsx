@@ -1,9 +1,13 @@
 import * as React from 'react';
-import Loading from '../../Loading';
-import {Button} from "../../../../components/button/index";
-import Calendar from "./Calendar";
 import { connect } from 'react-redux';
+import * as classNames from 'classnames';
+
+import Loading from '../../Loading';
+import Calendar from "./Calendar";
+
 import * as actions from '../../../../reducers/subscriber/actions';
+
+import { Button } from "../../../../components/button/index";
 
 import {
 	IconPhone,
@@ -19,7 +23,6 @@ interface Props {
 	data: any
 	subscriber?: any
 	getSessions?: (id: any, data: any) => void
-	getDevices?: (data: any) => void
 }
 
 interface State {
@@ -35,7 +38,6 @@ interface State {
 }
 
 class SubscriberSessions extends React.Component<Props, State> {
-	time: any;
 	constructor(props: any) {
 		super(props);
 
@@ -52,6 +54,8 @@ class SubscriberSessions extends React.Component<Props, State> {
 		};
 	}
 
+	private time: any;
+
 	componentWillReceiveProps(nextprop: any) {
 		this.setState({
 			devices: nextprop.subscriber.devices,
@@ -63,34 +67,70 @@ class SubscriberSessions extends React.Component<Props, State> {
 	updateSearch(time: any) {
 		this.time = time;
 
-		this.setState({loaded: false});
+		this.setState({
+			loaded: false
+		});
 
 		this.props.getSessions(this.props.data.id, {start_time: this.time.from[0], end_time: this.time.till[0]});
 	}
 
+	changeDevice(newDevice: any) {
+		this.setState({
+			activeDevice: newDevice
+		});
+
+		let tx = 0,
+				rx = 0,
+				size = 0;
+
+		for(let k in this.state.sessions) {
+			if (this.state.sessions.hasOwnProperty(k)) {
+				if(newDevice !== 0 && this.state.sessions[k].device_id !== newDevice.device_id) continue
+				tx += this.state.sessions[k].tx;
+				rx += this.state.sessions[k].rx;
+				size ++;
+			}
+		}
+
+		this.setState({
+			activeDevice: newDevice,
+			tx: tx,
+			rx: rx,
+			size: size,
+			showDevicesDropdown: false
+		}, () => this.updateSearch(this.time));
+	}
+
 	render() {
+		const {
+			showDevicesDropdown,
+			size,
+			tx,
+			rx
+		} = this.state;
+
 		return (
 			<div className="subscriber_body_content">
 				<div className="session_filter">
 					<Calendar
 						updateSearch={(time: any) => this.updateSearch(time)}
 						calendarOpened={() => {
-							if(this.state.showDevicesDropdown) this.setState({showDevicesDropdown: false});
+							if (showDevicesDropdown) this.setState({showDevicesDropdown: false});
 						}}
-						devicesDropdown={this.state.showDevicesDropdown}/>
+						devicesDropdown={showDevicesDropdown}/>
 					{this.renderDeviceSelector()}
 					<div className="sessions_traffic js-sessions-traffic">
 						<div className="sessions_traffic_item">
 							<div className="sessions_traffic_label">Total sessions</div>
-							<div className="sessions_traffic_value js-sessions-total">{this.state.size}</div>
+							<div className="sessions_traffic_value js-sessions-total">{size}</div>
 						</div>
 						<div className="sessions_traffic_item">
 							<div className="sessions_traffic_label">Total TX</div>
-							<div className="sessions_traffic_value js-sessions-total-tx">{byteConvert(this.state.tx)}</div>
+							<div className="sessions_traffic_value js-sessions-total-tx">{byteConvert(tx)}</div>
 						</div>
 						<div className="sessions_traffic_item">
 							<div className="sessions_traffic_label">Total RX</div>
-							<div className="sessions_traffic_value js-sessions-total-rx">{byteConvert(this.state.rx)}</div>
+							<div className="sessions_traffic_value js-sessions-total-rx">{byteConvert(rx)}</div>
 						</div>
 					</div>
 				</div>
@@ -100,71 +140,79 @@ class SubscriberSessions extends React.Component<Props, State> {
 	}
 
 	renderContent() {
-		if(!this.state.loaded) {
+		const {
+			loaded,
+			sessions,
+			activeDevice,
+			size
+		} = this.state;
+
+		if(!loaded) {
 			return (
 				<div className="subscriber_tabs_content sessions_content">
-					<div className="subscriber_tabs_empty sessions_empty"><Loading/></div>
+					<div className="subscriber_tabs_empty sessions_empty">
+						<Loading/>
+					</div>
 				</div>
 			);
 		}
 
-		if(this.state.sessions.length === 0) {
+		if(sessions.length === 0) {
 			return (
 				<div className="subscriber_tabs_content sessions_content">
 					<div className="subscriber_tabs_empty sessions_empty">
 						<p>
-							Subscriber has no sessions from <span>{this.state.activeDevice===0?'All Devices':this.state.activeDevice.device_id}</span> between<br />
+							Subscriber has no sessions from&nbsp;
+							<span>{activeDevice === 0 ? 'All Devices' : activeDevice.device_id}</span>&nbsp;between<br />
 							<span>{this.time.from[1]} - {this.time.till[1]}</span>
 						</p>
 					</div>
 				</div>
 			);
-		}
-		
-		let content = [];
-		
-		for(let k in this.state.sessions) {
-			let session = this.state.sessions[k];
-			if(this.state.activeDevice !== 0 && session.device_id !== this.state.activeDevice.device_id) continue;
+		} else {
+			let content = [];
 
-			content.push(
-				<div className="table_row" key={k}>
-					<div className="table_row_wrapper">
-						<div className="table_cell" style={{width: "16.4%"}}>
-							<div className="table_cell_content">{session.device_id}</div>
-						</div>
-						<div className="table_cell" style={{width: "16.7%"}}>
-							<div className="table_cell_content">{session.server}}</div>
-						</div>
-						<div className="table_cell" style={{width: "11.25%"}}>
-							<div className="table_cell_content">
-								<div className="table_date">{dateString(session.start_time)}</div>
+			for(let k in sessions) {
+				if (sessions.hasOwnProperty(k)) {
+					let session = sessions[k];
+					if(activeDevice !== 0 && session.device_id !== activeDevice.device_id) continue;
+
+					content.push(<div className="table_row" key={k}>
+						<div className="table_row_wrapper">
+							<div className="table_cell" style={{width: "16.4%"}}>
+								<div className="table_cell_content">{session.device_id}</div>
+							</div>
+							<div className="table_cell" style={{width: "16.7%"}}>
+								<div className="table_cell_content">{session.server}}</div>
+							</div>
+							<div className="table_cell" style={{width: "11.25%"}}>
+								<div className="table_cell_content">
+									<div className="table_date">{dateString(session.start_time)}</div>
+								</div>
+							</div>
+							<div className="table_cell" style={{width: "11.25%"}}>
+								<div className="table_cell_content">
+									<div className="table_date">{dateString(session.end_time)}</div>
+								</div>
+							</div>
+							<div className="table_cell" style={{width: "13.7%"}}>
+								<div className="table_cell_content">{session.client_address}</div>
+							</div>
+							<div className="table_cell" style={{width: "13.02%"}}>
+								<div className="table_cell_content">{session.internal_address}</div>
+							</div>
+							<div className="table_cell a-right" style={{width: "9.25%"}}>
+								<div className="table_cell_content">{byteConvert(session.tx)}</div>
+							</div>
+							<div className="table_cell a-right" style={{width: "8%"}}>
+								<div className="table_cell_content">{byteConvert(session.rx)}</div>
 							</div>
 						</div>
-						<div className="table_cell" style={{width: "11.25%"}}>
-							<div className="table_cell_content">
-								<div className="table_date">{dateString(session.end_time)}</div>
-							</div>
-						</div>
-						<div className="table_cell" style={{width: "13.7%"}}>
-							<div className="table_cell_content">{session.client_address}</div>
-						</div>
-						<div className="table_cell" style={{width: "13.02%"}}>
-							<div className="table_cell_content">{session.internal_address}</div>
-						</div>
-						<div className="table_cell a-right" style={{width: "9.25%"}}>
-							<div className="table_cell_content">{byteConvert(session.tx)}</div>
-						</div>
-						<div className="table_cell a-right" style={{width: "8%"}}>
-							<div className="table_cell_content">{byteConvert(session.rx)}</div>
-						</div>
-					</div>
-				</div>
-			)
-		}
-		
-		return (
-			<div className="table inner_table">
+					</div>)
+				}
+			}
+
+			return (<div className="table inner_table">
 				<div className="table_head">
 					<table>
 						<tbody>
@@ -187,55 +235,43 @@ class SubscriberSessions extends React.Component<Props, State> {
 				</div>
 				<div className="subscriber_tabs_empty sessions_empty">
 					<p>
-						Subscriber has {this.state.size} sessions from <span>{this.state.activeDevice===0?'All Devices':this.state.activeDevice.device_id}</span> between<br />
+						Subscriber has {size} sessions from&nbsp;
+						<span>{activeDevice === 0 ? 'All Devices' : activeDevice.device_id}</span> between<br />
 						<span>{this.time.from[1]} - {this.time.till[1]}</span>
 					</p>
-					<p><a href="#" className="js-sessions-other-range">Try different time range</a></p>
 				</div>
-			</div>
-		)
-	}
-
-	changeDevice(newDevice: any) {
-		this.setState({activeDevice: newDevice});
-
-		let tx = 0, rx = 0, size = 0;
-
-		for(let k in this.state.sessions) {
-			if(newDevice !== 0 && this.state.sessions[k].device_id !== newDevice.device_id) continue
-			tx += this.state.sessions[k].tx;
-			rx += this.state.sessions[k].rx;
-			size ++;
+			</div>)
 		}
-
-		this.setState({
-			activeDevice: newDevice,
-			tx: tx,
-			rx: rx,
-			size: size,
-			showDevicesDropdown: false}, () => this.updateSearch(this.time));
 	}
 
 	renderDeviceSelector() {
-		let devices = [
+		const {
+			devices,
+			activeDevice,
+			showDevicesDropdown
+		} = this.state;
+
+		let devicesList = [
 			<div className="device" key="all" onClick={() => this.changeDevice(0)}>All Devices</div>
 		];
 
-		for(let k in this.state.devices) {
-			devices.push(<div key={this.state.devices[k].device_id} className="device" onClick={() => this.changeDevice(this.state.devices[k])}>
-				{this.state.devices[k].device_id}
-			</div>);
+		for(let k in devices) {
+			if (devices.hasOwnProperty(k)) {
+				devicesList.push(<div key={devices[k].device_id} className="device" onClick={() => this.changeDevice(devices[k])}>
+					{devices[k].device_id}
+				</div>);
+			}
 		}
 
 		return (
 			<div className="session_button_container devices">
-				<Button type="button" className={'calendar_button'} onClick={() => this.setState({showDevicesDropdown: !this.state.showDevicesDropdown})}>
+				<Button type="button" className={'calendar_button'} onClick={() => this.setState({showDevicesDropdown: !showDevicesDropdown})}>
 					<IconPhone width="24" height="24" />
-					<span>{this.state.activeDevice.device_id || 'All devices'}</span>
+					<span>{activeDevice.device_id || 'All devices'}</span>
 					<div className="arrow"><IconPlay width="24" height="24" /></div>
 				</Button>
-				<div className={'sessions_devices_drop' + (this.state.showDevicesDropdown?' opened':'')}>
-					{devices}
+				<div className={classNames('sessions_devices_drop', showDevicesDropdown && 'opened')}>
+					{devicesList}
 				</div>
 			</div>
 		);

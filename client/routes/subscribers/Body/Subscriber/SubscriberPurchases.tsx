@@ -1,20 +1,17 @@
 import * as React from 'react';
 import Modal from 'react-modal';
-import Loading from '../../Loading';
 import { connect } from 'react-redux';
-import * as actions from '../../../../reducers/subscriber/actions';
 
-import {
-	getPurchases,
-	deletePurchase,
-	dateString
-} from '../../../../functions/subscribers';
+import * as actions from '../../../../reducers/subscriber/actions';
+import { dateString } from '../../../../utils';
+import { Button } from '../../../../components/button';
+
+import Loading from '../../Loading';
 
 import {
 	IconClose,
 	IconDelete,
 } from '../../../../components/icons'
-import {Button} from '../../../../components/button';
 
 interface Props {
 	data: any
@@ -70,22 +67,29 @@ class SubscriberPurchases extends React.Component<Props, State> {
 			showModal: false
 		});
 
-		this.props.deletePurchase(this.props.data.id, id)
-			.then(() => this.getPurchases());
+		this.props.deletePurchase(this.props.data.id, id).then(() => this.getPurchases());
 	}
 
 	render() {
-		if(!this.state.loaded) {
+		const {
+			loaded,
+			purchases,
+			showModal
+		} = this.state;
+
+		if(!loaded) {
 			return (
 				<div id="purchases" className="subscriber_tab subscriber_tab-active">
 					<div className="subscriber_tab_content">
-						<div className="subscriber_tabs_empty"><Loading/></div>
+						<div className="subscriber_tabs_empty">
+							<Loading/>
+						</div>
 					</div>
 				</div>
 			);
 		}
 
-		if(this.state.purchases.length === 0) {
+		if(purchases.length === 0) {
 			return (
 				<div id="purchases" className="subscriber_tab subscriber_tab-active">
 					<div className="subscriber_tab_content">
@@ -96,11 +100,12 @@ class SubscriberPurchases extends React.Component<Props, State> {
 		}
 
 		let content = [];
-		for(let k in this.state.purchases) {
-			let purchase = this.state.purchases[k];
 
-			content.push(
-				<div className="table_row" key={k}>
+		for(let k in purchases) {
+			if (purchases.hasOwnProperty(k)) {
+				let purchase = purchases[k];
+
+				content.push(<div className="table_row" key={k}>
 					<div className="table_row_wrapper">
 						<div className="table_cell" style={{width: '30%'}}>
 							<div className="table_cell_content">{purchase.purchase_id}</div>
@@ -119,7 +124,7 @@ class SubscriberPurchases extends React.Component<Props, State> {
 									<IconDelete width="24" height="24"/>
 								</Button>
 								<Modal
-									isOpen={this.state.showModal}
+									isOpen={showModal}
 									className={{base: 'modal_inner'}}
 									overlayClassName={{base: 'modal_outer'}}
 									contentLabel="test">
@@ -142,8 +147,8 @@ class SubscriberPurchases extends React.Component<Props, State> {
 							</div>
 						</div>
 					</div>
-				</div>
-			)
+				</div>)
+			}
 		}
 
 		return (
@@ -152,12 +157,12 @@ class SubscriberPurchases extends React.Component<Props, State> {
 					<div className="table_head">
 						<table>
 							<tbody>
-							<tr>
-								<td style={{width: '30%'}}>Purchase ID</td>
-								<td style={{width: '30%'}}>Purchase type</td>
-								<td style={{width: '30%'}}>Check time</td>
-								<td style={{width: '10%'}}>&nbsp;</td>
-							</tr>
+								<tr>
+									<td style={{width: '30%'}}>Purchase ID</td>
+									<td style={{width: '30%'}}>Purchase type</td>
+									<td style={{width: '30%'}}>Check time</td>
+									<td style={{width: '10%'}}>&nbsp;</td>
+								</tr>
 							</tbody>
 						</table>
 					</div>

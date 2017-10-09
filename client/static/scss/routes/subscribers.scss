@@ -1,14 +1,5 @@
 @import "../vars/vars";
 
-.layout_h1 {
-  select {
-    height: 25px;
-    width: auto;
-    margin-left: 10px;
-    bottom: 3px;
-  }
-}
-
 .subscriber {
   &_close {
     position: absolute;
@@ -48,9 +39,7 @@
       cursor: pointer;
       &-open {
         background: $table-cell-dark;
-        svg {
-          transform: rotate(-180deg);
-        }
+        svg { transform: rotate(-180deg); }
       }
       svg {
         margin-left: 5px;
@@ -92,6 +81,7 @@
     position: relative;
     padding: 30px 0 24px;
     color: $palette-white;
+
     table {
       position: relative;
       z-index: 1;
@@ -146,6 +136,7 @@
       color: $x-palette-gray_1;
       cursor: pointer;
       transition: color .3s ease-in-out;
+
       &-active {
         border-bottom: 2px solid $palette-brand;
         font: 24px $font-bold;
@@ -160,6 +151,7 @@
       font-size: 13px;
       line-height: 21px;
       color: $x-palette-gray_1;
+
       span { color: $x-palette-gray; }
       p:not(:last-child) { margin-bottom: 27px; }
       a {
@@ -176,6 +168,7 @@
     border-bottom: 1px solid rgba($palette-black, .05);
     padding-bottom: 9px;
     margin-bottom: 24px;
+
     &_item {
       padding: 12px;
       background: none;
@@ -193,6 +186,7 @@
   }
   &_edit_checkbox {
     position: relative;
+
     input[type="checkbox"] {
       position: absolute;
       top: 0;
@@ -214,6 +208,7 @@
       color: $x-palette-gray_1;
       cursor: pointer;
       transition: color ease-in-out .3s;
+
       &:before {
         content: '';
         position: absolute;
@@ -248,7 +243,6 @@
         float: left;
         margin-right: 10px;
       }
-
     }
   }
   &_filter {
@@ -261,6 +255,7 @@
       width: 70%;
       float: right;
       height: 48px;
+
       &_form {
         position: relative;
         float: right;
@@ -270,6 +265,7 @@
         transition: all .4s ease-in-out;
         background: transparent;
         border-radius: 4px;
+
         .btn {
           position: relative;
           z-index: 10;
@@ -301,6 +297,7 @@
           visibility .2s ease-in-out;
         text-overflow: ellipsis;
         word-break: break-all;
+
         &::-webkit-input-placeholder { font: 13px/15px $font-regular; }
         &:-ms-input-placeholder { font: 13px/15px $font-regular; }
         &::-ms-input-placeholder { font: 13px/15px $font-regular; }
@@ -329,6 +326,7 @@
         border: none;
         outline: none;
         cursor: pointer;
+
         svg { fill: $x-palette-gray_2; }
       }
       &_btn {
@@ -355,6 +353,7 @@
           width: 100%;
           max-width: 424px;
           transition: all .4s ease-in-out .2s;
+
           .btn {
             z-index: 10;
             opacity: 0;
@@ -394,12 +393,14 @@
         0 2px 10px 0 rgba( $palette-black, 0.1 ),
         0 2px 50px 0 rgba( $table-cell-dark, 0.1 );
       background: $palette-white;
+
       &_item {
         height: 48px;
         padding: 0 25px;
         line-height: 48px;
         transition: all .3s ease-in-out;
         cursor: pointer;
+
         &:first-child { border-radius: 4px 4px 0 0; }
         &:last-child { border-radius: 0 0 4px 4px; }
         b {
@@ -414,13 +415,13 @@
         }
       }
     }
-
   }
 }
 
 .user_delete {
   text-align: right;
   width: 100%;
+
   &_btn {
     display: inline-flex;
     padding: 4px;
@@ -428,6 +429,7 @@
     height: 34px;
     border: 1px solid $x-palette-lightred;
     border-radius: 100%;
+
     svg {
       display: block;
       fill: $x-palette-lightred;
@@ -462,24 +464,20 @@
     height: 48px;
     padding: 9px 12px;
     border-radius: 4px;
-    background: #fff;
+    background: $palette-white;
     text-align: left;
-    font: 13px apercuregular,Arial,sans-serif;
+    font: 13px $font-regular;
 
     &.small {
       width: 220px;
     }
 
     &.time_button {
-      .input {
-        top: -9px;
-      }
-
+      .input { top: -9px; }
       label {
         padding-top: 8px;
         font-size: 10px;
       }
-
       svg {
         position: relative;
         top: -9px;
@@ -491,14 +489,15 @@
       vertical-align: middle;
       width: 70px;
       margin: 0 12px;
+
       .date {
         margin-bottom: 2px;
         font-size: 13px;
-        color: #242b33;
+        color: $x-palette-dark;
       }
       .time {
         font-size: 12px;
-        color: #a7a7a7;
+        color: $x-palette-gray_1;
       }
     }
     .calendar_separator {
@@ -506,20 +505,20 @@
       vertical-align: middle;
       width: 17px;
       height: 1px;
-      background: #d8d8d8;
+      background: $x-palette-gray_4;
       transition: background .3s ease-in-out;
     }
     .arrow {
-      svg {fill: #c4c3c3;}
+      svg { fill: $x-palette-gray_1; }
     }
     &.opened {
-      background: #3f9beb;
-      color: #fff;
+      background: $palette-brand;
+      color: $palette-white;
       .calendar_date {
-        .date {color: #fff;}
-        .time {color: rgba(255,255,255,.4);}
+        .date { color: $palette-white; }
+        .time { color: lighten($palette-white, 40%); }
       }
-      svg {fill: #fff;}
+      svg {fill: $palette-white;}
     }
   }
 
@@ -532,12 +531,9 @@
     width: 100%;
     border-radius: 4px;
     box-shadow: 0 2px 10px 0 rgba(0,0,0,.1),0 2px 50px 0 rgba(62,70,81,.1);
-    background: #fff;
+    background: $palette-white;
 
-    &.opened {
-      display: block;
-    }
-
+    &.opened { display: block; }
     .device {
       height: 48px;
       padding: 0 25px;
@@ -546,18 +542,12 @@
       cursor: pointer;
 
       &:hover {
-        background: #3f9beb;
-        color: #fff;
+        background: $palette-brand;
+        color: $palette-white;
       }
     }
-
-    .device:first-child {
-      border-radius: 4px 4px 0 0;
-    }
-
-    .device:last-child {
-      border-radius: 0 0 4px 4px;
-    }
+    .device:first-child { border-radius: 4px 4px 0 0; }
+    .device:last-child { border-radius: 0 0 4px 4px; }
   }
 
   .calendar_dropdown {
@@ -569,18 +559,15 @@
     width: 480px;
     border-radius: 4px;
     box-shadow: 0 2px 10px 0 rgba(0,0,0,.1),0 2px 50px 0 rgba(62,70,81,.1);
-    background: #f5f4f2;
+    background: $table-cell-light;
 
-    &.opened {
-      display: block;
-    }
-
+    &.opened { display: block; }
     .DayPicker-wrapper {
       width: 480px;
       height: 293px;
-      background: #fff;
-      font: 13px apercubold,Arial,sans-serif;
-      color: #000;
+      background: $palette-white;
+      font: 13px $font-bold;
+      color: $palette-black;
       border-radius: 4px 4px 0 0;
 
       .DayPicker-Month {
@@ -588,15 +575,13 @@
         margin: 7px;
         float: left;
       }
-
       .DayPicker-Caption {
         height: 40px;
         line-height: 40px;
         text-align: center;
-        color: #333;
+        color: $x-palette-gray;
         text-transform: uppercase;
       }
-
       .DayPicker-WeekdaysRow {
         height: 32px;
         font-weight: 100;
@@ -608,31 +593,28 @@
           width: 32px;
           height: 32px;
           padding: 0;
-          font: 12px apercubold,Arial,sans-serif;
-          color: #a7a7a7;
+          font: 12px $font-bold;
+          color: $x-palette-gray_1;
           letter-spacing: -.2px;
           text-align: center;
           line-height: 32px;
           cursor: default;
 
-          abbr {
-            text-decoration: none;
-          }
+          abbr { text-decoration: none; }
         }
       }
 
       .DayPicker-Week {
         height: 32px;
-        margin: 1px 0px;
+        margin: 1px 0;
 
         .DayPicker-Day {
           float: left;
           width: 32px;
           height: 32px;
-          color: #333;
+          color: $x-palette-gray;
           cursor: pointer;
-
-
+          
           .custom-day {
             width: 32px;
             height: 32px;
@@ -648,8 +630,8 @@
           .custom-day {
             &.selected  {
               &.outer {
-                background: #3f9beb;
-                color: #fff;
+                background: $palette-brand;
+                color: $palette-white;
                 border-radius: 100%;
 
                 &.multiple {
@@ -663,19 +645,15 @@
                     background: rgba(63,155,235,.2);
                   }
 
-                  &.last::before {left: 0px;}
-                  &.first::before {right: 0px;}
+                  &.last::before { left: 0; }
+                  &.first::before { right: 0; }
                 }
               }
 
               &.center {
                 background: rgba(63,155,235,.2);
-                &.first {
-                  border-radius: 100% 0 0 100%;
-                }
-                &.last {
-                  border-radius: 0 100% 100% 0;
-                }
+                &.first { border-radius: 100% 0 0 100%; }
+                &.last { border-radius: 0 100% 100% 0; }
               }
             }
           }
@@ -687,19 +665,16 @@
         }
       }
     }
-
     .DayPicker-delimiter {
       position: absolute;
+      top: 0;
       height: 293px;
       background: rgba(0,0,0,.05);
       width: 1px;
-      position: absolute;
       left: 239px;
-      top: 0px;
     }
-
     &_options {
-      padding: 19px 19px 0px 19px;
+      padding: 19px 19px 0 19px;
 
       .calendar_dropdown_row{
         margin-bottom: 19px;
@@ -708,37 +683,32 @@
           cursor: not-allowed;
           div {
             cursor: not-allowed;
-            input {cursor: not-allowed;}
-            label {cursor: not-allowed;}
+            input { cursor: not-allowed; }
+            label { cursor: not-allowed; }
           }
         }
-
         .calendar_dropdown_item {
           position: relative;
           display: inline-block;
           vertical-align: top;
 
           span {
-            color: #a7a7a7;
+            color: $x-palette-gray_1;
             font-size: 12px;
             line-height: 19px;
             letter-spacing: -.2px;
             cursor: pointer;
 
-            &:hover {
-              color: #3f9beb;
-            }
+            &:hover { color: $palette-brand; }
           }
-
           label {
             letter-spacing: -.2px;
             font-size: 12px;
           }
-
-          &.item1 {width: 170px;}
-          &.item2 {width: 90px;}
-          &.item3 {width: 80px;}
-          &.item4 {width: 100px;}
+          &.item1 { width: 170px; }
+          &.item2 { width: 90px; }
+          &.item3 { width: 80px; }
+          &.item4 { width: 100px; }
         }
       }
     }
@@ -749,15 +719,11 @@
       height: 50px;
       display: none;
 
-      &.opened {
-        display: block;
-      }
-
+      &.opened { display: block; }
       button:first-child {
         position: absolute;
         left: 0;
       }
-
       button:last-child {
         position: absolute;
         right: 0;
@@ -766,8 +732,8 @@
   }
 
   .update_search {
-    background: #3f9beb;
-    color: #fff;
+    background: $palette-brand;
+    color: $palette-white;
   }
 }
 
@@ -784,13 +750,13 @@
     .sessions_traffic_label {
       margin-bottom: 4px;
       font-size: 12px;
-      color: #a7a7a7;
+      color: $x-palette-gray_1;
     }
 
     .sessions_traffic_value {
       font-size: 13px;
-      font-family: apercubold,Arial,sans-serif;
-      color: #242b33;
+      font-family: $font-bold;
+      color: $x-palette-dark;
     }
   }
 }

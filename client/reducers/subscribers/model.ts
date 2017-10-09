@@ -1,13 +1,9 @@
 export class subscribersModel {
 	subscribersLoading?: boolean;
-	list?: any;
 	activeProject?: any;
+	list?: any;
 	activeSubscriber?: any;
-
-
-
 	licenses?: any;
-	addSubscriberStatus?: any;
 }
 
-export type IState = subscribersModel;
+export type ISubscribers = subscribersModel;

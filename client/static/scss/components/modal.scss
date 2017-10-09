@@ -73,20 +73,23 @@
     border-top: 1px solid rgba( $palette-black, .05 );
     border-right: 1px solid rgba( $palette-black, .05 );
     outline: none;
-    font: 13px/15px 'apercuregular', 'Arial', sans-serif;
+    font: 13px/15px $font-regular;
     cursor: pointer;
     &:last-child { border-right: none; }
-    &-reset { color: $x-palette-gray_1; }
-    &-submit { color: $palette-brand; }
+    &-reset {
+      border-radius: 0 0 0 4px;
+      color: $x-palette-gray_1;
+    }
+    &-submit {
+      border-radius: 0 0 4px 0;
+      background: $palette-brand;
+      color: $palette-white;
+    }
     &_fullwidth { width: 100%; }
   }
   &_form {
     .input,
-    .textarea {
-      background: $x-palette-gray_3;
-    }
-    label {
-      color: $x-palette-gray_1;
-    }
+    .textarea { background: $x-palette-gray_3; }
+    label { color: $x-palette-gray_1; }
   }
 }

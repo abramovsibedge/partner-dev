@@ -1,9 +1,10 @@
 import * as React from 'react';
 import * as DayPicker from 'react-day-picker';
-import {Button} from "../../../../components/button/index";
 import ReactInputMask from 'react-input-mask';
+import * as classNames from 'classnames';
 
 import { Checkbox } from '../../../../components/form';
+import { Button } from "../../../../components/button/index";
 
 import {
 	IconClock,
@@ -29,17 +30,6 @@ interface State {
 const MS_IN_DAY = 86400000;
 
 class Calendar extends React.Component<Parent, State> {
-	updateSearch: (time: any) => void;
-	defaultTime: any;
-	calendarOpened: () => void
-
-	formatChars:any = {
-		'1':'[0-2]',
-		'2':'[0-3]',
-		'3':'[0-5]',
-		'4':'[0-9]'
-	};
-
 	constructor(props: any) {
 		super(props);
 
@@ -47,8 +37,8 @@ class Calendar extends React.Component<Parent, State> {
 
 		this.state = {
 			days: {
-				from: (now.getMonth()+1)+'/'+now.getDate()+'/'+now.getFullYear(),
-				till: (now.getMonth()+1)+'/'+now.getDate()+'/'+now.getFullYear()
+				from: (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear(),
+				till: (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear()
 			},
 			time: {
 				from: '00:00',
@@ -64,14 +54,24 @@ class Calendar extends React.Component<Parent, State> {
 		this.calendarOpened = props.calendarOpened;
 	}
 
+	private updateSearch: (time: any) => void;
+	private defaultTime: any;
+	private calendarOpened: () => void;
+	private formatChars: any = {
+		'1':'[0-2]',
+		'2':'[0-3]',
+		'3':'[0-5]',
+		'4':'[0-9]'
+	};
+
 	componentDidMount() {
 		this.update()
 	}
 
 	componentWillReceiveProps(props: any) {
-		if(!this.state.show) return;
+		if (!this.state.show) return;
 
-		if(this.state.show && props.devicesDropdown) this.closeCalendar();
+		if (this.state.show && props.devicesDropdown) this.closeCalendar();
 	}
 
 	update() {
@@ -95,8 +95,7 @@ class Calendar extends React.Component<Parent, State> {
 	}
 
 	showCalendar(state: boolean) {
-		if(state) this.openCalendar();
-		else this.closeCalendar();
+		state ? this.openCalendar() : this.closeCalendar();
 	}
 
 	openCalendar() {
@@ -132,27 +131,26 @@ class Calendar extends React.Component<Parent, State> {
 
 	handleDayClick(input: string) {
 		let day  = new Date(input);
-		let date = (day.getMonth()+1)+'/'+day.getDate()+'/'+day.getFullYear();
+		let date = (day.getMonth() + 1) + '/' + day.getDate() + '/' + day.getFullYear();
 		let days = this.state.days;
 
-		let dayTs  = new Date(date).getTime()
+		let dayTs  = new Date(date).getTime();
 		let fromTs = new Date(days.from).getTime();
 		let tillTs = new Date(days.till).getTime();
 
-		if(fromTs === dayTs) {
+		if (fromTs === dayTs) {
 			days.till = date;
-		}
-		else if(tillTs === dayTs) {
+		} else if (tillTs === dayTs) {
 			days.from = date;
-		}
-		else if(fromTs > dayTs) {
+		} else if (fromTs > dayTs) {
 			days.from = date;
-		}
-		else {
+		} else {
 			days.till = date;
 		}
 
-		this.setState({days: days});
+		this.setState({
+			days: days
+		});
 	}
 
 	renderDay(input: string) {
@@ -160,34 +158,34 @@ class Calendar extends React.Component<Parent, State> {
 				className = this.checkIfSelected( day );
 
 		return (
-			<div className={'custom-day'+className}>
+			<div className={'custom-day' + className}>
 				{day.getDate()}
 			</div>
 		);
 	}
 
 	checkIfSelected(day: any) {
-		let ts   = new Date(day).getTime();
-		let date = (day.getMonth()+1)+'/'+day.getDate()+'/'+day.getFullYear();
-
-
+		let ts = new Date(day).getTime();
+		let date = (day.getMonth() + 1) + '/' + day.getDate() + '/' + day.getFullYear();
 		let from = new Date(this.state.days.from).getTime();
-		let till = new Date(this.state.days.till).getTime()+MS_IN_DAY-1;
+		let till = new Date(this.state.days.till).getTime() + MS_IN_DAY - 1;
 
-		if(
-			from > ts
-			|| till < ts
-		) return '';
+		if (from > ts || till < ts) return '';
 
 		let className = ' selected';
 
-		if(this.state.days.from === date)      className += ' outer first';
-		else if(this.state.days.till === date) className += ' outer last';
-		else {
+		if (this.state.days.from === date) {
+			className += ' outer first';
+		} else if (this.state.days.till === date) {
+			className += ' outer last';
+		} else {
 			className += ' center';
 
-			if(day.getDay() === 0) className += ' first';
-			else if(day.getDay() === 6) className += ' last';
+			if (day.getDay() === 0) {
+				className += ' first';
+			} else if(day.getDay() === 6) {
+				className += ' last';
+			}
 		}
 
 		if( ( (till - from) / MS_IN_DAY) > 1 ) className += ' multiple';
@@ -197,7 +195,7 @@ class Calendar extends React.Component<Parent, State> {
 
 	showToday() {
 		let day = new Date();
-		let date = (day.getMonth()+1)+'/'+day.getDate()+'/'+day.getFullYear();
+		let date = (day.getMonth() + 1) + '/' + day.getDate() + '/' + day.getFullYear();
 
 		this.setState({
 			days: {
@@ -215,17 +213,17 @@ class Calendar extends React.Component<Parent, State> {
 
 		this.setState({
 			days: {
-				from: ((from.getMonth()+1)+'/'+from.getDate()+'/'+from.getFullYear()),
-				till: ((till.getMonth()+1)+'/'+till.getDate()+'/'+till.getFullYear())
+				from: ((from.getMonth() + 1) + '/' + from.getDate() + '/' + from.getFullYear()),
+				till: ((till.getMonth() + 1) + '/' + till.getDate() + '/' + till.getFullYear())
 			}
 		});
 	}
 
 	showThisMonth() {
 		let till = new Date();
-		let tillDate = (till.getMonth()+1)+'/'+till.getDate()+'/'+till.getFullYear();
+		let tillDate = (till.getMonth() + 1) + '/' + till.getDate() + '/' + till.getFullYear();
 		let from = new Date(tillDate);
-		let fromDate = (from.getMonth()+1)+'/1/'+from.getFullYear();
+		let fromDate = (from.getMonth() + 1) + '/1/' + from.getFullYear();
 
 		this.setState({
 			days: {
@@ -237,7 +235,7 @@ class Calendar extends React.Component<Parent, State> {
 
 	showYesterday() {
 		let day = new Date(Date.now() - MS_IN_DAY);
-		let date = (day.getMonth()+1)+'/'+day.getDate()+'/'+day.getFullYear();
+		let date = (day.getMonth() + 1) + '/' + day.getDate() + '/' + day.getFullYear();
 
 		this.setState({
 			days: {
@@ -249,15 +247,15 @@ class Calendar extends React.Component<Parent, State> {
 
 	showLastWeek() {
 		let today = new Date();
-		let till = new Date(today.getTime() - (today.getDay()+1) * MS_IN_DAY);
+		let till = new Date(today.getTime() - (today.getDay() + 1) * MS_IN_DAY);
 		let tillTs = till.getTime();
 		let fromTs = tillTs - (6 * MS_IN_DAY);
 		let from = new Date(fromTs);
 
 		this.setState({
 			days: {
-				from: ((from.getMonth()+1)+'/'+from.getDate()+'/'+from.getFullYear()),
-				till: ((till.getMonth()+1)+'/'+till.getDate()+'/'+till.getFullYear())
+				from: ((from.getMonth() + 1) + '/' + from.getDate() + '/' + from.getFullYear()),
+				till: ((till.getMonth() + 1) + '/' + till.getDate() + '/' + till.getFullYear())
 			}
 		});
 	}
@@ -268,10 +266,10 @@ class Calendar extends React.Component<Parent, State> {
 
 		this.setState({
 			days: {
-				from: ((till.getMonth()+1)+'/1/'+till.getFullYear()),
-				till: ((till.getMonth()+1)+'/'+till.getDate()+'/'+till.getFullYear())
+				from: ((till.getMonth() + 1) + '/1/' + till.getFullYear()),
+				till: ((till.getMonth() + 1) + '/'+till.getDate() + '/' + till.getFullYear())
 			},
-			currentMonth: new Date((till.getMonth()+1)+'/1/'+till.getFullYear())
+			currentMonth: new Date((till.getMonth() + 1) + '/1/' + till.getFullYear())
 		});
 	}
 
@@ -285,30 +283,37 @@ class Calendar extends React.Component<Parent, State> {
 	}
 
 	render() {
+		const {
+			show,
+			days,
+			time,
+			currentMonth,
+			customTime
+		} = this.state;
+
 		return (
 			<div className="session_button_container">
-				<Button type="button" className={'calendar_button'+(this.state.show?' opened':'')} onClick={() => this.showCalendar(!this.state.show)}>
+				<Button type="button" className={classNames('calendar_button', show ? 'opened': '')} onClick={() => this.showCalendar(!show)}>
 					<IconCalendar width="24" height="24" />
 					<div className="calendar_date from">
-						<div className="date">{this.state.days.from}</div>
-						<div className="time">{this.state.time.from.replace(/_/g, '0')}</div>
+						<div className="date">{days.from}</div>
+						<div className="time">{time.from.replace(/_/g, '0')}</div>
 					</div>
 					<div className="calendar_separator" />
 					<div className="calendar_date to">
-						<div className="date">{this.state.days.till}</div>
-						<div className="time">{this.state.time.till.replace(/_/g, '0')}</div>
+						<div className="date">{days.till}</div>
+						<div className="time">{time.till.replace(/_/g, '0')}</div>
 					</div>
 					<div className="arrow"><IconPlay width="24" height="24" /></div>
 				</Button>
 
-				<div className={'calendar_dropdown'+(this.state.show?' opened':'')}>
+				<div className={classNames('calendar_dropdown', show ? 'opened' : '')}>
 					<DayPicker
 						onDayClick={this.handleDayClick.bind(this)}
 						numberOfMonths={2}
 						renderDay={this.renderDay.bind(this)}
-						month={this.state.currentMonth}
-						fixedWeeks
-					/>
+						month={currentMonth}
+						fixedWeeks />
 					<div className="DayPicker-delimiter" />
 					<div className="calendar_dropdown_options">
 						<div className="calendar_dropdown_row">
@@ -333,8 +338,8 @@ class Calendar extends React.Component<Parent, State> {
 							<div className="calendar_dropdown_item item1">
 								<Checkbox
 									className="subscriber_edit_checkbox"
-									checked={this.state.customTime}
-									onChange={() => this.setState({customTime: !this.state.customTime})}>Specific time range</Checkbox>
+									checked={customTime}
+									onChange={() => this.setState({customTime: !customTime})}>Specific time range</Checkbox>
 							</div>
 							<div className="calendar_dropdown_item item2">
 								<span onClick={() => this.showYesterday()}>Yesterday</span>
@@ -348,14 +353,14 @@ class Calendar extends React.Component<Parent, State> {
 						</div>
 					</div>
 
-					<div className={'calendar_dropdown_custom_time'+(this.state.customTime?' opened':'')}>
+					<div className={classNames('calendar_dropdown_custom_time', customTime ? 'opened' : '')}>
 						<Button type="button" className={'calendar_button small time_button'} onClick={() => {}}>
 							<IconClock width="24" height="24" />
 							<div className="input">
 								<ReactInputMask
 									mask="12:34"
 									maskChar="_"
-									value={this.state.time.from}
+									value={time.from}
 									onChange={(e) => this.inputHandler(e.target.value, 'from')}
 									formatChars={this.formatChars}
 									className="input_input"
@@ -363,24 +368,27 @@ class Calendar extends React.Component<Parent, State> {
 								<label className="input_label">Start time (24 hours)</label>
 							</div>
 						</Button>
-						<Button type="button" className={'calendar_button small time_button'} onClick={() => {}}>
+						<Button type="button" className="calendar_button small time_button">
 							<IconClock width="24" height="24" />
 							<div className="input">
 								<ReactInputMask
 									mask="12:34"
 									maskChar="_"
-									value={this.state.time.till}
+									value={time.till}
 									onChange={(e) => this.inputHandler(e.target.value, 'till')}
 									formatChars={this.formatChars}
-									className="input_input"
-								/>
+									className="input_input" />
 								<label className="input_label">End time (24 hours)</label>
 							</div>
 						</Button>
 					</div>
 					<div className="modal_footer">
-						<button className="modal_btn modal_btn-reset" type="button" onClick={() => this.showCalendar(!this.state.show)}>Cancel</button>
-						<button className="modal_btn modal_btn-submit update_search"  onClick={() => {this.update(); this.closeCalendar();}}>Search</button>
+						<button className="modal_btn modal_btn-reset" type="button" onClick={() => this.showCalendar(!show)}>
+							Cancel
+						</button>
+						<button className="modal_btn modal_btn-submit update_search"  onClick={() => {this.update(); this.closeCalendar();}}>
+							Search
+						</button>
 					</div>
 				</div>
 			</div>

@@ -10,6 +10,8 @@ class SubscriberSocial extends React.Component<Props, {}> {
 	}
 
 	render() {
+		const { data } = this.props;
+
 		let content = [
 			<div className="table_row" key='extref'>
 				<div className="table_row_wrapper">
@@ -17,25 +19,25 @@ class SubscriberSocial extends React.Component<Props, {}> {
 						<div className="table_cell_content">Extref</div>
 					</div>
 					<div className="table_cell" style={{width: '80%'}}>
-						<div className="table_cell_content">{this.props.data.extref}</div>
+						<div className="table_cell_content">{data.extref}</div>
 					</div>
 				</div>
 			</div>
 		];
 
-		for(let k in this.props.data.social) {
-			content.push(
-				<div className="table_row" key={k}>
+		for(let k in data.social) {
+			if (data.social.hasOwnProperty(k)) {
+				content.push(<div className="table_row" key={k}>
 					<div className="table_row_wrapper">
 						<div className="table_cell" style={{width: '20%'}}>
 							<div className="table_cell_content">{k}</div>
 						</div>
 						<div className="table_cell" style={{width: '80%'}}>
-							<div className="table_cell_content">{this.props.data.social[k]}</div>
+							<div className="table_cell_content">{data.social[k]}</div>
 						</div>
 					</div>
-				</div>
-			);
+				</div>);
+			}
 		}
 
 		return (
@@ -44,10 +46,10 @@ class SubscriberSocial extends React.Component<Props, {}> {
 					<div className="table_head">
 						<table>
 							<tbody>
-							<tr>
-								<td style={{width: '20%'}}>Social</td>
-								<td style={{width: '80%'}}>Content</td>
-							</tr>
+								<tr>
+									<td style={{width: '20%'}}>Social</td>
+									<td style={{width: '80%'}}>Content</td>
+								</tr>
 							</tbody>
 						</table>
 					</div>

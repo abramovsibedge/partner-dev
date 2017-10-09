@@ -17,7 +17,7 @@ import { Button } from '../../../../components/button';
 interface Props {
 	data: any
 	setLimit?: any
-	loadingState?: any
+	setLoadingState?: any
 	getTraffic?: (data: any) => void
 }
 
@@ -54,23 +54,24 @@ class SubscriberSetLimit extends React.Component<Props, State> {
 		let object = this.state.modalObject;
 
 		let valid = true;
-		for(let k in object) {
-			if(
-				!object[k]
-				|| typeof (object[k]) !== 'object'
-				|| !object[k].check
-				|| (object[k].value === '' && object[k].canBeEmpty)) continue;
+		for (let k in object) {
+			if (object.hasOwnProperty(k)) {
+				if(!object[k]
+					|| typeof (object[k]) !== 'object'
+					|| !object[k].check
+					|| (object[k].value === '' && object[k].canBeEmpty)) continue;
 
-			if(!object[k].value || !object[k].value.toString().match(object[k].check)) {
-				object[k].valid = false;
-				valid = false;
-			}
-			else {
-				object[k].valid = true;
+				if(!object[k].value
+					|| !object[k].value.toString().match(object[k].check)) {
+					object[k].valid = false;
+					valid = false;
+				} else {
+					object[k].valid = true;
+				}
 			}
 		}
 
-		if(!valid) {
+		if (!valid) {
 			object['message'] = 'Fill in the highlighted fields.';
 			return this.setState(update(this.state, {
 				modalObject: {$set: object}
@@ -79,7 +80,7 @@ class SubscriberSetLimit extends React.Component<Props, State> {
 
 		let type: string = this.state.modalObject['unlimited'] ? 'delete' : 'update';
 
-		this.props.loadingState(true)
+		this.props.setLoadingState(true)
 			.then(() => {
 				this.props.setLimit(type, this.props.data.id, {
 					traffic_limit: this.state.modalObject['limit'].value,
@@ -147,8 +148,7 @@ class SubscriberSetLimit extends React.Component<Props, State> {
 									label="Limit"
 									value={modalObject['limit'].value}
 									notValid={!modalObject['limit'].valid}
-									onChange={(e) => this.inputHandler(e.target.value, 'limit')}>
-								</Input>
+									onChange={(e) => this.inputHandler(e.target.value, 'limit')} />
 							</FormRow>
 							<FormRow>
 								<Checkbox
@@ -164,8 +164,12 @@ class SubscriberSetLimit extends React.Component<Props, State> {
 							</FormRow>
 						</div>
 						<div className="modal_footer">
-							<button className="modal_btn modal_btn-reset" type="button" onClick={() => this.showModal(false)}>Cancel</button>
-							<button className="modal_btn modal_btn-submit" type="submit">Set limit</button>
+							<button className="modal_btn modal_btn-reset" type="button" onClick={() => this.showModal(false)}>
+								Cancel
+							</button>
+							<button className="modal_btn modal_btn-submit" type="submit">
+								Set limit
+							</button>
 						</div>
 					</Form>
 				</Modal>
@@ -178,7 +182,7 @@ export default connect<any, any, Props>(
 	state => ({}),
 	({
 		setLimit: actions.setLimit,
-		loadingState: actions.loadingState,
+		setLoadingState: actions.loadingState,
 		getTraffic: actions.getTraffic
 	})
 )(SubscriberSetLimit);

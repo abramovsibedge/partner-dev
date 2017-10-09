@@ -14,8 +14,8 @@ import { checkAuth, logOut } from '../../utils'
 import '../../static/scss/routes/subscribers.scss';
 
 interface Props {
-	projectsLoading: boolean;
-	loadProjects: () => void;
+	loading: boolean;
+	getProjects: () => void;
 	getLicenses: () => void;
 }
 
@@ -28,20 +28,20 @@ class Subscribers extends React.Component<Props, {}> {
 		if (!checkAuth()) {
 			logOut();
 		} else {
-			this.props.loadProjects();
+			this.props.getProjects();
 			this.props.getLicenses();
 		}
 	}
 
 	render() {
-		const { projectsLoading } = this.props;
+		const { loading } = this.props;
 
 		return (
 			<Dashboard current="subscribers">
 				<DashboardHeader>
 					<Header />
 				</DashboardHeader>
-				{projectsLoading ? <Loading /> : <Body />}
+				{loading ? <Loading /> : <Body />}
 			</Dashboard>
 		);
 	}
@@ -49,10 +49,10 @@ class Subscribers extends React.Component<Props, {}> {
 
 export default connect(
 	state => ({
-		projectsLoading: state.projects.loading
+		loading: state.projects.loading
 	}),
 	({
-		loadProjects: getProjects,
+		getProjects: getProjects,
 		getLicenses: actions.getLicenses
 	})
 )(Subscribers);

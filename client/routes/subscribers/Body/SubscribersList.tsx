@@ -51,7 +51,6 @@ class SubscribersList extends React.Component<Props, State> {
 			loading,
 			subscribersList
 		} = this.props;
-
 		const { stickedTableHead } = this.state;
 
 		return (

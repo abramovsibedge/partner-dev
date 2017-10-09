@@ -1,21 +1,21 @@
 import * as React from 'react';
 import Modal from 'react-modal';
 import { connect } from 'react-redux';
-import * as actions from '../../../../reducers/subscriber/actions';
 
+import * as actions from '../../../../reducers/subscriber/actions';
 import { dateString } from '../../../../utils';
+import { Button } from '../../../../components/button';
 
 import {
 	IconClose,
 	IconDelete,
 } from '../../../../components/icons'
-import {Button} from '../../../../components/button';
 
 interface Props {
 	data: any,
 	subscriber?: any
 	deleteDevice?: (id: any, params: any) => void
-	loadingState?: any
+	setLoadingState?: any
 	getDevices?: (data: any) => void
 }
 
@@ -39,13 +39,9 @@ class SubscriberDevices extends React.Component<Props, State> {
 	}
 
 	deleteDevice(id: number) {
-		this.props.loadingState(true)
-			.then(() => {
-				this.props.deleteDevice(this.props.data.id, id);
-			})
-			.then(() => {
-				this.props.getDevices(id)
-			});
+		this.props.setLoadingState(true)
+			.then(() => this.props.deleteDevice(this.props.data.id, id))
+			.then(() => this.props.getDevices(id));
 	}
 
 	render() {
@@ -54,10 +50,10 @@ class SubscriberDevices extends React.Component<Props, State> {
 		let content = [];
 
 		for(let k in subscriber.devices) {
-			let device = subscriber.devices[k];
+			if (subscriber.devices.hasOwnProperty(k)) {
+				let device = subscriber.devices[k];
 
-			content.push(
-				<div className="table_row" key={k}>
+				content.push(<div className="table_row" key={k}>
 					<div className="table_row_wrapper">
 						<div className="table_cell" style={{width: '16.9%'}}>
 							<div className="table_cell_content">{device.device_id}</div>
@@ -77,8 +73,7 @@ class SubscriberDevices extends React.Component<Props, State> {
 
 						<div className="table_cell" style={{width: '6.5%'}}>
 							<div className="table_cell_content">
-								<Button type="button" className="subscriber_manage_item subscriber_manage_item-disable"
-												onClick={() => this.showModal(true)}>
+								<Button type="button" className="subscriber_manage_item subscriber_manage_item-disable" onClick={() => this.showModal(true)}>
 									<IconDelete width="24" height="24"/>
 								</Button>
 								<Modal
@@ -91,23 +86,22 @@ class SubscriberDevices extends React.Component<Props, State> {
 									</div>
 									<div className="modal_content is-text-center">Do you really want to delete device?</div>
 									<div className="modal_footer">
-										<button className="modal_btn modal_btn-reset" type="button"
-														onClick={() => this.showModal(false)}>Cancel
+										<button className="modal_btn modal_btn-reset" type="button" onClick={() => this.showModal(false)}>
+											Cancel
 										</button>
-										<button className="modal_btn modal_btn-submit" type="button"
-														onClick={() => this.deleteDevice(device.device_id)}>Delete device
+										<button className="modal_btn modal_btn-submit" type="button" onClick={() => this.deleteDevice(device.device_id)}>
+											Delete device
 										</button>
 									</div>
-									<Button type="button" className="modal_close"
-													onClick={() => this.showModal(false)}>
+									<Button type="button" className="modal_close" onClick={() => this.showModal(false)}>
 										<IconClose width="24" height="24"/>
 									</Button>
 								</Modal>
 							</div>
 						</div>
 					</div>
-				</div>
-			)
+				</div>)
+			}
 		}
 
 		return (
@@ -142,7 +136,7 @@ export default connect<any, any, Props>(
 	}),
 	({
 		deleteDevice: actions.deleteDevice,
-		loadingState: actions.loadingState,
+		setLoadingState: actions.loadingState,
 		getDevices: actions.getDevices
 	})
 )(SubscriberDevices);

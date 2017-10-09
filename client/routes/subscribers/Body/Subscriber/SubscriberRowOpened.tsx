@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-
 import * as classNames from 'classnames';
+
 import * as actions from '../../../../reducers/subscriber/actions';
 
 import Spinner from '../../../../components/spinner';
@@ -20,12 +20,12 @@ import SubscriberPurchases from './SubscriberPurchases';
 import SubscriberChangeStatus from './SubscriberChangeStatus';
 
 interface Props {
+	data: any
 	loading?: boolean
 	subscriber?: any
-	loadingState?: any
+	setLoadingState?: any
 	getTraffic?: (data: any) => void
 	getDevices?: (data: any) => void
-	data: any
 }
 
 interface State {
@@ -46,13 +46,9 @@ class SubscriberRowOpened extends React.Component<Props, State> {
 	}
 
 	loadInfo(id: number) {
-		this.props.loadingState(true)
-			.then(() => {
-				this.props.getDevices(id)
-			})
-			.then(() => {
-				this.props.getTraffic(id)
-			});
+		this.props.setLoadingState(true)
+			.then(() => this.props.getDevices(id))
+			.then(() => this.props.getTraffic(id));
 	}
 
 	tabSwitcher(tab: string) {
@@ -109,9 +105,11 @@ class SubscriberRowOpened extends React.Component<Props, State> {
 
 		for(let k in buttons) {
 			contentButtons.push(
-				<button key={k}
-								className={'subscriber_tabs_item' + (this.state.tab===k?' subscriber_tabs_item-active':'')}
-								onClick={() => this.tabSwitcher(k)} type="button">
+				<button
+					type="button"
+					key={k}
+					className={classNames('subscriber_tabs_item', this.state.tab === k? 'subscriber_tabs_item-active' : '')}
+					onClick={() => this.tabSwitcher(k)}>
 					{buttons[k]}
 				</button>
 			);
@@ -197,7 +195,7 @@ export default connect<any, any, Props>(
 		subscriber: state.subscriber
 	}),
 	({
-		loadingState: actions.loadingState,
+		setLoadingState: actions.loadingState,
 		getTraffic: actions.getTraffic,
 		getDevices: actions.getDevices
 	})

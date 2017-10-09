@@ -18,8 +18,9 @@ interface Props {
 	data: any
 	projectsList?: any
 	activeProject?: any
+	licenses?: any
 	modifySubscriber?: any
-	loadingState?: any
+	setLoadingState?: any
 	getTraffic?: (data: any) => void
 	getSubscribers?: any
 }
@@ -58,20 +59,25 @@ class SubscriberModify extends React.Component<Props, State> {
 		};
 	}
 
-	componentWillReceiveProps(props: any) {
-		this.fetchLicence(props.subscribers.licenses);
+	componentWillMount() {
+		this.fetchLicence(this.props.licenses);
 	}
 
 	fetchLicence(licenses: any) {
 		let licenceList = [];
+
 		for(let k in licenses) {
-			licenceList.push({
-				value: licenses[k].id,
-				label: licenses[k].name
-			});
+			if (licenses.hasOwnProperty(k)) {
+				licenceList.push({
+					value: licenses[k].id,
+					label: licenses[k].name
+				});
+			}
 		}
 
-		this.setState({licencesList: licenceList});
+		this.setState({
+			licencesList: licenceList
+		});
 	}
 
 	showModal(state: boolean) {
@@ -82,21 +88,25 @@ class SubscriberModify extends React.Component<Props, State> {
 		let object = this.state.modalObject;
 
 		let valid = true;
-		for(let k in object) {
-			if(!object[k] || typeof (object[k]) !== 'object' || !object[k].check) continue;
 
-			if(!object[k].value || !object[k].value.toString().match(object[k].check)) {
-				object[k].valid = false;
-				valid = false;
-			}
-			else {
-				object[k].valid = true;
+		for (let k in object) {
+			if (object.hasOwnProperty(k)) {
+				if(!object[k] || typeof (object[k]) !== 'object' || !object[k].check) continue;
+
+				if(!object[k].value || !object[k].value.toString().match(object[k].check)) {
+					object[k].valid = false;
+					valid = false;
+				} else {
+					object[k].valid = true;
+				}
 			}
 		}
 
-		if(!valid) {
+		if (!valid) {
 			object['message'] = 'Fill in the highlighted fields.';
-			return this.setState({modalObject: object});
+			return this.setState({
+				modalObject: object
+			});
 		}
 
 		let subscriber = {
@@ -105,7 +115,7 @@ class SubscriberModify extends React.Component<Props, State> {
 			license_id: object['licence'].value,
 		};
 
-		this.props.loadingState(true)
+		this.props.setLoadingState(true)
 			.then(() => {
 				this.props.modifySubscriber(this.props.data.id, subscriber)
 					.then(() => {
@@ -152,8 +162,7 @@ class SubscriberModify extends React.Component<Props, State> {
 									label="Username"
 									value={modalObject['name'].value}
 									notValid={!modalObject['name'].valid}
-									onChange={(e) => this.inputHandler(e.target.value, 'name')}>
-								</Input>
+									onChange={(e) => this.inputHandler(e.target.value, 'name')} />
 							</FormRow>
 							<FormRow>
 								<Select
@@ -170,13 +179,16 @@ class SubscriberModify extends React.Component<Props, State> {
 									label="Extref"
 									value={modalObject['extref'].value}
 									notValid={!modalObject['extref'].valid}
-									onChange={(e) => this.inputHandler(e.target.value, 'extref')}>
-								</Input>
+									onChange={(e) => this.inputHandler(e.target.value, 'extref')} />
 							</FormRow>
 						</div>
 						<div className="modal_footer">
-							<button className="modal_btn modal_btn-reset" type="button" onClick={() => this.showModal(false)}>Cancel</button>
-							<button className="modal_btn modal_btn-submit" type="submit">Modify subscriber</button>
+							<button className="modal_btn modal_btn-reset" type="button" onClick={() => this.showModal(false)}>
+								Cancel
+							</button>
+							<button className="modal_btn modal_btn-submit" type="submit">
+								Modify subscriber
+							</button>
 						</div>
 					</Form>
 				</Modal>
@@ -189,10 +201,11 @@ export default connect<any, any, Props>(
 	state => ({
 		projectsList: state.projects.list,
 		activeProject: state.subscribers.activeProject,
+		licenses: state.subscribers.licenses
 	}),
 	({
 		modifySubscriber: actions.modifySubscriber,
-		loadingState: actions.loadingState,
+		setLoadingState: actions.loadingState,
 		getTraffic: actions.getTraffic,
 		getSubscribers: getSubscribers
 	})

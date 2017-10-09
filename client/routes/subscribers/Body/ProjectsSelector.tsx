@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as update from 'immutability-helper';
-import { connect } from 'react-redux';
 import * as classNames from 'classnames';
+import { connect } from 'react-redux';
 import onClickOutside from 'react-onclickoutside';
 
 import * as actions from '../../../reducers/subscribers/actions';
@@ -68,9 +68,11 @@ class ProjectsSelector extends React.Component<Props, State> {
 		let active: number = 0;
 
 		for (let k in projects) {
-			if(projects[k].publickey === activeProject) {
-				active = Number(k);
-				break;
+			if (projects.hasOwnProperty(k)){
+				if(projects[k].publickey === activeProject) {
+					active = Number(k);
+					break;
+				}
 			}
 		}
 
@@ -86,9 +88,9 @@ class ProjectsSelector extends React.Component<Props, State> {
 	};
 
 	changeState = (state: boolean): any => {
-		this.setState(update(this.state, {
-			showDropdown: {$set: state}
-		}))
+		this.setState({
+			showDropdown: state
+		});
 	};
 
 	render() {

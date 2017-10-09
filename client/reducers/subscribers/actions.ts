@@ -1,20 +1,32 @@
-import * as firebase from 'firebase';
-
-import {Action, ActionCreator, Dispatch} from 'redux';
-import {ThunkAction} from 'redux-thunk';
-
+import { Action, ActionCreator, Dispatch } from 'redux';
+import { ThunkAction } from 'redux-thunk';
 import * as ReduxActions from "redux-actions";
-import * as types from './constants';
 
-import {storageHelper} from '../../utils';
+import { storageHelper } from '../../utils';
 const storage = new storageHelper;
 
 import axios from 'axios';
 import config from '../../config';
 
-import { IState, subscribersModel } from './model';
+import * as types from './constants';
+import {
+	ISubscribers,
+	subscribersModel
+} from './model';
 
-const logIn = async function(project: any) {
+/* Change loading state */
+export const loadingState: ActionCreator<ThunkAction<Promise<Action>, ISubscribers, void>> = (value: boolean) => {
+	return async (dispatch: Dispatch<ISubscribers>): Promise<Action> => {
+		return dispatch({
+			type: types.SET_LOADING_STATUS,
+			value
+		});
+	};
+};
+/**/
+
+/* Get project REST token */
+const logIn = async (project: any) => {
 	let request: string = config.host + 'partner/login?access_token=' + config.firebaseToken();
 	request += '&login=' + project['publickey'];
 	request += '&password=' + project['privatekey'];
@@ -32,18 +44,17 @@ const logIn = async function(project: any) {
 		})
 		.catch(error => error);
 };
+/**/
 
-export const loadLicenses = () => {
-	if (config.restToken()) {
-		return axios.get(config.host + 'partner/licenses?access_token=' + config.restToken())
-			.then((response) => response.data.licenses)
-			.then((responseJson) => {
-				return responseJson;
-			});
-	}
-};
+/* Set active project */
+export const setActiveProject = ReduxActions.createAction<any, number>(
+	types.SET_ACTIVE_PROJECT,
+	(project: any) => project
+);
+/**/
 
-export const loadSubscribers = async (project: any) => {
+/* Get subscribers list */
+const loadSubscribers = async (project: any) => {
 	let restToken = await logIn(project);
 
 	let request: string = config.host + 'partner/subscribers?access_token=' + restToken;
@@ -53,7 +64,35 @@ export const loadSubscribers = async (project: any) => {
 		.catch(error => error);
 };
 
-export const findSubscribers = (type: string, value: string) => {
+export const getSubscribers = ReduxActions.createAction<any, any, string>(
+	types.LOAD_SUBSCRIBERS,
+	(project: any) => loadSubscribers(project)
+);
+/**/
+
+/* Set active subscriber */
+export const setActiveSubscriber = ReduxActions.createAction<any, any, string>(
+	types.SET_ACTIVE_SUBSCRIBER,
+	(subscriber: any) => subscriber
+);
+/**/
+
+/* Load licenses */
+const loadLicenses = () => {
+	if (config.restToken()) {
+		return axios.get(config.host + 'partner/licenses?access_token=' + config.restToken())
+			.then((response) => response.data.licenses);
+	}
+};
+
+export const getLicenses = ReduxActions.createAction<any, subscribersModel>(
+	types.LOAD_LICENSES,
+	() => loadLicenses()
+);
+/**/
+
+/* Search for subscribers */
+const findSubscribers = (type: string, value: string) => {
 	const filterType: string = type === 'userId' ? '/' : '/' + type + '/';
 	let request: string = config.host + 'partner/subscribers' + filterType + value + '?access_token=' + config.restToken();
 
@@ -61,13 +100,18 @@ export const findSubscribers = (type: string, value: string) => {
 		.then(response => {
 			let result = response.data;
 
-      return result.result === 'OK' ? result.subscriber ? [result.subscriber] : result.subscribers : [];
+			return result.result === 'OK' ? result.subscriber ? [result.subscriber] : result.subscribers : [];
 		})
-		.catch(error => {
-			return [];
-		});
+		.catch(error => []);
 };
 
+export const searchSubscriber = ReduxActions.createAction<any, string, string>(
+	types.SEARCH_SUBSCRIBERS,
+	(type: string, value: string) => findSubscribers(type, value)
+);
+/**/
+
+/**/
 const addNewSubscriber = async (data: any) => {
 	let request:string = config.host + 'partner/subscribers?access_token=' + config.restToken();
 	request += '&extref=' + data['extref'];
@@ -87,58 +131,8 @@ const addNewSubscriber = async (data: any) => {
 		.catch(error => error)
 };
 
-const loadingState: ActionCreator<ThunkAction<Promise<Action>, IState, void>> = (value: boolean) => {
-	return async (dispatch: Dispatch<IState>): Promise<Action> => {
-		return dispatch({
-			type: types.SET_LOADING_STATUS,
-			value
-		});
-	};
-};
-
-const setActiveProject = ReduxActions.createAction<any, number>(
-	types.SET_ACTIVE_PROJECT,
-	(project: any) => project
-);
-
-const getSubscribers = ReduxActions.createAction<any, any, string>(
-	types.LOAD_SUBSCRIBERS,
-	(project: any) => loadSubscribers(project)
-);
-
-const setActiveSubscriber = ReduxActions.createAction<any, any, string>(
-	types.SET_ACTIVE_SUBSCRIBER,
-	(subscriber: any) => subscriber
-);
-
-
-
-
-
-
-
-
-
-
-const getLicenses = ReduxActions.createAction<any, subscribersModel>(
-	types.LOAD_LICENSES,
-	() => loadLicenses()
-);
-
-
-
-const searchSubscriber = ReduxActions.createAction<any, string, string>(
-	types.SEARCH_SUBSCRIBERS,
-	(type: string, value: string) => findSubscribers(type, value)
-);
-
-
-
-
-
-
-const addSubscriber: ActionCreator<ThunkAction<Promise<Action>, IState, void>> = (data: any) => {
-	return async (dispatch: Dispatch<IState>): Promise<Action> => {
+export const addSubscriber: ActionCreator<ThunkAction<Promise<Action>, ISubscribers, void>> = (data: any) => {
+	return async (dispatch: Dispatch<ISubscribers>): Promise<Action> => {
 		let result = await addNewSubscriber(data);
 
 		return dispatch({
@@ -147,67 +141,4 @@ const addSubscriber: ActionCreator<ThunkAction<Promise<Action>, IState, void>> =
 		});
 	};
 };
-
-
-
-
-
-/* ------------------------------------------------------------------------------------------------------------------ */
-
-
-// let test = async () => {
-// 	console.log(123213);
-// };
-//
-//
-// const reduxAction: ActionCreator<Action> = (text: string) => {
-//   return {
-//     type: 'qqq',
-//     text
-//   };
-// };
-//
-// const asyncThinkAction: ActionCreator<
-//   ThunkAction<Promise<Action>, IState, void>
-//   > = () => {
-//   return async (dispatch: Dispatch<IState>): Promise<Action> => {
-//     try {
-//       const text = await test();
-//       return dispatch({
-//         type: 'qqq',
-//         text
-//       });
-//     } catch (e) {}
-//   };
-// };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-export {
-	loadingState,
-	setActiveProject,
-	getSubscribers,
-	setActiveSubscriber,
-
-
-
-	getLicenses,
-	searchSubscriber,
-	addSubscriber
-}
+/**/

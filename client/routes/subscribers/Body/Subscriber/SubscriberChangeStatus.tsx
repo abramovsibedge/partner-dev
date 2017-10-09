@@ -18,7 +18,6 @@ interface Props {
 	projectsList?: any
 	activeProject?: any
 	modifySubscriber?: any
-	loadingState?: any
 	getTraffic?: (data: any) => void
 	getSubscribers?: any
 }
@@ -39,7 +38,9 @@ class SubscriberChangeStatus extends React.Component<Props, State> {
 	}
 
 	showModal(state: boolean) {
-		this.setState({showModal: state});
+		this.setState({
+			showModal: state
+		});
 	}
 
 	changeStatus(status: number) {
@@ -55,11 +56,16 @@ class SubscriberChangeStatus extends React.Component<Props, State> {
 	}
 
 	render() {
-		let action = (this.state.condition === 0) ? ['Disable', 'disable', 1] : ['Enable', 'enable', 0];
+		const {
+			condition,
+			showModal
+		} = this.state;
+
+		let action = condition === 0 ? ['Disable', 'disable', 1] : ['Enable', 'enable', 0];
 
 		return (
 			<div className="subscriber_manage-button">
-				{(action[2] === 1)
+				{action[2] === 1
 					? <Button type="button" className="subscriber_manage_item subscriber_manage_item-disable" onClick={() => this.showModal(true)}>
 							<IconDelete width="24" height="24"/>
 							<span>{action[0]} subscriber</span>
@@ -69,7 +75,7 @@ class SubscriberChangeStatus extends React.Component<Props, State> {
 							<span>{action[0]} subscriber</span>
 						</Button>}
 				<Modal
-					isOpen={this.state.showModal}
+					isOpen={showModal}
 					className={{base: 'modal_inner'}}
 					overlayClassName={{base: 'modal_outer'}}
 					contentLabel="test">
@@ -101,7 +107,6 @@ export default connect<any, any, Props>(
 	}),
 	({
 		modifySubscriber: actions.modifySubscriber,
-		loadingState: actions.loadingState,
 		getTraffic: actions.getTraffic,
 		getSubscribers: getSubscribers
 	})

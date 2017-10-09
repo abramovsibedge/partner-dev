@@ -1,11 +1,9 @@
 export class subscriberModel {
-	subscriberLoading?: boolean
-	traffic?: any
-	devices?: any
-
-	data?: any;
+	subscriberLoading?: boolean;
+	traffic?: any;
 	sessions?: any;
+	devices?: any;
 	purchases?: any
 }
 
-export type IState = subscriberModel;
+export type ISubscriber = subscriberModel;
